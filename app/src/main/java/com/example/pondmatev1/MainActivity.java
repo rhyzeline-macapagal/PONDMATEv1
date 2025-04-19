@@ -16,6 +16,7 @@ import kotlin.jvm.functions.Function1;
 
 public class MainActivity extends AppCompatActivity {
 
+
     NafisBottomNavigation bottomNavigation;
 
 
