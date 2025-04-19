@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/almostwhite"
+    tools:context=".fraghome"
+    android:textColor="#000000">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Dashboard Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dashboard"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#023e8a"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Pond Overview Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_container"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"
+            android:backgroundTintMode="src_in">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pond Overview"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Fish Breed -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fish Breed"
+                android:textColor="#000000"/>
+            <TextView
+                android:id="@+id/txt_fish_breed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
+                android:text="Tilapia"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Total Fish Stocked -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Fish Stocked"
+                android:textColor="#000000"/>
+            <TextView
+                android:id="@+id/txt_total_stocked"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
+                android:textColor="#000000"
+                android:text="500"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Mortality Rate -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mortality Rate"
+                android:textColor="#000000"/>
+            <TextView
+                android:id="@+id/txt_mortality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
+                android:text="5%"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Days Until Harvest -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Days Until Harvest"
+                android:textColor="#000000"/>
+            <TextView
+                android:id="@+id/txt_days_harvest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
+                android:text="45"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btn_edit_pond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:background="@drawable/rounded_button"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+        <!-- Production Cost Summary -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_container"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Production Cost Summary"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Total Expenses -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Expenses"
+                android:textColor="#000000"/>
+            <TextView
+                android:id="@+id/txt_expenses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
+                android:text="₱15,000"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Projected Revenue -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Projected Revenue"
+                android:textColor="#000000"/>
+            <TextView
+                android:id="@+id/txt_revenue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
+                android:textColor="#000000"
+                android:text="₱30,000"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btn_edit_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add/Edit"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="#023e8a"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+        <!-- Fish Feeder Status -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_container"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fish Feeder Status"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Current Feeding Schedule -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:text="Current Feeding Schedule" />
+            <TextView
+                android:id="@+id/txt_schedule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
+                android:text="3x per day"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Last Feeding Time -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Feeding Time"
+                android:textColor="#000000"/>
+            <TextView
+                android:id="@+id/txt_last_feed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
+                android:text="10:30 AM"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Feed Amount per Cycle -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Feed Amount per Cycle"
+                android:textColor="#000000"/>
+            <TextView
+                android:id="@+id/txt_feed_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
+                android:text="500g"
+                android:textColor="#000000"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btn_edit_feeder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="#023e8a"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

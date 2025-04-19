@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/almostwhite"
+    tools:context=".pcostroi"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:spacing="16dp">
+
+        <!-- REPORT DISPLAY CONTAINER -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_container"
+            android:padding="16dp"
+
+            android:elevation="4dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PRODUCTION COSTS AND ROI"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cost of Fingerlings: ₱2,000"
+                android:textColor="#000000"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cost of Feeds: ₱5,000"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Maintenance Cost:"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Labor: ₱1,000"
+                android:textColor="#000000"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Electricity: ₱500"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Other Expenses:"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:textColor="#000000"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Repairs: ₱800"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Cost: ₱9,300"
+                android:layout_marginTop="8dp"
+                android:textColor="#000000"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Sales: ₱15,000"
+                android:textColor="#000000"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mortality Rate: 5%"
+                android:textColor="#000000"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Projected Revenue: ₱14,250"
+                android:textColor="#000000"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ROI: 53.2%"
+                android:layout_marginBottom="8dp"
+                android:textColor="#000000"/>
+
+            <Button
+                android:id="@+id/btn_generate_pdf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Generate Report (PDF)"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="#023e8a"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <!-- EDITABLE INPUTS CONTAINER -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_container"
+            android:padding="16dp"
+            android:elevation="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EDIT"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Fingerlings Cost -->
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Edit Fingerlings Cost:" />
+            <EditText
+                android:id="@+id/edit_fingerlings"
+                android:layout_width="match_parent"
+                android:textColor="#000000"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:hint="e.g. 2000" />
+
+            <!-- Feeds Cost -->
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Edit Feeds Cost:" />
+            <EditText
+                android:id="@+id/edit_feeds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:inputType="numberDecimal"
+                android:hint="e.g. 5000" />
+
+            <!-- Maintenance -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:text="Add Maintenance Cost:"
+                android:layout_marginTop="16dp" />
+            <EditText
+                android:id="@+id/edit_maintenance_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:hint="e.g. Labor" />
+            <EditText
+                android:id="@+id/edit_maintenance_cost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:inputType="numberDecimal"
+                android:hint="e.g. 1000" />
+            <Button
+                android:id="@+id/btn_add_maintenance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Maintenance"
+                android:textColor="@android:color/white"
+                android:background="@drawable/rounded_button"
+                android:layout_marginTop="8dp" />
+
+            <!-- Other Expense -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Other Expense:"
+                android:textColor="#000000"
+
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/edit_other_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e.g. Repairs"
+                android:textColor="#000000"
+                />
+
+            <EditText
+                android:id="@+id/edit_other_cost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:hint="e.g. 800"
+                android:textColor="#000000"
+                />
+
+            <Button
+                android:id="@+id/btn_add_other"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Other Expense"
+                android:textColor="@android:color/white"
+                android:background="@drawable/rounded_button"
+                android:layout_marginTop="8dp" />
+
+            <!-- Save / Generate Buttons -->
+            <Button
+                android:id="@+id/btn_save_report"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="✔ Save"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="#38b000"
+                android:textColor="@android:color/white" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
