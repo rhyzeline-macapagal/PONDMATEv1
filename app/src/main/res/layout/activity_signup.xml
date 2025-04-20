@@ -166,11 +166,11 @@
 
             <TextView
                 android:id="@+id/signuptext"
-                android:layout_width="match_parent"
+                android:layout_width="274dp"
                 android:layout_height="wrap_content"
                 android:text="Already have an account? Log in."
-                android:textSize="14sp"
-                android:textAlignment="center"/>
+                android:textAlignment="center"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
