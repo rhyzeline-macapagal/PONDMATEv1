@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.add(new NafisBottomNavigation.Model(4, R.drawable.feeder4));
         bottomNavigation.add(new NafisBottomNavigation.Model(5, R.drawable.activity5));
 
+        bottomNavigation.show(1, true);
+        getSupportFragmentManager().beginTransaction().replace(R.id.con, new fraghome()).commit();
+
         bottomNavigation.setOnClickMenuListener(new Function1<NafisBottomNavigation.Model, Unit>() {
             @Override
             public Unit invoke(NafisBottomNavigation.Model model) {
