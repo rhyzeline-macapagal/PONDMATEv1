@@ -1,6 +1,8 @@
 package com.example.pondmatev1;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -10,6 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 public class signup extends AppCompatActivity {
 
@@ -18,9 +21,9 @@ public class signup extends AppCompatActivity {
     EditText password1;
     EditText Cpassword;
     Button signupButton;
-
     CheckBox adminCheckBox;
     CheckBox caretakerCheckBox;
+    TextView logindirect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,15 @@ public class signup extends AppCompatActivity {
         signupButton = findViewById(R.id.signup_button);
         adminCheckBox = findViewById(R.id.admincheckbox);
         caretakerCheckBox = findViewById(R.id.caretakercheckBox);
+
+        logindirect = findViewById(R.id.loginalready);
+        logindirect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(signup.this, login.class);
+                startActivity(intent);
+            }
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

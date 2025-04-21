@@ -55,7 +55,7 @@
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
@@ -66,20 +66,20 @@
                 android:id="@+id/textView3"
                 android:layout_width="217dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginTop="19dp"
-                android:layout_marginEnd="80dp"
                 android:text="SIGN UP"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/fullname_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/rounded_corner"
                 android:drawableLeft="@drawable/uname_icon"
                 android:drawablePadding="8dp"
@@ -88,13 +88,17 @@
                 android:padding="16dp"
                 android:textColor="#000000"
                 android:textColorHint="#000000"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
             <EditText
                 android:id="@+id/username_input1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/rounded_corner"
                 android:drawableLeft="@drawable/uname_icon"
                 android:drawablePadding="8dp"
@@ -103,76 +107,113 @@
                 android:padding="16dp"
                 android:textColor="#000000"
                 android:textColorHint="#000000"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fullname_input" />
 
             <EditText
                 android:id="@+id/password_input1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/rounded_corner"
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="16dp"
                 android:textColor="#000000"
                 android:textColorHint="#000000"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/username_input1" />
 
             <EditText
                 android:id="@+id/password_input2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/rounded_corner"
                 android:hint="Confirm Password"
                 android:inputType="textPassword"
                 android:padding="16dp"
                 android:textColor="#000000"
                 android:textColorHint="#000000"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password_input1" />
 
             <TextView
                 android:id="@+id/usertype"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="12dp"
                 android:text="User Type:"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password_input2" />
 
             <CheckBox
                 android:id="@+id/admincheckbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:text="Admin"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/usertype" />
 
             <CheckBox
                 android:id="@+id/caretakercheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:text="Caretaker"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/admincheckbox" />
 
             <Button
                 android:id="@+id/signup_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:backgroundTint="#2A1616"
-                android:text="SIGN UP" />
+                android:text="SIGN UP"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/caretakercheckBox" />
 
             <TextView
-                android:id="@+id/signuptext"
-                android:layout_width="274dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Already have an account? Log in."
-                android:textAlignment="center"
-                android:textSize="14sp" />
+                android:text="Already have an account?"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.314"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signup_button" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/loginalready"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.729"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/signup_button" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.cardview.widget.CardView>
 
