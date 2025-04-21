@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentTop="true"
-        android:background="#023e8a"
+        android:background="#047CA1"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
@@ -61,28 +61,47 @@
     </RelativeLayout>
 
     <!-- Main Content Container -->
+
+    <!-- bottom nav -->
     <FrameLayout
         android:id="@+id/con"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="627dp"
         android:layout_above="@id/bottomNavigation"
-        android:layout_below="@id/topBar" />
+        android:layout_below="@id/topBar"
+        android:layout_marginTop="-1dp"
+        android:background="#C2A0CDD8">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <!-- bottom nav -->
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="892dp"
+                android:layout_height="634dp"
+                android:layout_marginTop="44dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.455"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/bg" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+
     <com.nafis.bottomnavigation.NafisBottomNavigation
         android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:mbn_backgroundBottomColor="#023e8a"
+        app:mbn_backgroundBottomColor="#047CA1"
         app:mbn_circleColor="#caf0f8"
-        app:mbn_countBackgroundColor="#caf0f8"
-        app:mbn_countTextColor="#ffffff"
+        app:mbn_countBackgroundColor="#047BA0"
+        app:mbn_countTextColor="#047BA0"
         app:mbn_countTypeface="fonts/SourceSansPro-Regular.ttf"
         app:mbn_defaultIconColor="#caf0f8"
         app:mbn_hasAnimation="true"
-        app:mbn_rippleColor="#005CFF"
-        app:mbn_selectedIconColor="#023e8a"
+        app:mbn_rippleColor="#1E5B6B"
+        app:mbn_selectedIconColor="#114B5B"
         app:mbn_shadowColor="#6900A3FF" />
 
 </RelativeLayout>

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentTop="true"
-        android:background="#023e8a"
+        android:background="#047CA1"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
@@ -22,7 +22,7 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:contentDescription="App Logo"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/logoraw" />
 
         <TextView
             android:id="@+id/appName"

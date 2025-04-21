@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/almostwhite"
+    android:background="#00A0CDD8"
     tools:context=".fraghome"
     android:textColor="#000000">
 
@@ -13,17 +14,24 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Dashboard Title -->
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dashboard"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:textColor="#023e8a"
-            android:layout_marginBottom="16dp" />
-
+            android:layout_height="wrap_content">
+            <!-- Dashboard Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="130dp"
+                android:text="Dashboard"
+                android:textAlignment="center"
+                android:textColor="#023e8a"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="0dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <!-- Pond Overview Card -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,8 +121,8 @@
                 android:id="@+id/btn_edit_pond"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#047CA1"
                 android:text="Edit"
-                android:background="@drawable/rounded_button"
                 android:textColor="#ffffff" />
         </LinearLayout>
 
@@ -173,9 +181,8 @@
                 android:id="@+id/btn_edit_cost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#047CA1"
                 android:text="Add/Edit"
-                android:background="@drawable/rounded_button"
-                android:backgroundTint="#023e8a"
                 android:textColor="#ffffff" />
         </LinearLayout>
 
@@ -250,9 +257,8 @@
                 android:id="@+id/btn_edit_feeder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="#047CA1"
                 android:text="Edit"
-                android:background="@drawable/rounded_button"
-                android:backgroundTint="#023e8a"
                 android:textColor="#ffffff" />
         </LinearLayout>
 

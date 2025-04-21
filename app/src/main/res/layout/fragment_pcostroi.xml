@@ -110,8 +110,7 @@
                 android:layout_height="wrap_content"
                 android:text="Generate Report (PDF)"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/rounded_button"
-                android:backgroundTint="#023e8a"
+                android:backgroundTint="#047CA1"
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
@@ -173,14 +172,15 @@
                 android:textColor="#000000"
                 android:inputType="numberDecimal"
                 android:hint="e.g. 1000" />
+
             <Button
                 android:id="@+id/btn_add_maintenance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#047CA1"
                 android:text="Add Maintenance"
-                android:textColor="@android:color/white"
-                android:background="@drawable/rounded_button"
-                android:layout_marginTop="8dp" />
+                android:textColor="@android:color/white" />
 
             <!-- Other Expense -->
             <TextView
@@ -212,10 +212,10 @@
                 android:id="@+id/btn_add_other"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#047CA1"
                 android:text="Add Other Expense"
-                android:textColor="@android:color/white"
-                android:background="@drawable/rounded_button"
-                android:layout_marginTop="8dp" />
+                android:textColor="@android:color/white" />
 
             <!-- Save / Generate Buttons -->
             <Button
@@ -224,8 +224,7 @@
                 android:layout_height="wrap_content"
                 android:text="✔ Save"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/rounded_button"
-                android:backgroundTint="#38b000"
+                android:backgroundTint="#047CA1"
                 android:textColor="@android:color/white" />
 
 
