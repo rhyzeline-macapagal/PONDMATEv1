@@ -24,7 +24,7 @@
                 android:layout_marginStart="130dp"
                 android:text="Dashboard"
                 android:textAlignment="center"
-                android:textColor="#023e8a"
+                android:textColor="#3A4E56"
                 android:textSize="26sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
                 android:text="Pond Overview"
                 android:textStyle="bold"
                 android:textSize="20sp"
-                android:textColor="#000000"
+                android:textColor="#10282E"
                 android:layout_marginBottom="12dp" />
 
             <!-- Fish Breed -->
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fish Breed"
-                android:textColor="#000000"/>
+                android:textColor="#10282E"/>
             <TextView
                 android:id="@+id/txt_fish_breed"
                 android:layout_width="match_parent"
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Fish Stocked"
-                android:textColor="#000000"/>
+                android:textColor="#10282E"/>
             <TextView
                 android:id="@+id/txt_total_stocked"
                 android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mortality Rate"
-                android:textColor="#000000"/>
+                android:textColor="#10282E"/>
             <TextView
                 android:id="@+id/txt_mortality"
                 android:layout_width="match_parent"
@@ -106,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Days Until Harvest"
-                android:textColor="#000000"/>
+                android:textColor="#10282E"/>
             <TextView
                 android:id="@+id/txt_days_harvest"
                 android:layout_width="match_parent"
@@ -141,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:text="Production Cost Summary"
                 android:textStyle="bold"
-                android:textColor="#000000"
+                android:textColor="#10282E"
                 android:textSize="18sp"
                 android:layout_marginBottom="12dp" />
 
@@ -150,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Expenses"
-                android:textColor="#000000"/>
+                android:textColor="#10282E"/>
             <TextView
                 android:id="@+id/txt_expenses"
                 android:layout_width="match_parent"
@@ -158,7 +158,7 @@
                 android:background="@drawable/rounded_box"
                 android:padding="8dp"
                 android:text="₱15,000"
-                android:textColor="#000000"
+                android:textColor="#10282E"
                 android:layout_marginBottom="8dp" />
 
             <!-- Projected Revenue -->
@@ -166,14 +166,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Projected Revenue"
-                android:textColor="#000000"/>
+                android:textColor="#10282E"/>
             <TextView
                 android:id="@+id/txt_revenue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_box"
                 android:padding="8dp"
-                android:textColor="#000000"
+                android:textColor="#10282E"
                 android:text="₱30,000"
                 android:layout_marginBottom="16dp" />
 
@@ -201,7 +201,7 @@
                 android:layout_height="wrap_content"
                 android:text="Fish Feeder Status"
                 android:textStyle="bold"
-                android:textColor="#000000"
+                android:textColor="#10282E"
                 android:textSize="18sp"
                 android:layout_marginBottom="12dp" />
 
@@ -209,7 +209,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
+                android:textColor="#10282E"
                 android:text="Current Feeding Schedule" />
             <TextView
                 android:id="@+id/txt_schedule"
@@ -218,7 +218,7 @@
                 android:background="@drawable/rounded_box"
                 android:padding="8dp"
                 android:text="3x per day"
-                android:textColor="#000000"
+                android:textColor="#10282E"
                 android:layout_marginBottom="8dp" />
 
             <!-- Last Feeding Time -->
@@ -226,7 +226,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Last Feeding Time"
-                android:textColor="#000000"/>
+                android:textColor="#10282E"/>
             <TextView
                 android:id="@+id/txt_last_feed"
                 android:layout_width="match_parent"
@@ -234,7 +234,7 @@
                 android:background="@drawable/rounded_box"
                 android:padding="8dp"
                 android:text="10:30 AM"
-                android:textColor="#000000"
+                android:textColor="#10282E"
                 android:layout_marginBottom="8dp" />
 
             <!-- Feed Amount per Cycle -->
@@ -242,7 +242,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Feed Amount per Cycle"
-                android:textColor="#000000"/>
+                android:textColor="#10282E"/>
             <TextView
                 android:id="@+id/txt_feed_amount"
                 android:layout_width="match_parent"
@@ -250,7 +250,7 @@
                 android:background="@drawable/rounded_box"
                 android:padding="8dp"
                 android:text="500g"
-                android:textColor="#000000"
+                android:textColor="#10282E"
                 android:layout_marginBottom="16dp" />
 
             <Button
