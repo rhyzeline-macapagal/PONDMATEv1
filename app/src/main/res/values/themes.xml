@@ -8,4 +8,9 @@
 
     <style name="Theme.PONDMATEv1" parent="Base.Theme.PONDMATEv1" />
 
+    <style name="CustomTabLayout" parent="Widget.Material3.TabLayout">
+        <item name="tabIndicatorColor">@android:color/transparent</item>
+    </style>
+
+
 </resources>

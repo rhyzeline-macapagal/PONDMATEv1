@@ -75,10 +75,6 @@ public class FragmentTwo extends Fragment {
             }
         });
 
-
-
-
-
         return view;
     }
 }

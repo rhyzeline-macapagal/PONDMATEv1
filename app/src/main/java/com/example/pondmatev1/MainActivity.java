@@ -60,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.con, pcostroi).commit();
 
                 } else if (model.getId() == 4) {
-
+                    feeders feeders = new feeders();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.con, feeders).commit();
 
                 } else if (model.getId() == 5) {
 
