@@ -26,8 +26,7 @@ public class feeders extends Fragment {
         viewPager2 = view.findViewById(R.id.viewpager2);
 
         tabLayout.addTab(tabLayout.newTab().setText("Controls"));
-        tabLayout.addTab(tabLayout.newTab().setText("Feeder Status"));
-        tabLayout.addTab(tabLayout.newTab().setText("Add Status"));
+        tabLayout.addTab(tabLayout.newTab().setText("Schedule Feeder"));
 
         FragmentManager fragmentManager = getChildFragmentManager();
         adapter = new FeederAdapter(fragmentManager, getLifecycle());

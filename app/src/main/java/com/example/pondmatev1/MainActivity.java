@@ -1,6 +1,5 @@
 package com.example.pondmatev1;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -51,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.con, fraghome).commit();
 
                 } else if (model.getId() == 2) {
-                    FragmentTwo fragmentTwo = new FragmentTwo();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.con, fragmentTwo).commit();
+                    Breed breed = new Breed();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.con, breed).commit();
 
 
                 } else if (model.getId() == 3) {

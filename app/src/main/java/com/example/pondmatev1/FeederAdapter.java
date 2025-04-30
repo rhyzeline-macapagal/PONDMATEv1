@@ -15,19 +15,17 @@ public class FeederAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         if (position == 0) {
-            return new ControlFragment();
+            return new ControlsFeeder();
         } else if (position == 1) {
-            return new FeederStatsFragment();
-        } else if (position == 2) {
-            return new AddFeederFragment();
+            return new ScheduleFeeder();
         } else {
             // fallback in case position is invalid
-            return new ControlFragment();
+            return new ControlsFeeder();
         }
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 2;
     }
 }

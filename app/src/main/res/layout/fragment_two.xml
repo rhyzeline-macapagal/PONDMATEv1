@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FragmentTwo">
+    tools:context=".Breed">
 
 
     <LinearLayout
@@ -91,7 +91,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:textColor="#3A4E56">
+                    android:textColor="#3A4E56"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    >
 
                 </AutoCompleteTextView>
             </com.google.android.material.textfield.TextInputLayout>
@@ -164,11 +169,11 @@
                 android:id="@+id/edit_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="64dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="16dp"
                 android:backgroundTint="#047CA1"
                 android:text="Edit"
                 android:textColor="#ffffff"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewEHD" />
 
@@ -181,10 +186,12 @@
                 android:backgroundTint="#047CA1"
                 android:text="Save"
                 android:textColor="#ffffff"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.036"
                 app:layout_constraintStart_toEndOf="@+id/edit_btn"
                 app:layout_constraintTop_toBottomOf="@+id/est_doh" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
