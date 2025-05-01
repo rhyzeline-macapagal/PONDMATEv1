@@ -1,233 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@color/almostwhite"
-    tools:context=".pcostroi"
-    >
+    tools:context=".pcostroi">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="360dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:spacing="16dp">
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/rounded_container"
+        android:elevation="4dp"
+        android:orientation="Vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.089">
 
-        <!-- REPORT DISPLAY CONTAINER -->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/rounded_container"
-            android:padding="16dp"
-
-            android:elevation="4dp"
-            android:layout_marginBottom="16dp">
+            android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/textView8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PRODUCTION COSTS AND ROI"
-                android:textSize="20sp"
-                android:textColor="#000000"
+                android:layout_marginTop="4dp"
+                android:text="PRODUCTION COST"
+                android:textAlignment="center"
+                android:textColor="#3A4E56"
+                android:textSize="26sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cost of Fingerlings: ₱2,000"
-                android:textColor="#000000"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cost of Feeds: ₱5,000"
-                android:textColor="#000000"/>
+                android:layout_marginTop="36dp"
+                android:text="Type of Fingerlings:"
+                android:textColor="#10282E"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/textView8"
+                app:layout_constraintHorizontal_bias="0.183"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Maintenance Cost:"
-                android:textColor="#000000"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="• Labor: ₱1,000"
-                android:textColor="#000000"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="• Electricity: ₱500"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Other Expenses:"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                android:textColor="#000000"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="• Repairs: ₱800"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Total Cost: ₱9,300"
-                android:layout_marginTop="8dp"
-                android:textColor="#000000"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Total Sales: ₱15,000"
-                android:textColor="#000000"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Mortality Rate: 5%"
-                android:textColor="#000000"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Projected Revenue: ₱14,250"
-                android:textColor="#000000"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="ROI: 53.2%"
-                android:layout_marginBottom="8dp"
-                android:textColor="#000000"/>
-
-            <Button
-                android:id="@+id/btn_generate_pdf"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Generate Report (PDF)"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="120dp"
+                android:layout_height="57dp"
+                android:layout_margin="16dp"
                 android:layout_marginTop="12dp"
-                android:backgroundTint="#047CA1"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
+                android:hint="@string/select_breed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.428"
+                app:layout_constraintStart_toEndOf="@+id/textView10"
+                app:layout_constraintTop_toBottomOf="@+id/textView8">
 
-        <!-- EDITABLE INPUTS CONTAINER -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/rounded_container"
-            android:padding="16dp"
-            android:elevation="4dp">
+                <AutoCompleteTextView
+                    android:id="@+id/auto_complete_txt1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="none"
+                    android:textColor="#3A4E56">
+
+                </AutoCompleteTextView>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
+                android:id="@+id/textView15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EDIT"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginTop="28dp"
+                android:text="Cost of fingerlings:"
+                android:textColor="#10282E"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.138"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
-            <!-- Fingerlings Cost -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Edit Fingerlings Cost:" />
             <EditText
-                android:id="@+id/edit_fingerlings"
-                android:layout_width="match_parent"
+                android:id="@+id/amtoffingerlings"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/text_box"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="eg.₱1,500"
+                android:inputType="none"
+                android:padding="12dp"
+                android:textAlignment="textEnd"
                 android:textColor="#000000"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:hint="e.g. 2000" />
+                android:textColorHint="#10282E"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.487"
+                app:layout_constraintStart_toEndOf="@+id/textView15"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
-            <!-- Feeds Cost -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Edit Feeds Cost:" />
-            <EditText
-                android:id="@+id/edit_feeds"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:inputType="numberDecimal"
-                android:hint="e.g. 5000" />
-
-            <!-- Maintenance -->
             <TextView
+                android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:text="Add Maintenance Cost:"
-                android:layout_marginTop="16dp" />
-            <EditText
-                android:id="@+id/edit_maintenance_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:hint="e.g. Labor" />
-            <EditText
-                android:id="@+id/edit_maintenance_cost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:inputType="numberDecimal"
-                android:hint="e.g. 1000" />
+                android:layout_marginTop="24dp"
+                android:text="Cost of Feeders:"
+                android:textColor="#10282E"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.126"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
-            <Button
-                android:id="@+id/btn_add_maintenance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="#047CA1"
-                android:text="Add Maintenance"
-                android:textColor="@android:color/white" />
+            <EditText
+                android:id="@+id/amtoffeeders"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/text_box"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="eg.₱1,500"
+                android:inputType="none"
+                android:padding="12dp"
+                android:textAlignment="textEnd"
+                android:textColor="#000000"
+                android:textColorHint="#10282E"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.633"
+                app:layout_constraintStart_toEndOf="@+id/textView11"
+                app:layout_constraintTop_toBottomOf="@+id/amtoffingerlings" />
 
-            <!-- Other Expense -->
             <TextView
+                android:id="@+id/textView12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Other Expense:"
-                android:textColor="#000000"
-
-                android:layout_marginTop="16dp" />
-
-            <EditText
-                android:id="@+id/edit_other_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="e.g. Repairs"
-                android:textColor="#000000"
-                />
+                android:layout_marginTop="24dp"
+                android:text="Maintenance Cost:"
+                android:textColor="#10282E"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.135"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
             <EditText
-                android:id="@+id/edit_other_cost"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:hint="e.g. 800"
+                android:id="@+id/maintenancecost"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/text_box"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="eg.₱1,500"
+                android:inputType="none"
+                android:padding="12dp"
+                android:textAlignment="textEnd"
                 android:textColor="#000000"
-                />
+                android:textColorHint="#10282E"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView12"
+                app:layout_constraintTop_toBottomOf="@+id/amtoffeeders" />
 
-            <Button
-                android:id="@+id/btn_add_other"
+            <TextView
+                android:id="@+id/textView13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="#047CA1"
-                android:text="Add Other Expense"
-                android:textColor="@android:color/white" />
+                android:layout_marginTop="24dp"
+                android:text="Other Expenses:"
+                android:textColor="#10282E"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.121"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
-            <!-- Save / Generate Buttons -->
-            <Button
-                android:id="@+id/btn_save_report"
-                android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/otherexpenses"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/text_box"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="eg.₱1,500"
+                android:inputType="none"
+                android:padding="12dp"
+                android:textAlignment="textEnd"
+                android:textColor="#000000"
+                android:textColorHint="#10282E"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.633"
+                app:layout_constraintStart_toEndOf="@+id/textView13"
+                app:layout_constraintTop_toBottomOf="@+id/maintenancecost" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="✔ Save"
-                android:layout_marginTop="16dp"
-                android:backgroundTint="#047CA1"
-                android:textColor="@android:color/white" />
+                android:layout_marginTop="32dp"
+                android:text="Total Expenditures:"
+                android:textColor="#10282E"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.144"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
-
-        </LinearLayout>
+            <EditText
+                android:id="@+id/totalexpenses"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/text_box"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="eg.₱1,500"
+                android:inputType="none"
+                android:padding="12dp"
+                android:textAlignment="textEnd"
+                android:textColor="#000000"
+                android:textColorHint="#10282E"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.894"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/otherexpenses" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
