@@ -9,6 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+
 
 import java.util.ArrayList;
 
@@ -19,6 +22,10 @@ public class pcostroi extends Fragment {
     ArrayAdapter<String> adapterItems;
     Button addOptionButton, editButton, saveButton;
     EditText amtFingerlings, amtFeeders, maintenance, otherExpenses, totalExpenses;
+    LinearLayout maintenanceList, oexpensesList;
+    ImageButton addMaintenanceButton, addOtherExpensesButton;
+    EditText initialMaintenanceCost, initialOtherExpenseCost;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,14 +48,18 @@ public class pcostroi extends Fragment {
         // Initialize views
         amtFingerlings = view.findViewById(R.id.amtoffingerlings);
         amtFeeders = view.findViewById(R.id.amtoffeeders);
-        maintenance = view.findViewById(R.id.maintenancecost);
-        otherExpenses = view.findViewById(R.id.otherexpenses);
+        initialMaintenanceCost = view.findViewById(R.id.initialMaintenanceCost);
+        initialOtherExpenseCost = view.findViewById(R.id.initialOtherExpenseCost);
         totalExpenses = view.findViewById(R.id.totalexpenses);
         editButton = view.findViewById(R.id.editbtn);
         saveButton = view.findViewById(R.id.savebtn);
+        maintenanceList = view.findViewById(R.id.maintenanceList);
+        oexpensesList = view.findViewById(R.id.otherExpensesList);
 
-        autoCompleteText = view.findViewById(R.id.auto_complete_txt1);
         addOptionButton = view.findViewById(R.id.addOptionButton);
+        autoCompleteText = view.findViewById(R.id.auto_complete_txt1);
+        addMaintenanceButton = view.findViewById(R.id.addMaintenanceButton);
+        addOtherExpensesButton = view.findViewById(R.id.addOtherExpensesButton);
 
         // Set up dropdown adapter
         adapterItems = new ArrayAdapter<>(requireContext(),
@@ -70,8 +81,6 @@ public class pcostroi extends Fragment {
             setEditable(false);
             saveButton.setVisibility(View.GONE);
             editButton.setVisibility(View.VISIBLE);
-
-            // Optional: Logic to save changes to database or shared preferences
         });
 
         // Add new breed option
@@ -88,20 +97,59 @@ public class pcostroi extends Fragment {
             }
         });
 
+        // Add new maintenance row
+        addMaintenanceButton.setOnClickListener(v -> addNewMaintenanceRow());
+
+        // Add new other expenses row
+        addOtherExpensesButton.setOnClickListener(v -> addNewOtherExpensesRow());
+
         return view;
     }
 
     private void setEditable(boolean editable) {
-        EditText[] fields = {amtFingerlings, amtFeeders, maintenance, otherExpenses, totalExpenses};
+        EditText[] fields = {amtFingerlings, amtFeeders,  initialMaintenanceCost, initialOtherExpenseCost, totalExpenses};
 
         for (EditText field : fields) {
             field.setFocusable(editable);
             field.setFocusableInTouchMode(editable);
             field.setClickable(editable);
             field.setCursorVisible(editable);
+
+            if (editable) {
+                field.requestFocus(); // Manually request focus when making editable
+            }
         }
+        initialMaintenanceCost.setFocusable(editable);
+        initialMaintenanceCost.setFocusableInTouchMode(editable);
+        initialMaintenanceCost.setClickable(editable);
+        initialMaintenanceCost.setCursorVisible(editable);
+
+        initialOtherExpenseCost.setFocusable(editable);
+        initialOtherExpenseCost.setFocusableInTouchMode(editable);
+        initialOtherExpenseCost.setClickable(editable);
+        initialOtherExpenseCost.setCursorVisible(editable);
 
         autoCompleteText.setEnabled(editable);
         addOptionButton.setEnabled(editable);
+    }
+
+    // Method to add new maintenance row dynamically
+    private void addNewMaintenanceRow() {
+        View maintenanceView = LayoutInflater.from(requireContext()).inflate(R.layout.row_maintenance, null);
+
+        EditText maintenanceType = maintenanceView.findViewById(R.id.maintenanceType);
+        EditText maintenanceCost = maintenanceView.findViewById(R.id.maintenanceCost);
+
+        maintenanceList.addView(maintenanceView);
+    }
+
+    // Method to add new other expenses row dynamically
+    private void addNewOtherExpensesRow() {
+        View expensesView = LayoutInflater.from(requireContext()).inflate(R.layout.row_other_expenses, null);
+
+        EditText expenseType = expensesView.findViewById(R.id.otherexpenses);
+        EditText expenseCost = expensesView.findViewById(R.id.otherexpensesCost);
+
+        oexpensesList.addView(expensesView);
     }
 }
