@@ -8,17 +8,23 @@
 
     <EditText
         android:id="@+id/otherexpenses"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:hint="Type"
+        android:layout_width="157dp"
+        android:layout_height="41dp"
+        android:hint="Add expenses"
+        android:textSize="14sp"
         android:inputType="text" />
 
     <EditText
         android:id="@+id/otherexpensesCost"
-        android:layout_width="0dp"
+        android:layout_width="121dp"
+        android:layout_height="41dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:cursorVisible="true"
+        android:enabled="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:hint="Cost"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        android:textSize="14sp" />
 </LinearLayout>
