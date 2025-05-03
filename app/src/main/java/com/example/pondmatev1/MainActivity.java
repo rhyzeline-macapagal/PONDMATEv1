@@ -1,6 +1,10 @@
 package com.example.pondmatev1;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +34,13 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        ImageView profileIcon = findViewById(R.id.profileIcon);
+
+        profileIcon.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, profile.class);
+            startActivity(intent);
+        });
+
         bottomNavigation = findViewById(R.id.bottomNavigation);
 
         bottomNavigation.add(new NafisBottomNavigation.Model(1, R.drawable.home1));
@@ -37,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.add(new NafisBottomNavigation.Model(3, R.drawable.productioncost3));
         bottomNavigation.add(new NafisBottomNavigation.Model(4, R.drawable.feeder4));
         bottomNavigation.add(new NafisBottomNavigation.Model(5, R.drawable.activity5));
+
 
         bottomNavigation.show(1, true);
         getSupportFragmentManager().beginTransaction().replace(R.id.con, new fraghome()).commit();
@@ -70,5 +82,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
     }
+
 }
