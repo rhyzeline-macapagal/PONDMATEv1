@@ -137,6 +137,9 @@ public class pcostroi extends Fragment {
     private void addNewMaintenanceRow() {
         View maintenanceView = LayoutInflater.from(requireContext()).inflate(R.layout.row_maintenance, null);
 
+        ImageButton removeButton = maintenanceView.findViewById(R.id.removeMaintenanceButton);
+        removeButton.setOnClickListener(v -> maintenanceList.removeView(maintenanceView));
+
         EditText maintenanceType = maintenanceView.findViewById(R.id.maintenanceType);
         EditText maintenanceCost = maintenanceView.findViewById(R.id.maintenanceCost);
 
@@ -146,6 +149,9 @@ public class pcostroi extends Fragment {
     // Method to add new other expenses row dynamically
     private void addNewOtherExpensesRow() {
         View expensesView = LayoutInflater.from(requireContext()).inflate(R.layout.row_other_expenses, null);
+
+        ImageButton removeButton = expensesView.findViewById(R.id.removeOtherExpenseButton);
+        removeButton.setOnClickListener(v -> oexpensesList.removeView(expensesView));
 
         EditText expenseType = expensesView.findViewById(R.id.otherexpenses);
         EditText expenseCost = expensesView.findViewById(R.id.otherexpensesCost);

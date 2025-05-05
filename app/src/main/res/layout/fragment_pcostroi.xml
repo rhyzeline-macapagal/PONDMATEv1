@@ -10,11 +10,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
+            android:id="@+id/linearLayout5"
             android:layout_width="360dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="80dp"
             android:layout_marginTop="50dp"
+            android:layout_marginBottom="80dp"
             android:background="@drawable/rounded_container"
             android:elevation="4dp"
             android:padding="16dp"
@@ -376,6 +378,21 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/generatereport"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#047CA1"
+            android:text="GENERATE REPORT"
+            android:drawablePadding="16dp"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 
