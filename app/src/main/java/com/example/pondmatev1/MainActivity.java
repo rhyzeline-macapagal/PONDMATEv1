@@ -56,27 +56,32 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.setOnClickMenuListener(new Function1<NafisBottomNavigation.Model, Unit>() {
             @Override
             public Unit invoke(NafisBottomNavigation.Model model) {
-
-                if (model.getId() == 1) {
-                    fraghome fraghome = new fraghome();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.con, fraghome).commit();
-
-                } else if (model.getId() == 2) {
-                    Breed breed = new Breed();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.con, breed).commit();
-
-
-                } else if (model.getId() == 3) {
-                    pcostroi pcostroi = new pcostroi();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.con, pcostroi).commit();
-
-                } else if (model.getId() == 4) {
-                    feeders feeders = new feeders();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.con, feeders).commit();
-
-                } else if (model.getId() == 5) {
-
-
+                switch (model.getId()) {
+                    case 1:
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.con, new fraghome())
+                                .commit();
+                        break;
+                    case 2:
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.con, new Breed())
+                                .commit();
+                        break;
+                    case 3:
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.con, new pcostroi())
+                                .commit();
+                        break;
+                    case 4:
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.con, new feeders())
+                                .commit();
+                        break;
+                    case 5:
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.con, new ActProd())
+                                .commit();
+                        break;
                 }
                 return null;
             }
