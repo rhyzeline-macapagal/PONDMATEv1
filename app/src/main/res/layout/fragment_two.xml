@@ -12,7 +12,7 @@
         android:layout_width="339dp"
         android:layout_height="340dp"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="35dp"
         android:background="@drawable/rounded_container"
         android:elevation="4dp"
         android:orientation="vertical"
@@ -90,13 +90,12 @@
                     android:id="@+id/auto_complete_txt1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:textColor="#3A4E56"
+                    android:clickable="false"
                     android:enabled="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:clickable="false"
-                    >
+                    android:inputType="none"
+                    android:textColor="#3A4E56">
 
                 </AutoCompleteTextView>
             </com.google.android.material.textfield.TextInputLayout>
@@ -182,7 +181,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:backgroundTint="#047CA1"
                 android:text="Save"
                 android:textColor="#ffffff"
@@ -198,9 +197,9 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="339dp"
-        android:layout_height="295dp"
+        android:layout_height="325dp"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="400dp"
+        android:layout_marginTop="380dp"
         android:background="@drawable/rounded_container"
         android:elevation="4dp"
         android:orientation="vertical"
@@ -208,7 +207,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="298dp">
 
             <TextView
                 android:id="@+id/textView5"
@@ -319,6 +318,48 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+            <Button
+                android:id="@+id/mreditbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="#047CA1"
+                android:text="Edit"
+                android:textColor="#ffffff"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mortrate_display" />
+
+            <Button
+                android:id="@+id/resetbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="#047CA1"
+                android:text="Reset"
+                android:textColor="#ffffff"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mortrate_display"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/calculatebtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="#047CA1"
+                android:text="Calculate"
+                android:textColor="#ffffff"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/mreditbtn"
+                app:layout_constraintTop_toBottomOf="@+id/mortrate_display"
+                android:visibility="gone"/>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

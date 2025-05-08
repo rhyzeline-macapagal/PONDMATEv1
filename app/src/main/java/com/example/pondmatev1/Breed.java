@@ -99,6 +99,32 @@ public class Breed extends Fragment {
             saveBtn.setVisibility(View.GONE);
         });
 
+        Button editButton = view.findViewById(R.id.mreditbtn);
+        Button resetButton = view.findViewById(R.id.resetbtn);
+        Button calculateButton = view.findViewById(R.id.calculatebtn);
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editButton.setVisibility(View.GONE);
+                resetButton.setVisibility(View.VISIBLE);
+                calculateButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        View.OnClickListener reverseAction = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editButton.setVisibility(View.VISIBLE);
+                resetButton.setVisibility(View.GONE);
+                calculateButton.setVisibility(View.GONE);
+            }
+        };
+
+        resetButton.setOnClickListener(reverseAction);
+        calculateButton.setOnClickListener(reverseAction);
+
+
         return view;
     }
 
