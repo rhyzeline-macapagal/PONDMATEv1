@@ -7,300 +7,284 @@
     android:background="@drawable/white_bg"
     android:elevation="3dp">
 
-    <ScrollView
-        android:id="@+id/scrollView3"
+    <View
+        android:id="@+id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="360dp"
+        android:background="@drawable/top_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="415dp"
+        android:layout_height="275dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/circle" />
+
+    <ImageButton
+        android:id="@+id/backbtn_profile"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="1dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/backbutton_profile"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="16dp" />
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="136dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="64dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/pfp" />
+
+            <TextView
+                android:id="@+id/profile_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Profile"
+                android:textColor="#ffffff"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="360dp"
-                    android:background="@drawable/top_background"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="415dp"
-                    android:layout_height="275dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/circle" />
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="136dp"
-                    android:layout_height="110dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/view"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="@+id/imageView4"
-                    app:layout_constraintTop_toTopOf="@+id/view"
-                    app:layout_constraintVertical_bias="0.304"
-                    app:srcCompat="@drawable/pfp" />
-
-                <TextView
-                    android:id="@+id/profile_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Name"
-                    android:textColor="#ffffff"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView5"
-                    app:layout_constraintVertical_bias="0.333" />
+                android:layout_height="330dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/white_bg"
+                android:elevation="3dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_username"
+                app:layout_constraintVertical_bias="0.0">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="480dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="24dp"
-                    android:background="@drawable/white_bg"
-                    android:elevation="3dp"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_username"
-                    app:layout_constraintVertical_bias="0.0">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="10dp"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="10dp"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent">
 
                         <TextView
                             android:id="@+id/textView_pondname1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="24dp"
                             android:layout_weight="1"
                             android:text="Pond Name:"
                             android:textColor="@color/black"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <EditText
                             android:id="@+id/textView_pondname2"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
+                            android:layout_width="152dp"
+                            android:layout_height="45dp"
+                            android:layout_marginTop="8dp"
                             android:layout_weight="1"
                             android:background="@android:drawable/edit_text"
                             android:backgroundTint="#ffffff"
+                            android:hint="Enter Name of Pond"
                             android:padding="5dp"
-                            android:text="Name of Pond"
-                            android:textAlignment="textEnd"
+                            android:enabled="false"
+                            android:textAlignment="textStart"
                             android:textColor="#5b5b5b"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/view12"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="15dp"
-                        android:background="#d9d9d9" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="10dp"
-                        android:orientation="horizontal">
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.826"
+                            app:layout_constraintStart_toEndOf="@+id/textView_pondname1"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/textView_location"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="16dp"
                             android:layout_weight="1"
                             android:text="Location:"
                             android:textColor="@color/black"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView_pondname1" />
 
                         <EditText
                             android:id="@+id/textView_location2"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
+                            android:layout_width="152dp"
+                            android:layout_height="45dp"
                             android:layout_weight="1"
                             android:background="@android:drawable/edit_text"
                             android:backgroundTint="#ffffff"
+                            android:hint="Enter Pond Location"
                             android:padding="5dp"
-                            android:text="Pond Location"
-                            android:textAlignment="textEnd"
+                            android:enabled="false"
+                            android:textAlignment="textStart"
                             android:textColor="#5b5b5b"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/view11"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="15dp"
-                        android:background="#d9d9d9" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="10dp"
-                        android:orientation="horizontal">
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.86"
+                            app:layout_constraintStart_toEndOf="@+id/textView_location"
+                            app:layout_constraintTop_toBottomOf="@+id/textView_pondname2" />
 
                         <TextView
                             android:id="@+id/textView_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="20dp"
                             android:layout_weight="1"
                             android:text="Name:"
                             android:textColor="@color/black"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView_location" />
 
                         <EditText
                             android:id="@+id/textView_name2"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
+                            android:layout_width="152dp"
+                            android:layout_height="45dp"
                             android:layout_weight="1"
                             android:background="@android:drawable/edit_text"
                             android:backgroundTint="#ffffff"
+                            android:hint="Enter Name"
                             android:padding="5dp"
-                            android:text="Name"
-                            android:textAlignment="textEnd"
+                            android:enabled="false"
+                            android:textAlignment="textStart"
                             android:textColor="#5b5b5b"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/view10"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="15dp"
-                        android:background="#d9d9d9" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginEnd="10dp"
-                        android:orientation="horizontal">
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.88"
+                            app:layout_constraintStart_toEndOf="@+id/textView_name"
+                            app:layout_constraintTop_toBottomOf="@+id/textView_location2" />
 
                         <TextView
                             android:id="@+id/textView_passworduser"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="24dp"
                             android:layout_weight="1"
-                            android:text="Password"
+                            android:text="Password:"
                             android:textColor="@color/black"
                             android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <EditText
-                            android:id="@+id/textView_password2"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
-                            android:layout_weight="1"
-                            android:background="@android:drawable/edit_text"
-                            android:backgroundTint="#ffffff"
-                            android:padding="5dp"
-                            android:text="Change"
-                            android:textAlignment="textEnd"
-                            android:textColor="#5b5b5b"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/view9"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="15dp"
-                        android:background="#d9d9d9" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView_name" />
 
                         <Button
-                            android:id="@+id/userprofile_logout"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
+                            android:id="@+id/resetbtn"
+                            android:layout_width="152dp"
+                            android:layout_height="wrap_content"
                             android:backgroundTint="#ffffff"
                             android:paddingHorizontal="16dp"
-                            android:text="Edit Profile"
+                            android:text="Reset Password"
+                            android:textAlignment="center"
                             android:textColor="#E81515"
-                            android:textSize="16sp" />
-                    </LinearLayout>
+                            android:textSize="16sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.853"
+                            app:layout_constraintStart_toEndOf="@+id/textView_passworduser"
+                            app:layout_constraintTop_toBottomOf="@+id/textView_name2" />
+
+                        <View
+                            android:id="@+id/view9"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#d9d9d9"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/resetbtn" />
+
+                        <Button
+                            android:id="@+id/userprofile_edit"
+                            android:layout_width="200dp"
+                            android:layout_height="48dp"
+                            android:layout_marginTop="12dp"
+                            android:backgroundTint="#047CA1"
+                            android:paddingHorizontal="16dp"
+                            android:text="Edit Profile"
+                            android:textColor="#ffffff"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/view9" />
+
+                        <Button
+                            android:id="@+id/userprofile_save"
+                            android:layout_width="200dp"
+                            android:layout_height="48dp"
+                            android:backgroundTint="#047CA1"
+                            android:paddingHorizontal="16dp"
+                            android:text="Save Changes"
+                            android:textColor="#ffffff"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/userprofile_edit" />
 
 
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
+            </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/backbtn_profile"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:padding="1dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Back"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/backbutton_profile"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_margin="16dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <Button
-                android:id="@+id/editprofile_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="50dp"
-                android:backgroundTint="#2496B9"
-                android:text="Log Out"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </LinearLayout>
-    </ScrollView>
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="50dp"
+            android:backgroundTint="#1D282A"
+            android:text="Log Out"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
