@@ -52,4 +52,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     implementation ("com.github.Foysalofficial:NafisBottomNav:5.0")
+
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

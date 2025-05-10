@@ -10,9 +10,9 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="339dp"
-        android:layout_height="340dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="45dp"
         android:background="@drawable/rounded_container"
         android:elevation="4dp"
         android:orientation="vertical"
@@ -20,7 +20,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <!-- FISH BREED-->
 
             <TextView
@@ -70,7 +70,7 @@
                 android:textSize="16sp"
 
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.909"
+                app:layout_constraintHorizontal_bias="0.929"
                 app:layout_constraintStart_toEndOf="@+id/textView4"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -101,55 +101,21 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/textViewTASF"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="20dp"
-                android:text="Total Amount of Stocked Fish:"
-                android:textColor="#10282E"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
-
-            <EditText
-                android:id="@+id/amt_fish_stocked_input"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/text_box"
-                android:hint="0 kg"
-                android:inputType="number"
-                android:padding="12dp"
-                android:textAlignment="textEnd"
-                android:textColor="#000000"
-                android:textColorHint="#10282E"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/textViewTASF"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
-
-            <TextView
                 android:id="@+id/textViewEHD"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:text="Estimated Date of Harvest:"
                 android:textColor="#10282E"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewTASF" />
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
             <EditText
                 android:id="@+id/est_doh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/text_box"
                 android:hint="mm/dd/yyyy"
@@ -162,7 +128,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/textViewEHD"
-                app:layout_constraintTop_toBottomOf="@+id/amt_fish_stocked_input" />
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
             <Button
                 android:id="@+id/edit_btn"
@@ -199,7 +165,7 @@
         android:layout_width="339dp"
         android:layout_height="325dp"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="380dp"
+        android:layout_marginTop="350dp"
         android:background="@drawable/rounded_container"
         android:elevation="4dp"
         android:orientation="vertical"

@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -25,8 +26,10 @@ public class Breed extends Fragment {
     AutoCompleteTextView autoCompleteText;
     ArrayAdapter<String> adapterItems;
     View view;
-    EditText SOA, estDoh, amtFishStocked;
+    EditText SOA, estDoh, intStockFish, NoDFish;
     Calendar calendar;
+    TextView MortResult;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,15 +39,23 @@ public class Breed extends Fragment {
         // Initialize views
         SOA = view.findViewById(R.id.start_of_act);
         estDoh = view.findViewById(R.id.est_doh);
-        amtFishStocked = view.findViewById(R.id.amt_fish_stocked_input);
+        intStockFish = view.findViewById(R.id.initialstock_input);
+        NoDFish = view.findViewById(R.id.deadfish_input);
         AutoCompleteTextView breedDropdown = view.findViewById(R.id.auto_complete_txt1);
         Button editBtn = view.findViewById(R.id.edit_btn);
         Button saveBtn = view.findViewById(R.id.save_btn);
+        Button mreditBtn = view.findViewById(R.id.mreditbtn);
+        Button resetBtn = view.findViewById(R.id.resetbtn);
+        Button calcBtn = view.findViewById(R.id.calculatebtn);
+        MortResult = view.findViewById(R.id.mortrate_display);
+
+
 
         // Disable inputs initially
         SOA.setEnabled(false);
         breedDropdown.setEnabled(false);
-        amtFishStocked.setEnabled(false);
+        intStockFish.setEnabled(false);
+        NoDFish.setEnabled(false);
         estDoh.setEnabled(false);
 
         // Setup dropdown adapter
@@ -65,7 +76,6 @@ public class Breed extends Fragment {
             // Enable inputs when Edit is clicked
             SOA.setEnabled(true);
             breedDropdown.setEnabled(true);
-            amtFishStocked.setEnabled(true);
             estDoh.setEnabled(true);
 
             // Set listeners only after enabling
@@ -89,7 +99,6 @@ public class Breed extends Fragment {
             // Disable inputs after Save is clicked
             SOA.setEnabled(false);
             breedDropdown.setEnabled(false);
-            amtFishStocked.setEnabled(false);
             estDoh.setEnabled(false);
 
             breedDropdown.setFocusable(false);
@@ -99,30 +108,86 @@ public class Breed extends Fragment {
             saveBtn.setVisibility(View.GONE);
         });
 
-        Button editButton = view.findViewById(R.id.mreditbtn);
-        Button resetButton = view.findViewById(R.id.resetbtn);
-        Button calculateButton = view.findViewById(R.id.calculatebtn);
+        mreditBtn.setOnClickListener(v -> {
+            intStockFish.setEnabled(true);
+            NoDFish.setEnabled(true);
 
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editButton.setVisibility(View.GONE);
-                resetButton.setVisibility(View.VISIBLE);
-                calculateButton.setVisibility(View.VISIBLE);
-            }
+            mreditBtn.setEnabled(false);
+            mreditBtn.setVisibility(View.GONE);
+            resetBtn.setVisibility(View.VISIBLE);
+            calcBtn.setVisibility(View.VISIBLE);
         });
 
-        View.OnClickListener reverseAction = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editButton.setVisibility(View.VISIBLE);
-                resetButton.setVisibility(View.GONE);
-                calculateButton.setVisibility(View.GONE);
-            }
-        };
 
-        resetButton.setOnClickListener(reverseAction);
-        calculateButton.setOnClickListener(reverseAction);
+        resetBtn.setOnClickListener(v -> {
+            intStockFish.setText("");
+            NoDFish.setText("");
+            MortResult.setText("");
+
+            // Disable fields again and hide buttons
+            intStockFish.setEnabled(false);
+            NoDFish.setEnabled(false);
+
+            // Restore mreditBtn
+            mreditBtn.setEnabled(true);
+            mreditBtn.setVisibility(View.VISIBLE);
+
+            resetBtn.setVisibility(View.GONE);
+            calcBtn.setVisibility(View.GONE);
+        });
+
+
+
+        mreditBtn.setOnClickListener(v -> {
+            intStockFish.setEnabled(true);
+            NoDFish.setEnabled(true);
+            intStockFish.setText("");
+            NoDFish.setText("");
+
+            mreditBtn.setVisibility(View.GONE);
+            resetBtn.setVisibility(View.VISIBLE);
+            calcBtn.setVisibility(View.VISIBLE);
+        });
+
+        resetBtn.setOnClickListener(v -> {
+            intStockFish.setText("");
+            NoDFish.setText("");
+            MortResult.setText("");
+
+            mreditBtn.setVisibility(View.VISIBLE);
+            resetBtn.setVisibility(View.GONE);
+            calcBtn.setVisibility(View.GONE);
+        });
+
+        calcBtn.setOnClickListener(v -> {
+            String intStockFishStr = intStockFish.getText().toString();
+            String noDFishStr = NoDFish.getText().toString();
+
+            if (intStockFishStr.isEmpty() || noDFishStr.isEmpty()) {
+                Toast.makeText(requireContext(), "Please enter both values.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                double intStockFishValue = Double.parseDouble(intStockFishStr);
+                double noDFishValue = Double.parseDouble(noDFishStr);
+
+                if (intStockFishValue == 0) {
+                    Toast.makeText(requireContext(), "Initial stock of fish cannot be zero.", Toast.LENGTH_SHORT).show();
+                } else {
+                    double result = (noDFishValue / intStockFishValue) * 100;
+                    MortResult.setText(String.format(Locale.US, "%.2f%%", result));
+                    // Disable the fields after calculation
+                    intStockFish.setEnabled(false);
+                    NoDFish.setEnabled(false);
+
+                    // Disable the edit button
+                    mreditBtn.setEnabled(false);
+                }
+            } catch (NumberFormatException e) {
+                Toast.makeText(requireContext(), "Invalid input, please enter valid numbers.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         return view;
