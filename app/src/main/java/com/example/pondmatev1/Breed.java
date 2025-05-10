@@ -17,12 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class Breed extends Fragment {
 
-    String[] items = {"Tilapia", "Milkfish", "Shrimp", "Seaweed", "Carp", "Oyster", "Mussel"};
+    ArrayList<String> breedList;
     AutoCompleteTextView autoCompleteText;
     ArrayAdapter<String> adapterItems;
     View view;
@@ -30,6 +31,18 @@ public class Breed extends Fragment {
     Calendar calendar;
     TextView MortResult;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        breedList = new ArrayList<>();
+        breedList.add("Tilapia");
+        breedList.add("Milkfish");
+        breedList.add("Shrimp");
+        breedList.add("Seaweed");
+        breedList.add("Carp");
+        breedList.add("Oyster");
+        breedList.add("Mussel");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,26 +54,53 @@ public class Breed extends Fragment {
         estDoh = view.findViewById(R.id.est_doh);
         intStockFish = view.findViewById(R.id.initialstock_input);
         NoDFish = view.findViewById(R.id.deadfish_input);
-        AutoCompleteTextView breedDropdown = view.findViewById(R.id.auto_complete_txt1);
+        autoCompleteText = view.findViewById(R.id.auto_complete_txt1);
         Button editBtn = view.findViewById(R.id.edit_btn);
         Button saveBtn = view.findViewById(R.id.save_btn);
         Button mreditBtn = view.findViewById(R.id.mreditbtn);
         Button resetBtn = view.findViewById(R.id.resetbtn);
         Button calcBtn = view.findViewById(R.id.calculatebtn);
+        Button addOptionBtn = view.findViewById(R.id.addOptionButton);
         MortResult = view.findViewById(R.id.mortrate_display);
 
 
 
         // Disable inputs initially
         SOA.setEnabled(false);
-        breedDropdown.setEnabled(false);
+        SOA.setFocusable(false);
+        SOA.setFocusableInTouchMode(false);
+        SOA.setClickable(false);
+
+        autoCompleteText.setEnabled(false);
+        autoCompleteText.setFocusable(false);
+        autoCompleteText.setFocusableInTouchMode(false);
+        autoCompleteText.setClickable(false);
+
+        estDoh.setEnabled(false);
+        estDoh.setFocusable(false);
+        estDoh.setFocusableInTouchMode(false);
+        estDoh.setClickable(false);
+
         intStockFish.setEnabled(false);
         NoDFish.setEnabled(false);
-        estDoh.setEnabled(false);
 
         // Setup dropdown adapter
-        adapterItems = new ArrayAdapter<>(requireContext(), R.layout.list_items, items);
-        breedDropdown.setAdapter(adapterItems);
+        adapterItems = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, breedList);
+        autoCompleteText.setAdapter(adapterItems);
+
+
+        addOptionBtn.setOnClickListener(v -> {
+            String newItem = autoCompleteText.getText().toString().trim();
+
+            if (!newItem.isEmpty() && !breedList.contains(newItem)) {
+                breedList.add(newItem);
+                adapterItems = new ArrayAdapter<>(requireContext(),
+                        android.R.layout.simple_dropdown_item_1line, breedList);
+                autoCompleteText.setAdapter(adapterItems);
+                autoCompleteText.setText("");
+                autoCompleteText.showDropDown();
+            }
+        });
 
         // Calendar setup
         calendar = Calendar.getInstance();
@@ -75,8 +115,19 @@ public class Breed extends Fragment {
         editBtn.setOnClickListener(v -> {
             // Enable inputs when Edit is clicked
             SOA.setEnabled(true);
-            breedDropdown.setEnabled(true);
+            SOA.setFocusable(true);
+            SOA.setFocusableInTouchMode(true);
+            SOA.setClickable(true);
+
+            autoCompleteText.setEnabled(true);
+            autoCompleteText.setFocusable(true);
+            autoCompleteText.setFocusableInTouchMode(true);
+            autoCompleteText.setClickable(true);
+
             estDoh.setEnabled(true);
+            estDoh.setFocusable(true);
+            estDoh.setFocusableInTouchMode(true);
+            estDoh.setClickable(true);
 
             // Set listeners only after enabling
             SOA.setOnClickListener(v1 -> new DatePickerDialog(
@@ -86,7 +137,7 @@ public class Breed extends Fragment {
                     calendar.get(Calendar.DAY_OF_MONTH)
             ).show());
 
-            breedDropdown.setOnItemClickListener((parent, view1, position, id) -> {
+            autoCompleteText.setOnItemClickListener((parent, view1, position, id) -> {
                 String item = parent.getItemAtPosition(position).toString();
                 Toast.makeText(requireContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
             });
@@ -98,12 +149,19 @@ public class Breed extends Fragment {
         saveBtn.setOnClickListener(v -> {
             // Disable inputs after Save is clicked
             SOA.setEnabled(false);
-            breedDropdown.setEnabled(false);
-            estDoh.setEnabled(false);
+            SOA.setFocusable(false);
+            SOA.setFocusableInTouchMode(false);
+            SOA.setClickable(false);
 
-            breedDropdown.setFocusable(false);
-            breedDropdown.setFocusableInTouchMode(false);
-            breedDropdown.setClickable(false);
+            autoCompleteText.setEnabled(false);
+            autoCompleteText.setFocusable(false);
+            autoCompleteText.setFocusableInTouchMode(false);
+            autoCompleteText.setClickable(false);
+
+            estDoh.setEnabled(false);
+            estDoh.setFocusable(false);
+            estDoh.setFocusableInTouchMode(false);
+            estDoh.setClickable(false);
 
             saveBtn.setVisibility(View.GONE);
         });

@@ -20,7 +20,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="269dp">
             <!-- FISH BREED-->
 
             <TextView
@@ -43,36 +43,46 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginTop="12dp"
                 android:text="Activity Started:"
                 android:textColor="#10282E"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toBottomOf="@+id/addOptionButton" />
+
+            <Button
+                android:id="@+id/addOptionButton"
+                android:layout_width="110dp"
+                android:layout_height="35dp"
+                android:backgroundTint="#047CA1"
+                android:text="Add Option"
+                android:textColor="@android:color/white"
+                android:textSize="11sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.947"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
             <EditText
                 android:id="@+id/start_of_act"
-                android:layout_width="100dp"
+                android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/text_box"
+                android:layout_marginEnd="7dp"
+                android:backgroundTint="#8DFFFDFD"
                 android:clickable="false"
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:hint="Select Date"
                 android:inputType="none"
-                android:padding="12dp"
                 android:textAlignment="textEnd"
                 android:textColor="#000000"
-                android:textColorHint="#10282E"
-                android:textSize="16sp"
-
+                android:textColorHint="#313435"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.929"
+                app:layout_constraintHorizontal_bias="0.963"
                 app:layout_constraintStart_toEndOf="@+id/textView4"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toBottomOf="@+id/addOptionButton" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"
@@ -80,21 +90,22 @@
                 android:layout_width="292dp"
                 android:layout_height="57dp"
                 android:layout_margin="16dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="4dp"
                 android:hint="@string/select_breed"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.466"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4">
+                app:layout_constraintTop_toBottomOf="@+id/textView">
 
                 <AutoCompleteTextView
                     android:id="@+id/auto_complete_txt1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
                     android:clickable="false"
                     android:enabled="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:inputType="none"
                     android:textColor="#3A4E56">
 
                 </AutoCompleteTextView>
@@ -105,49 +116,48 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:text="Estimated Date of Harvest:"
                 android:textColor="#10282E"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
             <EditText
                 android:id="@+id/est_doh"
-                android:layout_width="wrap_content"
+                android:layout_width="110dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/text_box"
+                android:layout_marginEnd="7dp"
+                android:backgroundTint="#8DFFFDFD"
                 android:hint="mm/dd/yyyy"
                 android:inputType="none"
-                android:padding="12dp"
                 android:textAlignment="textEnd"
                 android:textColor="#000000"
-                android:textColorHint="#10282E"
-                android:textSize="16sp"
+                android:textColorHint="#313435"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.684"
                 app:layout_constraintStart_toEndOf="@+id/textViewEHD"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/start_of_act" />
 
             <Button
                 android:id="@+id/edit_btn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="8dp"
                 android:backgroundTint="#047CA1"
                 android:text="Edit"
                 android:textColor="#ffffff"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewEHD" />
+                app:layout_constraintTop_toBottomOf="@+id/est_doh" />
 
             <Button
                 android:id="@+id/save_btn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="4dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="8dp"
                 android:backgroundTint="#047CA1"
                 android:text="Save"
                 android:textColor="#ffffff"
@@ -217,7 +227,7 @@
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No. of Dead Fish:"
+                android:text="Est no. of Dead Fish:"
                 android:textColor="#10282E"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -235,7 +245,7 @@
                 android:padding="6dp"
                 android:textAlignment="textEnd"
                 android:textColor="#000000"
-                android:textColorHint="#10282E"
+                android:textColorHint="#313435"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -245,11 +255,11 @@
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Est Mortality Rate:"
+                android:text="Mortality Rate:"
                 android:textColor="#10282E"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.107"
+                app:layout_constraintHorizontal_bias="0.095"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/deadfish_input" />
 
@@ -263,7 +273,7 @@
                 android:padding="6dp"
                 android:textAlignment="textEnd"
                 android:textColor="#000000"
-                android:textColorHint="#10282E"
+                android:textColorHint="#313435"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -279,7 +289,7 @@
                 android:padding="6dp"
                 android:textAlignment="textEnd"
                 android:textColor="#000000"
-                android:textColorHint="#10282E"
+                android:textColorHint="#313435"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -288,7 +298,7 @@
             <Button
                 android:id="@+id/mreditbtn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="38dp"
                 android:layout_marginTop="4dp"
                 android:backgroundTint="#047CA1"
                 android:text="Edit"

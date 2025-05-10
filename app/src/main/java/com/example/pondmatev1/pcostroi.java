@@ -2,6 +2,9 @@ package com.example.pondmatev1;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import android.widget.LinearLayout;
 
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class pcostroi extends Fragment {
 
@@ -60,6 +64,9 @@ public class pcostroi extends Fragment {
         autoCompleteText = view.findViewById(R.id.auto_complete_txt1);
         addMaintenanceButton = view.findViewById(R.id.addMaintenanceButton);
         addOtherExpensesButton = view.findViewById(R.id.addOtherExpensesButton);
+
+        setupExpenseAutoSum(amtFingerlings, amtFeeders, initialMaintenanceCost, initialOtherExpenseCost);
+
 
         // Set up dropdown adapter
         adapterItems = new ArrayAdapter<>(requireContext(),
@@ -138,10 +145,21 @@ public class pcostroi extends Fragment {
         View maintenanceView = LayoutInflater.from(requireContext()).inflate(R.layout.row_maintenance, null);
 
         ImageButton removeButton = maintenanceView.findViewById(R.id.removeMaintenanceButton);
-        removeButton.setOnClickListener(v -> maintenanceList.removeView(maintenanceView));
-
         EditText maintenanceType = maintenanceView.findViewById(R.id.maintenanceType);
         EditText maintenanceCost = maintenanceView.findViewById(R.id.maintenanceCost);
+
+        maintenanceCost.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateTotalExpenses(amtFingerlings, amtFeeders, initialMaintenanceCost, initialOtherExpenseCost);
+            }
+            @Override public void afterTextChanged(Editable s) {}
+        });
+
+        removeButton.setOnClickListener(v -> {
+            maintenanceList.removeView(maintenanceView);
+            updateTotalExpenses(amtFingerlings, amtFeeders, initialMaintenanceCost, initialOtherExpenseCost);
+        });
 
         maintenanceList.addView(maintenanceView);
     }
@@ -151,11 +169,82 @@ public class pcostroi extends Fragment {
         View expensesView = LayoutInflater.from(requireContext()).inflate(R.layout.row_other_expenses, null);
 
         ImageButton removeButton = expensesView.findViewById(R.id.removeOtherExpenseButton);
-        removeButton.setOnClickListener(v -> oexpensesList.removeView(expensesView));
-
         EditText expenseType = expensesView.findViewById(R.id.otherexpenses);
         EditText expenseCost = expensesView.findViewById(R.id.otherexpensesCost);
 
+        expenseCost.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateTotalExpenses(amtFingerlings, amtFeeders, initialMaintenanceCost, initialOtherExpenseCost);
+            }
+            @Override public void afterTextChanged(Editable s) {}
+        });
+
+        removeButton.setOnClickListener(v -> {
+            oexpensesList.removeView(expensesView);
+            updateTotalExpenses(amtFingerlings, amtFeeders, initialMaintenanceCost, initialOtherExpenseCost);
+        });
+
         oexpensesList.addView(expensesView);
     }
+
+
+    private void setupExpenseAutoSum(EditText... staticFields) {
+        TextWatcher watcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateTotalExpenses(staticFields);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+
+        for (EditText field : staticFields) {
+            field.addTextChangedListener(watcher);
+        }
+    }
+
+    private void updateTotalExpenses(EditText... staticFields) {
+        double total = 0;
+
+        // Sum static fields
+        for (EditText field : staticFields) {
+            String value = field.getText().toString().trim();
+            if (!value.isEmpty()) {
+                try {
+                    total += Double.parseDouble(value);
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+
+        // Sum dynamic maintenance costs
+        for (int i = 0; i < maintenanceList.getChildCount(); i++) {
+            View row = maintenanceList.getChildAt(i);
+            EditText cost = row.findViewById(R.id.maintenanceCost);
+            if (cost != null && !cost.getText().toString().trim().isEmpty()) {
+                try {
+                    total += Double.parseDouble(cost.getText().toString().trim());
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+
+        // Sum dynamic other expenses
+        for (int i = 0; i < oexpensesList.getChildCount(); i++) {
+            View row = oexpensesList.getChildAt(i);
+            EditText cost = row.findViewById(R.id.otherexpensesCost);
+            if (cost != null && !cost.getText().toString().trim().isEmpty()) {
+                try {
+                    total += Double.parseDouble(cost.getText().toString().trim());
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+
+        totalExpenses.setText(String.format(Locale.US, "%.2f", total));
+    }
+
+
 }
