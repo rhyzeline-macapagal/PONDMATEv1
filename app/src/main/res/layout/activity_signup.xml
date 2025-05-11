@@ -7,6 +7,7 @@
     android:background="@drawable/lsbg"
     tools:context=".signup">
 
+    <!-- Top Bar -->
     <RelativeLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
@@ -31,49 +32,37 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@id/appLogo"
-            android:text= "PONDMATE"
+            android:text="PONDMATE"
             android:textColor="#ffffff"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
-
     </RelativeLayout>
 
+    <!-- CardView for Signup Form -->
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="540dp"
-        android:layout_below="@+id/topBar"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="101dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topBar"
+        android:layout_margin="30dp"
         android:backgroundTint="#D5EEFF"
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="540dp"
-            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/textView3"
-                android:layout_width="217dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="SIGN UP"
                 android:textAlignment="center"
                 android:textColor="#000000"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/fullname_input"
@@ -84,15 +73,26 @@
                 android:drawableLeft="@drawable/uname_icon"
                 android:drawablePadding="8dp"
                 android:hint="Fullname"
-                android:inputType="text"
-                android:padding="16dp"
+                android:inputType="textPersonName"
+                android:padding="12dp"
                 android:textColor="#000000"
                 android:textColorHint="#000000"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/address_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_corner"
+                android:drawableLeft="@drawable/address"
+                android:drawablePadding="8dp"
+                android:hint="Address"
+                android:inputType="textPostalAddress"
+                android:padding="12dp"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/username_input1"
@@ -104,14 +104,10 @@
                 android:drawablePadding="8dp"
                 android:hint="Username"
                 android:inputType="text"
-                android:padding="16dp"
+                android:padding="12dp"
                 android:textColor="#000000"
                 android:textColorHint="#000000"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fullname_input" />
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/password_input1"
@@ -119,16 +115,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/rounded_corner"
+                android:drawableLeft="@drawable/lock_icon"
+                android:drawableRight="@drawable/hidden"
+                android:drawablePadding="8dp"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:padding="16dp"
+                android:padding="12dp"
                 android:textColor="#000000"
                 android:textColorHint="#000000"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/username_input1" />
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/password_input2"
@@ -136,49 +131,51 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/rounded_corner"
+                android:drawableLeft="@drawable/lock_icon"
+                android:drawableRight="@drawable/hidden"
+                android:drawablePadding="8dp"
                 android:hint="Confirm Password"
                 android:inputType="textPassword"
-                android:padding="16dp"
+                android:padding="12dp"
                 android:textColor="#000000"
                 android:textColorHint="#000000"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/password_input1" />
+                android:textSize="18sp"
+                android:onClick="toggleConfirmPasswordVisibility" />
 
             <TextView
                 android:id="@+id/usertype"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="User Type:"
+                android:text="SELECT USER TYPE:"
                 android:textColor="#000000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/password_input2" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-            <CheckBox
-                android:id="@+id/admincheckbox"
+            <RadioGroup
+                android:id="@+id/rgUserType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Admin"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/usertype" />
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp">
 
-            <CheckBox
-                android:id="@+id/caretakercheckBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Caretaker"
-                android:textColor="#000000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/admincheckbox" />
+                <RadioButton
+                    android:id="@+id/rbOwner"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:layout_height="wrap_content"
+                    android:text="Owner/Admin" />
+
+                <RadioButton
+                    android:id="@+id/rbCaretaker"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:layout_height="wrap_content"
+                    android:text="Caretaker" />
+            </RadioGroup>
 
             <Button
                 android:id="@+id/signup_button"
@@ -186,35 +183,33 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#2A1616"
                 android:text="SIGN UP"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/caretakercheckBox" />
+                android:layout_gravity="center"
+                android:textColor="#ffffff"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Already have an account?"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.314"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/signup_button" />
+                android:layout_gravity="center"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/loginalready"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Login"
-                android:textAlignment="center"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.729"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/signup_button" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Already have an account?"
+                    android:textSize="16sp"
+                    android:textColor="#000000" />
 
-
+                <TextView
+                    android:id="@+id/loginalready"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Login"
+                    android:textSize="18sp"
+                    android:textColor="#027EB7"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
-
 </RelativeLayout>
