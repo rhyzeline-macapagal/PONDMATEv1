@@ -18,6 +18,7 @@ public class login extends AppCompatActivity {
 
     EditText userName, passWord;
     Button loginButton;
+
     TextView signupdirect;
     private DatabaseHelper dbHelper;
 
