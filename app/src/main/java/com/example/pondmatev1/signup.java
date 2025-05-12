@@ -30,7 +30,6 @@ public class signup extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase(); // Forces DB creation
-        Toast.makeText(this, "DB created at: " + db.getPath(), Toast.LENGTH_LONG).show();
         db.close();
 
         // Initialize EditText fields
