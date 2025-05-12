@@ -6,12 +6,10 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.pondmatev1.R; // Make sure the import points to your app's R class
 
 public class UserProfile extends Fragment {
 
     public UserProfile() {
-        // Required empty public constructor
     }
 
     @Override
