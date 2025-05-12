@@ -45,7 +45,6 @@ public class UserProfile extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
-        // Logout button functionality
         Button logoutButton = view.findViewById(R.id.btnLogout);
         logoutButton.setOnClickListener(v -> {
             sessionManager.clearSession();
@@ -54,11 +53,9 @@ public class UserProfile extends Fragment {
             startActivity(intent);
         });
 
-        // Profile photo ImageView and change photo button setup
         imgProfilePhoto = view.findViewById(R.id.imgProfilePhoto);
         Button changePhotoButton = view.findViewById(R.id.btnChangePhoto);
 
-        // Register the activity result launcher to pick image
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -77,11 +74,9 @@ public class UserProfile extends Fragment {
             imagePickerLauncher.launch(intent);
         });
 
-        // Initialize DatabaseHelper and SessionManager
         dbHelper = new DatabaseHelper(requireContext());
         sessionManager = new SessionManager(requireContext());
 
-        // Setup user details display
         fullNameText = view.findViewById(R.id.txtFullNameValue);
         addressText = view.findViewById(R.id.txtAddressValue);
         userTypeText = view.findViewById(R.id.txtPositionValue);
@@ -97,13 +92,12 @@ public class UserProfile extends Fragment {
             }
         }
 
-        // Load saved profile photo on fragment load
         loadSavedProfilePhoto();
 
         return view;
     }
 
-    // Save the selected profile image to internal storage and update ImageView
+
     private void saveProfileImage(Uri imageUri) {
         try {
             InputStream inputStream = requireContext().getContentResolver().openInputStream(imageUri);
@@ -119,13 +113,13 @@ public class UserProfile extends Fragment {
             outputStream.close();
             inputStream.close();
 
-            // Save file path in SharedPreferences
+            // save path to sharedpref
             SharedPreferences prefs = requireContext().getSharedPreferences("user_profile", Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("profile_photo_path_" + sessionManager.getUsername(), file.getAbsolutePath());
             editor.apply();
 
-            // Set image to ImageView
+
             imgProfilePhoto.setImageURI(Uri.fromFile(file));
 
         } catch (IOException e) {
@@ -133,7 +127,7 @@ public class UserProfile extends Fragment {
         }
     }
 
-    // Load saved profile photo from internal storage
+    // pang load ng pis from internal storage
     private void loadSavedProfilePhoto() {
         SharedPreferences prefs = requireContext().getSharedPreferences("user_profile", Activity.MODE_PRIVATE);
         String path = prefs.getString("profile_photo_path_" + sessionManager.getUsername(), null);

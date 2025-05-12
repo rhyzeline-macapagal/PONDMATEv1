@@ -48,7 +48,6 @@ public class login extends AppCompatActivity {
             String username = userName.getText().toString();
             String password = passWord.getText().toString();
 
-            // Check if any field is empty
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(login.this, "Both fields are required", Toast.LENGTH_SHORT).show();
             } else {
