@@ -59,7 +59,11 @@ public class login extends AppCompatActivity {
                     Intent intent = new Intent(login.this, MainActivity.class);
                     intent.putExtra("loggedInUsername", username); // pass username
                     startActivity(intent);
+                    SessionManager sessionManager = new SessionManager(login.this);
+                    sessionManager.saveUsername(username);
                     finish(); // prevent back to login
+
+
 
                 } else {
                     Toast.makeText(login.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
