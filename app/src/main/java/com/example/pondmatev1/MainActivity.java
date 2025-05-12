@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ImageView;
-import android.widget.Toast;
+
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,8 +37,9 @@ public class MainActivity extends AppCompatActivity {
         ImageView profileIcon = findViewById(R.id.profileIcon);
 
         profileIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, profile.class);
-            startActivity(intent);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.con, new UserProfile())
+                    .commit();
         });
 
         bottomNavigation = findViewById(R.id.bottomNavigation);

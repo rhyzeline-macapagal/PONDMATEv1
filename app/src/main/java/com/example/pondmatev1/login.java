@@ -56,7 +56,11 @@ public class login extends AppCompatActivity {
                 if (isValid) {
                     // Redirect to home page after successful login
                     Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(login.this, MainActivity.class));
+                    Intent intent = new Intent(login.this, MainActivity.class);
+                    intent.putExtra("loggedInUsername", username); // pass username
+                    startActivity(intent);
+                    finish(); // prevent back to login
+
                 } else {
                     Toast.makeText(login.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
                 }
