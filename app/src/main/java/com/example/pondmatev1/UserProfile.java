@@ -38,7 +38,7 @@ public class UserProfile extends Fragment {
 
         fullNameText = view.findViewById(R.id.txtFullNameValue);
         addressText = view.findViewById(R.id.txtAddressValue);
-        userTypeText = view.findViewById(R.id.txtPositionLabel);
+        userTypeText = view.findViewById(R.id.txtPositionValue);
 
         String username = sessionManager.getUsername();
         if (username != null) {
