@@ -22,7 +22,6 @@ public class login extends AppCompatActivity {
     TextView signupdirect;
     private DatabaseHelper dbHelper;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
