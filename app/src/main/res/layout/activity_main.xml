@@ -24,7 +24,7 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:contentDescription="App Logo"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/logoraw" />
 
         <TextView
             android:id="@+id/appName"
