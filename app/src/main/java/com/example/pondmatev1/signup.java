@@ -1,5 +1,6 @@
 package com.example.pondmatev1;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ public class signup extends AppCompatActivity {
     Button signupButton;
     TextView logindirect;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,9 +134,12 @@ public class signup extends AppCompatActivity {
 
 
     // Helper method to set drawable icons for EditText
-    private void setPasswordEyeIcon(EditText editText, int drawableRes) {
-        editText.setCompoundDrawablesWithIntrinsicBounds(
-                null, null, getResources().getDrawable(drawableRes), null
+    private void setPasswordEyeIcon(EditText editText, int drawableResEnd) {
+        editText.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                R.drawable.lock_icon, // start (left)
+                0,                    // top
+                drawableResEnd,       // end (right)
+                0                     // bottom
         );
     }
 
