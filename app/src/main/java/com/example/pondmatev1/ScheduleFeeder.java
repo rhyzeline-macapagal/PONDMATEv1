@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -113,61 +115,103 @@ public class ScheduleFeeder extends Fragment {
     private void displaySchedules() {
         scheduleListContainer.removeAllViews();
 
+        // Create TableLayout to hold the table rows
+        TableLayout tableLayout = new TableLayout(getContext());
+        tableLayout.setStretchAllColumns(true); // Make all columns stretch to fill the screen
+
+        // Create the header row (optional)
+        TableRow headerRow = new TableRow(getContext());
+        headerRow.setBackgroundColor(Color.parseColor("#f1f1f1")); // Set background color for header row
+        TextView dateHeader = new TextView(getContext());
+        dateHeader.setText("📅 Date");
+        dateHeader.setTextSize(16);
+        dateHeader.setPadding(10, 10, 10, 10);
+        dateHeader.setGravity(Gravity.CENTER);
+
+        TextView timeHeader = new TextView(getContext());
+        timeHeader.setText("🕒 Time");
+        timeHeader.setTextSize(16);
+        timeHeader.setPadding(10, 10, 10, 10);
+        timeHeader.setGravity(Gravity.CENTER);
+
+        TextView amountHeader = new TextView(getContext());
+        amountHeader.setText("🐟 Amount");
+        amountHeader.setTextSize(16);
+        amountHeader.setPadding(10, 10, 10, 10);
+        amountHeader.setGravity(Gravity.CENTER);
+
+        TextView deleteHeader = new TextView(getContext());
+        deleteHeader.setText("Pending");
+        deleteHeader.setTextSize(16);
+        deleteHeader.setPadding(10, 10, 10, 10);
+        deleteHeader.setGravity(Gravity.CENTER);
+
+        // Add the headers to the header row
+        headerRow.addView(dateHeader);
+        headerRow.addView(timeHeader);
+        headerRow.addView(amountHeader);
+        headerRow.addView(deleteHeader);
+        tableLayout.addView(headerRow);  // Add the header row to the table
+
+        // Loop through schedule list and create a row for each schedule
         for (int i = 0; i < scheduleList.size(); i++) {
-            Schedule s = scheduleList.get(i);
+            final int index = i;
 
-            CardView cardView = new CardView(getContext());
-            cardView.setCardElevation(8f);  // Elevation for shadow effect
-            cardView.setPadding(16, 12, 16, 12);
-            cardView.setBackgroundResource(R.drawable.rounded_container);
+            Schedule s = scheduleList.get(index);
 
-            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            cardParams.setMargins(0, 5, 0, 5); // Adds space between the cards (top and bottom)
-            cardView.setLayoutParams(cardParams);
+            // Create a row for each schedule item
+            TableRow scheduleRow = new TableRow(getContext());
+            scheduleRow.setBackgroundResource(R.drawable.transparentbg);
+            scheduleRow.setPadding(5, 5, 5, 5);
 
-            // Create the layout for content inside the card
-            LinearLayout itemLayout = new LinearLayout(getContext());
-            itemLayout.setOrientation(LinearLayout.HORIZONTAL);
-            itemLayout.setGravity(Gravity.CENTER_VERTICAL);
-            itemLayout.setWeightSum(1);
+            // Date column
+            TextView dateColumn = new TextView(getContext());
+            dateColumn.setText(s.date);
+            dateColumn.setTextSize(14);
+            dateColumn.setPadding(10, 10, 10, 10);
+            dateColumn.setGravity(Gravity.CENTER);
 
-            // TextView to display schedule details
-            TextView scheduleView = new TextView(getContext());
-            scheduleView.setText("📅 " + s.date + "   🕒 " + s.time + "   🐟 " + s.amount + " kg");
-            scheduleView.setTextSize(16);
-            scheduleView.setPadding(10,5,0,5);
-            scheduleView.setTextColor(Color.parseColor("#10282E"));
-            scheduleView.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 0.85f));
+            // Time column
+            TextView timeColumn = new TextView(getContext());
+            timeColumn.setText(s.time);
+            timeColumn.setTextSize(14);
+            timeColumn.setPadding(10, 10, 10, 10);
+            timeColumn.setGravity(Gravity.CENTER);
 
-            // Delete button
+            // Amount column
+            TextView amountColumn = new TextView(getContext());
+            amountColumn.setText(s.amount + " kg");
+            amountColumn.setTextSize(14);
+            amountColumn.setPadding(10, 10, 10, 10);
+            amountColumn.setGravity(Gravity.CENTER);
+
+            // Delete column
             Button deleteButton = new Button(getContext());
             deleteButton.setText("❌");
             deleteButton.setTextSize(14);
-            deleteButton.setPadding(0,0,10,0);
+            deleteButton.setPadding(0, 0, 10, 0);
             deleteButton.setBackgroundColor(Color.TRANSPARENT);
             deleteButton.setTextColor(Color.RED);
-            deleteButton.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 0.15f));
-
-            int finalI = i;
             deleteButton.setOnClickListener(v -> {
-                scheduleList.remove(finalI);
+                scheduleList.remove(index);
                 saveToPreferences();
                 displaySchedules();
             });
 
-            // Add views to the item layout
-            itemLayout.addView(scheduleView);
-            itemLayout.addView(deleteButton);
+            // Add columns to the schedule row
+            scheduleRow.addView(dateColumn);
+            scheduleRow.addView(timeColumn);
+            scheduleRow.addView(amountColumn);
+            scheduleRow.addView(deleteButton);
 
-            // Add item layout to card view
-            cardView.addView(itemLayout);
-
-            // Add the card to the container
-            scheduleListContainer.addView(cardView);
+            // Add the row to the table
+            tableLayout.addView(scheduleRow);
         }
+
+        // Add the TableLayout to the container
+        scheduleListContainer.addView(tableLayout);
     }
+
 
     private void saveToPreferences() {
         SharedPreferences prefs = requireContext().getSharedPreferences("SchedulePrefs", Context.MODE_PRIVATE);
