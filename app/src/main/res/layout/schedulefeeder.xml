@@ -128,7 +128,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/text_box"
                 android:hint="0kg"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:padding="12dp"
                 android:textAlignment="textEnd"
                 android:textColor="#000000"
@@ -156,6 +156,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/textView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="316dp"
@@ -168,6 +169,23 @@
         app:layout_constraintHorizontal_bias="0.546"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView16">
+
+        <LinearLayout
+            android:id="@+id/schedule_list_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp" />
+    </ScrollView>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

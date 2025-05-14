@@ -47,11 +47,12 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.google.material)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
     implementation ("com.github.Foysalofficial:NafisBottomNav:5.0")
-
+    implementation ("com.google.code.gson:gson:2.8.9")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

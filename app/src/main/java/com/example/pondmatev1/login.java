@@ -2,6 +2,7 @@ package com.example.pondmatev1;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ public class login extends AppCompatActivity {
     EditText userName, passWord;
     Button loginButton;
     TextView signupdirect;
+    CheckBox rememberMeCheckBox;
     private DatabaseHelper dbHelper;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -38,6 +41,7 @@ public class login extends AppCompatActivity {
         userName = findViewById(R.id.username_input);
         passWord = findViewById(R.id.password_input);
         loginButton = findViewById(R.id.login_button);
+        rememberMeCheckBox = findViewById(R.id.checkBox);
 
         final Drawable eyeOpen = ContextCompat.getDrawable(this, R.drawable.eye_open);
         final Drawable eyeClosed = ContextCompat.getDrawable(this, R.drawable.hidden);
@@ -93,6 +97,8 @@ public class login extends AppCompatActivity {
             startActivity(intent);
         });
 
+        loadPreferences();
+
         loginButton.setOnClickListener(v -> {
             String username = userName.getText().toString();
             String password = passWord.getText().toString();
@@ -109,6 +115,11 @@ public class login extends AppCompatActivity {
                     SessionManager sessionManager = new SessionManager(login.this);
                     sessionManager.saveUsername(username);
                     finish();
+                    if (rememberMeCheckBox.isChecked()) {
+                        savePreferences(username, password);
+                    } else {
+                        clearPreferences();  // Clear saved credentials if "Remember me" is unchecked
+                    }
                 } else {
                     Toast.makeText(login.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
                 }
@@ -120,6 +131,36 @@ public class login extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    // Save username and password to SharedPreferences
+    private void savePreferences(String username, String password) {
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("username", username);
+        editor.putString("password", password);
+        editor.putBoolean("rememberMe", true);
+        editor.apply();
+    }
+
+    private void clearPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("username");
+        editor.remove("password");
+        editor.remove("rememberMe");
+        editor.apply();
+    }
+    // Load username and password from SharedPreferences
+    private void loadPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        if (sharedPreferences.getBoolean("rememberMe", false)) {
+            String savedUsername = sharedPreferences.getString("username", "");
+            String savedPassword = sharedPreferences.getString("password", "");
+            userName.setText(savedUsername);
+            passWord.setText(savedPassword);
+            rememberMeCheckBox.setChecked(true);  // Set checkbox to checked
+        }
     }
 
     
