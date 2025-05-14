@@ -122,6 +122,7 @@ public class ScheduleFeeder extends Fragment {
         // Create the header row (optional)
         TableRow headerRow = new TableRow(getContext());
         headerRow.setBackgroundColor(Color.parseColor("#f1f1f1")); // Set background color for header row
+
         TextView dateHeader = new TextView(getContext());
         dateHeader.setText("📅 Date");
         dateHeader.setTextSize(16);

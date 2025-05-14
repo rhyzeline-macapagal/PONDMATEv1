@@ -11,7 +11,7 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="44dp"
         android:text="Activities in Production"
         android:textAlignment="center"
         android:textColor="#3A4E56"
@@ -37,7 +37,7 @@
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.024">
+        app:layout_constraintVertical_bias="0.105">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -145,40 +145,39 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout6"
-        android:layout_width="360dp"
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_container"
-        android:elevation="4dp"
-        android:orientation="horizontal"
-        android:padding="16dp"
+        android:text="Activity Logs"
+        android:textColor="#10282E"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
-        app:layout_constraintVertical_bias="0.059">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.475" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-300dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView20">
 
-            <TextView
-                android:id="@+id/textView20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Activity Logs"
-                android:textColor="#10282E"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TableLayout
+            android:id="@+id/logTable"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="0dp"
+            android:stretchColumns="*"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
