@@ -184,8 +184,10 @@ public class pcostroi extends Fragment {
             canvas.drawText("Breed: " + breed, x, y, paint); y += 30;
             canvas.drawText("➤ Fingerlings:                                           ₱" + fingerlings, x, y, paint); y += 25;
             canvas.drawText("➤ Feeders:                                               ₱" + feeders, x, y, paint); y += 25;
-            canvas.drawText("➤ Initial Maintenance: " + maintenancetype + " -         ₱" + maintenance, x, y, paint); y += 25;
-            canvas.drawText("➤ Initial Other Expenses: " + otherExpensestype + " -    ₱" + otherExpenses, x, y, paint); y += 35;
+            canvas.drawText("➤ Initial Maintenance: " +"\n"
+                    + maintenancetype + " -         ₱" + maintenance, x, y, paint); y += 25;
+            canvas.drawText("➤ Initial Other Expenses: " +"\n"
+                    + otherExpensestype + " -    ₱" + otherExpenses, x, y, paint); y += 35;
 
             canvas.drawText("— Maintenance Breakdown —", x, y, paint); y += 25;
             if (maintenanceDetails.length() > 0) {
