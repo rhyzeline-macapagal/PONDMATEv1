@@ -1,5 +1,8 @@
 package com.example.pondmatev1;
 
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
@@ -14,8 +17,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -24,8 +31,8 @@ public class pcostroi extends Fragment {
     ArrayList<String> breedList;
     AutoCompleteTextView autoCompleteText;
     ArrayAdapter<String> adapterItems;
-    Button addOptionButton, editButton, saveButton;
-    EditText amtFingerlings, amtFeeders, maintenance, otherExpenses, totalExpenses;
+    Button addOptionButton, editButton, saveButton, generateReportButton;
+    EditText amtFingerlings, amtFeeders, maintenance, otherExpenses, totalExpenses, initialMaintenancetype, initialOtherExpensetype;
     LinearLayout maintenanceList, oexpensesList;
     ImageButton addMaintenanceButton, addOtherExpensesButton;
     EditText initialMaintenanceCost, initialOtherExpenseCost;
@@ -52,7 +59,9 @@ public class pcostroi extends Fragment {
         // Initialize views
         amtFingerlings = view.findViewById(R.id.amtoffingerlings);
         amtFeeders = view.findViewById(R.id.amtoffeeders);
+        initialMaintenancetype = view.findViewById(R.id.initialMaintenanceType);
         initialMaintenanceCost = view.findViewById(R.id.initialMaintenanceCost);
+        initialOtherExpensetype = view.findViewById(R.id.initialOtherExpenseType);
         initialOtherExpenseCost = view.findViewById(R.id.initialOtherExpenseCost);
         totalExpenses = view.findViewById(R.id.totalexpenses);
         editButton = view.findViewById(R.id.editbtn);
@@ -64,6 +73,8 @@ public class pcostroi extends Fragment {
         autoCompleteText = view.findViewById(R.id.auto_complete_txt1);
         addMaintenanceButton = view.findViewById(R.id.addMaintenanceButton);
         addOtherExpensesButton = view.findViewById(R.id.addOtherExpensesButton);
+        generateReportButton = view.findViewById(R.id.generatereport);
+
 
         setupExpenseAutoSum(amtFingerlings, amtFeeders, initialMaintenanceCost, initialOtherExpenseCost);
 
@@ -90,7 +101,7 @@ public class pcostroi extends Fragment {
             editButton.setVisibility(View.VISIBLE);
         });
 
-        // Add new breed option
+        //Handle Add opt
         addOptionButton.setOnClickListener(v -> {
             String newItem = autoCompleteText.getText().toString().trim();
 
@@ -101,6 +112,9 @@ public class pcostroi extends Fragment {
                 autoCompleteText.setAdapter(adapterItems);
                 autoCompleteText.setText("");
                 autoCompleteText.showDropDown();
+                Toast.makeText(requireContext(), "Added: " + newItem, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(requireContext(), "Item is empty or already exists", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -110,7 +124,110 @@ public class pcostroi extends Fragment {
         // Add new other expenses row
         addOtherExpensesButton.setOnClickListener(v -> addNewOtherExpensesRow());
 
+        //generate report button
+        generateReportButton.setOnClickListener(v -> generateReport());
+
+
         return view;
+    }
+    // generate report
+    private void generateReport() {
+        String breed = autoCompleteText.getText().toString().trim();
+        String fingerlings = amtFingerlings.getText().toString().trim();
+        String feeders = amtFeeders.getText().toString().trim();
+        String maintenancetype = initialMaintenancetype.getText().toString().trim();
+        String maintenance = initialMaintenanceCost.getText().toString().trim();
+        String otherExpensestype = initialOtherExpensetype.getText().toString().trim();
+        String otherExpenses = initialOtherExpenseCost.getText().toString().trim();
+        String total = totalExpenses.getText().toString().trim();
+
+        StringBuilder maintenanceDetails = new StringBuilder();
+        for (int i = 0; i < maintenanceList.getChildCount(); i++) {
+            View row = maintenanceList.getChildAt(i);
+            EditText type = row.findViewById(R.id.maintenanceType);
+            EditText cost = row.findViewById(R.id.maintenanceCost);
+            maintenanceDetails.append("   • ").append(type.getText().toString())
+                    .append(": ₱").append(cost.getText().toString()).append("\n");
+        }
+
+        StringBuilder otherDetails = new StringBuilder();
+        for (int i = 0; i < oexpensesList.getChildCount(); i++) {
+            View row = oexpensesList.getChildAt(i);
+            EditText type = row.findViewById(R.id.otherexpenses);
+            EditText cost = row.findViewById(R.id.otherexpensesCost);
+            otherDetails.append("   • ").append(type.getText().toString())
+                    .append(": ₱").append(cost.getText().toString()).append("\n");
+        }
+
+        try {
+            PdfDocument pdfDocument = new PdfDocument();
+            Paint paint = new Paint();
+            paint.setTextSize(14);
+
+            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create(); // A4
+            PdfDocument.Page page = pdfDocument.startPage(pageInfo);
+            Canvas canvas = page.getCanvas();
+
+            int x = 40;
+            int y = 60;
+
+            // Title
+            Paint titlePaint = new Paint();
+            titlePaint.setTextSize(18);
+            titlePaint.setFakeBoldText(true);
+            String title = "*** Production Cost Summary ***";
+            float titleWidth = titlePaint.measureText(title);
+            canvas.drawText(title, (pageInfo.getPageWidth() - titleWidth) / 2, y, titlePaint);
+
+            y += 40;
+
+            canvas.drawText("Breed: " + breed, x, y, paint); y += 30;
+            canvas.drawText("➤ Fingerlings:                                           ₱" + fingerlings, x, y, paint); y += 25;
+            canvas.drawText("➤ Feeders:                                               ₱" + feeders, x, y, paint); y += 25;
+            canvas.drawText("➤ Initial Maintenance: " + maintenancetype + " -         ₱" + maintenance, x, y, paint); y += 25;
+            canvas.drawText("➤ Initial Other Expenses: " + otherExpensestype + " -    ₱" + otherExpenses, x, y, paint); y += 35;
+
+            canvas.drawText("— Maintenance Breakdown —", x, y, paint); y += 25;
+            if (maintenanceDetails.length() > 0) {
+                for (String line : maintenanceDetails.toString().split("\n")) {
+                    canvas.drawText(line, x + 20, y, paint);
+                    y += 22;
+                }
+            } else {
+                canvas.drawText("   No additional maintenance expenses.", x + 20, y, paint);
+                y += 22;
+            }
+
+            y += 20;
+            canvas.drawText("— Other Expenses Breakdown —", x, y, paint); y += 25;
+            if (otherDetails.length() > 0) {
+                for (String line : otherDetails.toString().split("\n")) {
+                    canvas.drawText(line, x + 20, y, paint);
+                    y += 22;
+                }
+            } else {
+                canvas.drawText("   No other expenses.", x + 20, y, paint);
+                y += 22;
+            }
+
+            y += 30;
+            Paint totalPaint = new Paint(paint);
+            totalPaint.setFakeBoldText(true);
+            canvas.drawText("============================", x, y, paint); y += 25;
+            canvas.drawText("TOTAL EXPENSES: ₱" + total, x, y, totalPaint);
+
+            pdfDocument.finishPage(page);
+
+            File file = new File(requireContext().getExternalFilesDir(null), "ProductionCostReport.pdf");
+            FileOutputStream fos = new FileOutputStream(file);
+            pdfDocument.writeTo(fos);
+            pdfDocument.close();
+
+            Toast.makeText(requireContext(), "PDF saved to: " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(requireContext(), "Failed to save PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setEditable(boolean editable) {
@@ -138,6 +255,10 @@ public class pcostroi extends Fragment {
 
         autoCompleteText.setEnabled(editable);
         addOptionButton.setEnabled(editable);
+        autoCompleteText.setFocusable(editable);
+        autoCompleteText.setFocusableInTouchMode(editable);
+        autoCompleteText.setClickable(editable);
+        autoCompleteText.setCursorVisible(editable);
     }
 
     // Method to add new maintenance row dynamically
