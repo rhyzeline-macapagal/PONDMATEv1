@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +58,19 @@ public class ActProd extends Fragment {
         descEditText = view.findViewById(R.id.descEditText);
         Button createBtn = view.findViewById(R.id.createbtn);
         logTable = view.findViewById(R.id.logTable);
+
+        // restrict to character input
+        InputFilter letterOnlyFilter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if (source.toString().matches("[a-zA-Z ]+")) {
+                    return source;
+                }
+                return "";
+            }
+        };
+        descEditText.setFilters(new InputFilter[]{letterOnlyFilter});
+        typeEditText.setFilters(new InputFilter[]{letterOnlyFilter});
 
         // Date-Time picker
         dateTimeEditText.setOnClickListener(v -> showDateTimePicker());

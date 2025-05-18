@@ -120,7 +120,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:hint="eg.₱1,500"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:padding="1dp"
                     android:textAlignment="textEnd"
                     android:textColor="#000000"
@@ -155,7 +155,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:hint="eg.₱1,500"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:padding="1dp"
                     android:textAlignment="textEnd"
                     android:textColor="#000000"
@@ -193,6 +193,7 @@
                         android:layout_height="41dp"
                         android:hint="Enter maintenance type"
                         android:textSize="14sp"
+                        android:inputType="text"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.093"
@@ -271,6 +272,7 @@
                         android:layout_height="41dp"
                         android:hint="Other Expenses"
                         android:textSize="14sp"
+                        android:inputType="text"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.093"
@@ -335,7 +337,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 
-                <EditText
+                <TextView
                     android:id="@+id/totalexpenses"
                     android:layout_width="120dp"
                     android:layout_height="40dp"
@@ -345,7 +347,6 @@
                     android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:inputType="none"
                     android:padding="12dp"
                     android:textAlignment="textEnd"
                     android:textColor="#000000"

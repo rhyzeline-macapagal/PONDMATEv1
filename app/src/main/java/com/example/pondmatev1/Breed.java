@@ -147,7 +147,18 @@ public class Breed extends Fragment {
 
         // Save button logic
         saveBtn.setOnClickListener(v -> {
-            // Disable inputs after Save is clicked
+            // Get text from the fields
+            String soaText = SOA.getText().toString().trim();
+            String breedText = autoCompleteText.getText().toString().trim();
+            String estDohText = estDoh.getText().toString().trim();
+
+            // Check if any field is empty
+            if (soaText.isEmpty() || breedText.isEmpty() || estDohText.isEmpty()) {
+                Toast.makeText(requireContext(), "Please complete all required fields.", Toast.LENGTH_SHORT).show();
+                return; // Stop execution here
+            }
+
+            // If valid, disable inputs and hide Save button
             SOA.setEnabled(false);
             SOA.setFocusable(false);
             SOA.setFocusableInTouchMode(false);
@@ -165,6 +176,7 @@ public class Breed extends Fragment {
 
             saveBtn.setVisibility(View.GONE);
         });
+
 
         mreditBtn.setOnClickListener(v -> {
             intStockFish.setEnabled(true);

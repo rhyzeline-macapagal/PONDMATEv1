@@ -7,6 +7,8 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -32,8 +35,9 @@ public class pcostroi extends Fragment {
     AutoCompleteTextView autoCompleteText;
     ArrayAdapter<String> adapterItems;
     Button addOptionButton, editButton, saveButton, generateReportButton;
-    EditText amtFingerlings, amtFeeders, maintenance, otherExpenses, totalExpenses, initialMaintenancetype, initialOtherExpensetype;
+    EditText amtFingerlings, amtFeeders, maintenance, otherExpenses, initialMaintenancetype, initialOtherExpensetype;
     LinearLayout maintenanceList, oexpensesList;
+    TextView totalExpenses;
     ImageButton addMaintenanceButton, addOtherExpensesButton;
     EditText initialMaintenanceCost, initialOtherExpenseCost;
 
@@ -79,6 +83,19 @@ public class pcostroi extends Fragment {
         setupExpenseAutoSum(amtFingerlings, amtFeeders, initialMaintenanceCost, initialOtherExpenseCost);
 
 
+        // restrict to character input
+        InputFilter letterOnlyFilter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if (source.toString().matches("[a-zA-Z ]+")) {
+                    return source;
+                }
+                return "";
+            }
+        };
+        initialMaintenancetype.setFilters(new InputFilter[]{letterOnlyFilter});
+        initialOtherExpensetype.setFilters(new InputFilter[]{letterOnlyFilter});
+
         // Set up dropdown adapter
         adapterItems = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_dropdown_item_1line, breedList);
@@ -96,10 +113,15 @@ public class pcostroi extends Fragment {
 
         // Handle Save button
         saveButton.setOnClickListener(v -> {
-            setEditable(false);
-            saveButton.setVisibility(View.GONE);
-            editButton.setVisibility(View.VISIBLE);
+            if (validateInputs()) {
+                setEditable(false);
+                saveButton.setVisibility(View.GONE);
+                editButton.setVisibility(View.VISIBLE);
+            } else {
+                Toast.makeText(requireContext(), "Please fill out all required fields", Toast.LENGTH_SHORT).show();
+            }
         });
+
 
         //Handle Add opt
         addOptionButton.setOnClickListener(v -> {
@@ -233,7 +255,7 @@ public class pcostroi extends Fragment {
     }
 
     private void setEditable(boolean editable) {
-        EditText[] fields = {amtFingerlings, amtFeeders,  initialMaintenanceCost, initialOtherExpenseCost, totalExpenses};
+        EditText[] fields = {amtFingerlings, amtFeeders,  initialMaintenanceCost, initialOtherExpenseCost};
 
         for (EditText field : fields) {
             field.setFocusable(editable);
@@ -368,6 +390,40 @@ public class pcostroi extends Fragment {
 
         totalExpenses.setText(String.format(Locale.US, "%.2f", total));
     }
+
+    private boolean validateInputs() {
+        // Check static required fields
+        if (amtFingerlings.getText().toString().trim().isEmpty()) return false;
+        if (amtFeeders.getText().toString().trim().isEmpty()) return false;
+        if (initialMaintenanceCost.getText().toString().trim().isEmpty()) return false;
+        if (initialOtherExpenseCost.getText().toString().trim().isEmpty()) return false;
+        if (initialMaintenancetype.getText().toString().trim().isEmpty()) return false;
+        if (initialOtherExpensetype.getText().toString().trim().isEmpty()) return false;
+        if (autoCompleteText.getText().toString().trim().isEmpty()) return false;
+
+        // Check dynamic maintenance fields
+        for (int i = 0; i < maintenanceList.getChildCount(); i++) {
+            View row = maintenanceList.getChildAt(i);
+            EditText type = row.findViewById(R.id.maintenanceType);
+            EditText cost = row.findViewById(R.id.maintenanceCost);
+            if (type.getText().toString().trim().isEmpty() || cost.getText().toString().trim().isEmpty()) {
+                return false;
+            }
+        }
+
+        // Check dynamic other expenses fields
+        for (int i = 0; i < oexpensesList.getChildCount(); i++) {
+            View row = oexpensesList.getChildAt(i);
+            EditText type = row.findViewById(R.id.otherexpenses);
+            EditText cost = row.findViewById(R.id.otherexpensesCost);
+            if (type.getText().toString().trim().isEmpty() || cost.getText().toString().trim().isEmpty()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
 
 }
