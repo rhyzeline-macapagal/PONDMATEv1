@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ import java.util.List;
 public class ActProd extends Fragment {
 
     private EditText typeEditText, dateTimeEditText, descEditText;
-    private TableLayout logTable;
+    private LinearLayout logTable;
 
     private final List<String[]> activityLogs = new ArrayList<>();
     private SharedPreferences sharedPreferences;
@@ -127,76 +128,48 @@ public class ActProd extends Fragment {
     }
 
     private void displayLogs() {
-        logTable.removeAllViews();  // Clear previous content
+        logTable.removeAllViews(); // Clear previous content
 
         // Header row
         TableRow headerRow = new TableRow(getContext());
         headerRow.setBackgroundColor(Color.parseColor("#f1f1f1"));
 
-        int totalWidthInDp = 360;
-        float scale = getResources().getDisplayMetrics().density;
-        int columnWidthPx = (int) ((totalWidthInDp / 3f) * scale + 0.5f);
+        TableRow.LayoutParams cellParams = new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
 
-        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(columnWidthPx, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-
-        TextView headerType = new TextView(getContext());
-        headerType.setText("Type");
-        headerType.setTextSize(18);
-        headerType.setTextColor(getResources().getColor(android.R.color.black));
-        headerType.setPadding(10, 10, 10, 10);
-        headerType.setGravity(Gravity.CENTER);
-        headerType.setLayoutParams(layoutParams);
-        headerRow.addView(headerType);
-
-        TextView headerDateTime = new TextView(getContext());
-        headerDateTime.setText("Date & Time");
-        headerDateTime.setTextSize(18);
-        headerDateTime.setTextColor(getResources().getColor(android.R.color.black));
-        headerDateTime.setPadding(10, 10, 10, 10);
-        headerDateTime.setGravity(Gravity.CENTER);
-        headerDateTime.setLayoutParams(layoutParams);
-        headerRow.addView(headerDateTime);
-
-        TextView headerDesc = new TextView(getContext());
-        headerDesc.setText("Description");
-        headerDesc.setTextSize(18);
-        headerDesc.setTextColor(getResources().getColor(android.R.color.black));
-        headerDesc.setPadding(10, 10, 10, 10);
-        headerDesc.setGravity(Gravity.CENTER);
-        headerDesc.setLayoutParams(layoutParams);
-        headerRow.addView(headerDesc);
+        String[] headers = {"Type", "Date & Time", "Description"};
+        for (String title : headers) {
+            TextView header = new TextView(getContext());
+            header.setText(title);
+            header.setTextSize(18);
+            header.setTextColor(getResources().getColor(android.R.color.black));
+            header.setGravity(Gravity.CENTER);
+            header.setPadding(16, 16, 16, 16);
+            header.setLayoutParams(cellParams);
+            headerRow.addView(header);
+        }
 
         logTable.addView(headerRow);
 
-    // Display logs in table rows
+        // Data rows
         for (String[] log : activityLogs) {
             TableRow row = new TableRow(getContext());
             row.setBackgroundResource(R.drawable.transparentbg);
-            row.setPadding(5, 5, 5, 5);
+            row.setPadding(8, 8, 8, 8);
 
-            TextView typeText = new TextView(getContext());
-            typeText.setText(log[0]);
-            typeText.setTextSize(16);
-            typeText.setGravity(Gravity.CENTER);
-            typeText.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-            row.addView(typeText);
-
-            TextView dateTimeText = new TextView(getContext());
-            dateTimeText.setText(log[1]);
-            dateTimeText.setTextSize(16);
-            dateTimeText.setGravity(Gravity.CENTER);
-            row.addView(dateTimeText);
-
-            TextView descText = new TextView(getContext());
-            descText.setText(log[2]);
-            descText.setTextSize(16);
-            descText.setGravity(Gravity.CENTER);
-            descText.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-            row.addView(descText);
+            for (String value : log) {
+                TextView cell = new TextView(getContext());
+                cell.setText(value);
+                cell.setTextSize(16);
+                cell.setGravity(Gravity.CENTER);
+                cell.setPadding(8, 8, 8, 8);
+                cell.setLayoutParams(cellParams);
+                row.addView(cell);
+            }
 
             logTable.addView(row);
         }
     }
+
 
     private void saveLogs() {
         JSONArray jsonArray = new JSONArray();

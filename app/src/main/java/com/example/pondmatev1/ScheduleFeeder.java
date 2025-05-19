@@ -124,28 +124,32 @@ public class ScheduleFeeder extends Fragment {
         headerRow.setBackgroundColor(Color.parseColor("#f1f1f1")); // Set background color for header row
 
         TextView dateHeader = new TextView(getContext());
-        dateHeader.setText("📅 Date");
-        dateHeader.setTextSize(16);
+        dateHeader.setText("Date");
+        dateHeader.setTextSize(18);
         dateHeader.setPadding(10, 10, 10, 10);
         dateHeader.setGravity(Gravity.CENTER);
+        dateHeader.setTextColor(getResources().getColor(android.R.color.black));
 
         TextView timeHeader = new TextView(getContext());
-        timeHeader.setText("🕒 Time");
-        timeHeader.setTextSize(16);
+        timeHeader.setText("Time");
+        timeHeader.setTextSize(18);
         timeHeader.setPadding(10, 10, 10, 10);
         timeHeader.setGravity(Gravity.CENTER);
+        timeHeader.setTextColor(getResources().getColor(android.R.color.black));
 
         TextView amountHeader = new TextView(getContext());
-        amountHeader.setText("🐟 Amount");
-        amountHeader.setTextSize(16);
+        amountHeader.setText("Amount");
+        amountHeader.setTextSize(18);
         amountHeader.setPadding(10, 10, 10, 10);
         amountHeader.setGravity(Gravity.CENTER);
+        amountHeader.setTextColor(getResources().getColor(android.R.color.black));
 
         TextView deleteHeader = new TextView(getContext());
         deleteHeader.setText("Pending");
-        deleteHeader.setTextSize(16);
+        deleteHeader.setTextSize(18);
         deleteHeader.setPadding(10, 10, 10, 10);
         deleteHeader.setGravity(Gravity.CENTER);
+        deleteHeader.setTextColor(getResources().getColor(android.R.color.black));
 
         // Add the headers to the header row
         headerRow.addView(dateHeader);
@@ -168,28 +172,28 @@ public class ScheduleFeeder extends Fragment {
             // Date column
             TextView dateColumn = new TextView(getContext());
             dateColumn.setText(s.date);
-            dateColumn.setTextSize(14);
+            dateColumn.setTextSize(16);
             dateColumn.setPadding(10, 10, 10, 10);
             dateColumn.setGravity(Gravity.CENTER);
 
             // Time column
             TextView timeColumn = new TextView(getContext());
             timeColumn.setText(s.time);
-            timeColumn.setTextSize(14);
+            timeColumn.setTextSize(16);
             timeColumn.setPadding(10, 10, 10, 10);
             timeColumn.setGravity(Gravity.CENTER);
 
             // Amount column
             TextView amountColumn = new TextView(getContext());
             amountColumn.setText(s.amount + " kg");
-            amountColumn.setTextSize(14);
+            amountColumn.setTextSize(16);
             amountColumn.setPadding(10, 10, 10, 10);
             amountColumn.setGravity(Gravity.CENTER);
 
             // Delete column
             Button deleteButton = new Button(getContext());
             deleteButton.setText("❌");
-            deleteButton.setTextSize(14);
+            deleteButton.setTextSize(16);
             deleteButton.setPadding(0, 0, 10, 0);
             deleteButton.setBackgroundColor(Color.TRANSPARENT);
             deleteButton.setTextColor(Color.RED);
