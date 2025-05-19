@@ -79,7 +79,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="330dp"
                 android:layout_marginStart="30dp"
@@ -93,15 +93,15 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profile_username"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintVertical_bias="1.0">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="10dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="10dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -111,8 +111,8 @@
                             android:id="@+id/textView_pondname1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginTop="24dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="28dp"
                             android:layout_weight="1"
                             android:text="Pond Name:"
                             android:textColor="@color/black"
@@ -129,9 +129,9 @@
                             android:layout_weight="1"
                             android:background="@android:drawable/edit_text"
                             android:backgroundTint="#ffffff"
+                            android:inputType="text"
                             android:hint="Enter Name of Pond"
                             android:padding="5dp"
-                            android:enabled="false"
                             android:textAlignment="textStart"
                             android:textColor="#5b5b5b"
                             android:textSize="16sp"
@@ -144,7 +144,7 @@
                             android:id="@+id/textView_location"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
+                            android:layout_marginStart="16dp"
                             android:layout_marginTop="16dp"
                             android:layout_weight="1"
                             android:text="Location:"
@@ -161,9 +161,10 @@
                             android:layout_weight="1"
                             android:background="@android:drawable/edit_text"
                             android:backgroundTint="#ffffff"
+                            android:enabled="false"
+                            android:inputType="text|numberDecimal"
                             android:hint="Enter Pond Location"
                             android:padding="5dp"
-                            android:enabled="false"
                             android:textAlignment="textStart"
                             android:textColor="#5b5b5b"
                             android:textSize="16sp"
@@ -176,8 +177,8 @@
                             android:id="@+id/textView_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="24dp"
                             android:layout_weight="1"
                             android:text="Name:"
                             android:textColor="@color/black"
@@ -193,9 +194,10 @@
                             android:layout_weight="1"
                             android:background="@android:drawable/edit_text"
                             android:backgroundTint="#ffffff"
-                            android:hint="Enter Name"
-                            android:padding="5dp"
                             android:enabled="false"
+                            android:hint="Enter Name"
+                            android:inputType="text"
+                            android:padding="5dp"
                             android:textAlignment="textStart"
                             android:textColor="#5b5b5b"
                             android:textSize="16sp"
@@ -208,7 +210,7 @@
                             android:id="@+id/textView_passworduser"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
+                            android:layout_marginStart="16dp"
                             android:layout_marginTop="24dp"
                             android:layout_weight="1"
                             android:text="Password:"
@@ -225,11 +227,11 @@
                             android:backgroundTint="#ffffff"
                             android:paddingHorizontal="16dp"
                             android:text="Reset Password"
-                            android:textAlignment="center"
+                            android:textAlignment="textStart"
                             android:textColor="#E81515"
                             android:textSize="16sp"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.853"
+                            app:layout_constraintHorizontal_bias="0.77"
                             app:layout_constraintStart_toEndOf="@+id/textView_passworduser"
                             app:layout_constraintTop_toBottomOf="@+id/textView_name2" />
 
@@ -272,7 +274,7 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
