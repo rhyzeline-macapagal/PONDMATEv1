@@ -3,7 +3,9 @@ package com.example.pondmatev1;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -247,19 +249,26 @@ public class Breed extends Fragment {
                 } else {
                     double result = (noDFishValue / intStockFishValue) * 100;
                     MortResult.setText(String.format(Locale.US, "%.2f%%", result));
-                    // Disable the fields after calculation
+
+                    // Get current month automatically
+                    Calendar calendar = Calendar.getInstance();
+                    int currentMonthIndex = calendar.get(Calendar.MONTH);
+
+                    // Share the mortality rate with current month index
+                    SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+                    viewModel.addMortalityEntry(currentMonthIndex, (float) result);
+                    Log.d("MortalityDebug", "Added: " + result + " for month: " + currentMonthIndex);
+                    Toast.makeText(requireContext(), "Mortality rate saved for month: " + currentMonthIndex, Toast.LENGTH_SHORT).show();
+
+                    // Disable fields after calculation
                     intStockFish.setEnabled(false);
                     NoDFish.setEnabled(false);
-
-                    // Disable the edit button
                     mreditBtn.setEnabled(false);
                 }
             } catch (NumberFormatException e) {
                 Toast.makeText(requireContext(), "Invalid input, please enter valid numbers.", Toast.LENGTH_SHORT).show();
             }
         });
-
-
         return view;
     }
 
