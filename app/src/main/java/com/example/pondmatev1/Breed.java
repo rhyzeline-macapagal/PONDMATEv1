@@ -257,7 +257,9 @@ public class Breed extends Fragment {
                     // Share the mortality rate with current month index
                     SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
                     viewModel.addMortalityEntry(currentMonthIndex, (float) result);
-                    Log.d("MortalityDebug", "Added: " + result + " for month: " + currentMonthIndex);
+                    viewModel.setContext(requireContext());
+                    viewModel.persistData();
+                    Log.d("BreedFragment", "Added mortality rate: " + result + " for month: " + currentMonthIndex);
                     Toast.makeText(requireContext(), "Mortality rate saved for month: " + currentMonthIndex, Toast.LENGTH_SHORT).show();
 
                     // Disable fields after calculation

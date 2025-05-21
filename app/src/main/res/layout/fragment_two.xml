@@ -269,7 +269,6 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/text_box"
                 android:hint="0%"
-                android:inputType="number"
                 android:padding="6dp"
                 android:textAlignment="textEnd"
                 android:textColor="#000000"

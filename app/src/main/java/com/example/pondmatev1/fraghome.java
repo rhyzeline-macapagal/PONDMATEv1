@@ -59,7 +59,7 @@ public class fraghome extends Fragment {
         // Chart configuration
         Description desc = new Description();
         desc.setText("Monthly Mortality Rate in Aquaculture");
-        desc.setPosition(150f, 15f);
+        desc.setPosition(450f, 15f);
         lineChart.setDescription(desc);
         lineChart.getAxisRight().setDrawLabels(false);
 
@@ -70,12 +70,36 @@ public class fraghome extends Fragment {
         xAxis.setLabelCount(12, true);
         xAxis.setGranularity(1f);
 
+        xAxis.setTextColor(Color.BLACK);
+        xAxis.setTextSize(12f);
+        xAxis.setDrawLabels(true);
+        xAxis.setAvoidFirstLastClipping(true);
+        xAxis.setSpaceMin(0.5f);
+        xAxis.setSpaceMax(0.5f);
+
+
         YAxis yAxis = lineChart.getAxisLeft();
         yAxis.setAxisMinimum(0f);
         yAxis.setAxisMaximum(100f);
         yAxis.setAxisLineWidth(2f);
         yAxis.setAxisLineColor(Color.BLACK);
         yAxis.setLabelCount(10);
+
+        lineChart.invalidate();
+
+        List<Entry> testEntries = new ArrayList<>();
+        testEntries.add(new Entry(0, 10));
+        testEntries.add(new Entry(1, 20));
+        testEntries.add(new Entry(2, 30));
+
+        LineDataSet testDataSet = new LineDataSet(testEntries, "Test Data");
+        testDataSet.setColor(Color.RED);
+        testDataSet.setCircleColor(Color.RED);
+        testDataSet.setValueTextColor(Color.BLACK);
+
+        LineData testLineData = new LineData(testDataSet);
+        lineChart.setData(testLineData);
+        lineChart.invalidate();
 
         // ViewModel + data loading
         SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
@@ -86,13 +110,18 @@ public class fraghome extends Fragment {
         viewModel.getMortalityRates().observe(getViewLifecycleOwner(), mortalityMap -> {
             Log.d("FragHomeDebug", "Mortality data received: " + mortalityMap);
             if (mortalityMap != null) {
-                List<Entry> entries = new ArrayList<>();
                 Log.d("MortalityDebug", "Observed mortality data change: " + mortalityMap.toString());
 
-                for (Map.Entry<Integer, List<Float>> monthEntry : mortalityMap.entrySet()) {
-                    int month = monthEntry.getKey();
-                    for (Float rate : monthEntry.getValue()) {
-                        entries.add(new Entry(month, rate));
+                List<Entry> entries = new ArrayList<>();
+
+                for (int month = 0; month < 12; month++) {
+                    List<Float> rates = mortalityMap.get(month);
+                    if (rates != null && !rates.isEmpty()) {
+                        float sum = 0f;
+                        for (Float r : rates) sum += r;
+                        float avg = sum / rates.size();
+                        entries.add(new Entry(month, avg));
+
                     }
                 }
 
@@ -106,16 +135,7 @@ public class fraghome extends Fragment {
                 lineChart.setData(lineData);
                 lineChart.invalidate(); // Refresh chart
 
-                // Option 2: Or plot average mortality rate for month:
-                /*
-                float sum = 0;
-                for (Float rate : rates) sum += rate;
-                float avg = sum / rates.size();
-                entries.add(new Entry(monthIndex, avg));
-                */
-
-                // Save updated data in real-time
-                saveData(mortalityMap   );
+                saveData(mortalityMap);
             }
         });
     }
