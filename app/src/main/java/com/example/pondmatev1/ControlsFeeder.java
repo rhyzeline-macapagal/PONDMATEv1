@@ -36,8 +36,9 @@ public class ControlsFeeder extends Fragment {
         textCurrentDate.setText(currentDateTime);
 
         // Access fields if needed (already non-editable in XML)
-        EditText amtofFeeders = view.findViewById(R.id.amtoffeeders);
-        EditText lastFeedingTime = view.findViewById(R.id.lastfeedingtimedisplay);
+        TextView amtofFeeders = view.findViewById(R.id.amtoffeeders);
+        TextView lastFeedingTime = view.findViewById(R.id.lastfeedingtimedisplay);
+        TextView feedslevel = view.findViewById(R.id.feedlvldisplay);
 
         return view;
     }
