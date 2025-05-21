@@ -1,344 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Breed">
-
+    tools:context=".fraghome"
+    android:textColor="#000000">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="339dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="45dp"
-        android:background="@drawable/rounded_container"
-        android:elevation="4dp"
         android:orientation="vertical"
         android:padding="16dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BREEDING"
+            android:textSize="26sp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textColor="#023e8a"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Pond Overview Card -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="269dp">
-            <!-- FISH BREED-->
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_container"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"
+            android:backgroundTintMode="src_in">
 
             <TextView
-                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="FISH BREED"
-                android:textAlignment="center"
-                android:textColor="#3A4E56"
-                android:textSize="26sp"
+                android:text="Fish Breed"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginBottom="12dp" />
 
+            <!-- Dropdown Button (disabled initially) -->
+            <Button
+                android:id="@+id/btn_select_breed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Fish Breed"
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
+                android:textSize="18dp"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp"
+                android:drawableEnd="@drawable/ic_dropdown_arrow"
+                android:gravity="start|center_vertical"
+                android:enabled="false" />
+
+            <!-- Activity Started Label -->
             <TextView
-                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="12dp"
-                android:text="Activity Started:"
-                android:textColor="#10282E"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addOptionButton" />
-
-            <Button
-                android:id="@+id/addOptionButton"
-                android:layout_width="110dp"
-                android:layout_height="35dp"
-                android:backgroundTint="#047CA1"
-                android:text="Add Option"
-                android:textColor="@android:color/white"
-                android:textSize="11sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.947"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
-
-            <EditText
-                android:id="@+id/start_of_act"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="7dp"
-                android:backgroundTint="#8DFFFDFD"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Select Date"
-                android:inputType="none"
-                android:textAlignment="textEnd"
+                android:text="Activity Started "
+                android:textStyle="bold"
+                android:textSize="20sp"
                 android:textColor="#000000"
-                android:textColorHint="#313435"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.963"
-                app:layout_constraintStart_toEndOf="@+id/textView4"
-                app:layout_constraintTop_toBottomOf="@+id/addOptionButton" />
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:layout_width="292dp"
-                android:layout_height="57dp"
-                android:layout_margin="16dp"
-                android:layout_marginTop="4dp"
-                android:hint="@string/select_breed"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.466"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView">
+            <!-- Horizontal layout for radio buttons and date picker -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
 
-                <AutoCompleteTextView
-                    android:id="@+id/auto_complete_txt1"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/txt_soa"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:textColor="#3A4E56">
+                    android:text="mm/dd/yyyy"
+                    android:textSize="20dp"
+                    android:background="@drawable/rounded_box"
+                    android:padding="6dp"
+                    android:textColor="#000000"
+                    android:enabled="false" />
 
-                </AutoCompleteTextView>
-            </com.google.android.material.textfield.TextInputLayout>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/textViewEHD"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="20dp"
-                android:text="Estimated Date of Harvest:"
-                android:textColor="#10282E"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                <Button
+                    android:id="@+id/btn_select_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select Date"
+                    android:background="@drawable/rounded_box"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:textSize="18sp"
+                    android:textColor="#000000"
+                    android:enabled="false" />
 
-            <EditText
-                android:id="@+id/est_doh"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="7dp"
-                android:backgroundTint="#8DFFFDFD"
-                android:hint="mm/dd/yyyy"
-                android:inputType="none"
-                android:textAlignment="textEnd"
-                android:textColor="#000000"
-                android:textColorHint="#313435"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.684"
-                app:layout_constraintStart_toEndOf="@+id/textViewEHD"
-                app:layout_constraintTop_toBottomOf="@+id/start_of_act" />
-
-            <Button
-                android:id="@+id/edit_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="38dp"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="#047CA1"
-                android:text="Edit"
-                android:textColor="#ffffff"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/est_doh" />
-
-            <Button
-                android:id="@+id/save_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="38dp"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="#047CA1"
-                android:text="Save"
-                android:textColor="#ffffff"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.036"
-                app:layout_constraintStart_toEndOf="@+id/edit_btn"
-                app:layout_constraintTop_toBottomOf="@+id/est_doh" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="339dp"
-        android:layout_height="325dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="350dp"
-        android:background="@drawable/rounded_container"
-        android:elevation="4dp"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="298dp">
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="MORTALITY RATE"
-                android:textAlignment="center"
-                android:textColor="#3A4E56"
-                android:textSize="26sp"
+                android:text="Harvest Date"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.495"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="280dp"
-                android:layout_height="47dp"
-                android:layout_marginTop="4dp"
-                android:src="@drawable/formula"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.592"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/harvestdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7 months after the start of Activity"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/btn_edit_fbreed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:background="@drawable/rounded_button"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
+        <!-- Production Cost Summary -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_container"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mortality Rate"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Formula Image -->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/formula"
+                android:contentDescription="Mortality Rate Formula"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Initial Stock -->
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Initial Stock:"
-                android:textColor="#10282E"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.087"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+            <EditText
+                android:id="@+id/txt_initial_stock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="—"
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
+                android:textColor="#000000"
+                android:layout_marginBottom="12dp"
+                android:enabled="false"
+                android:inputType="number"/>
 
+            <!-- Estimated No. of Dead Fish -->
             <TextView
-                android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Est no. of Dead Fish:"
-                android:textColor="#10282E"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.103"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/initialstock_input" />
-
-            <EditText
-                android:id="@+id/deadfish_input"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/text_box"
-                android:hint="0 kg"
-                android:inputType="number"
-                android:padding="6dp"
-                android:textAlignment="textEnd"
+                android:text="Est. No. of Dead Fish:"
+                android:textStyle="bold"
                 android:textColor="#000000"
-                android:textColorHint="#313435"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                android:textSize="16sp" />
+                <EditText
+                android:id="@+id/txt_est_dead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="—"
+
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
+                android:textColor="#000000"
+                android:layout_marginBottom="12dp"
+                android:enabled="false"
+                    android:inputType="number"/>
 
             <TextView
-                android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mortality Rate:"
-                android:textColor="#10282E"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.095"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/deadfish_input" />
-
-            <TextView
-                android:id="@+id/mortrate_display"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/text_box"
-                android:hint="0%"
-                android:padding="6dp"
-                android:textAlignment="textEnd"
+                android:textStyle="bold"
                 android:textColor="#000000"
-                android:textColorHint="#313435"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
-
+                android:textSize="16sp" />
             <EditText
-                android:id="@+id/initialstock_input"
-                android:layout_width="200dp"
+                android:id="@+id/txt_mortality_rate"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/text_box"
-                android:hint="0 kg"
-                android:inputType="number"
-                android:padding="6dp"
-                android:textAlignment="textEnd"
+                android:text="—"
+                android:background="@drawable/rounded_box"
+                android:padding="8dp"
                 android:textColor="#000000"
-                android:textColorHint="#313435"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                android:layout_marginBottom="16dp"
+                android:enabled="false" />
 
             <Button
-                android:id="@+id/mreditbtn"
+                android:id="@+id/btn_edit_mort"
                 android:layout_width="wrap_content"
-                android:layout_height="38dp"
-                android:layout_marginTop="4dp"
-                android:backgroundTint="#047CA1"
+                android:layout_height="wrap_content"
                 android:text="Edit"
-                android:textColor="#ffffff"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mortrate_display" />
 
-            <Button
-                android:id="@+id/resetbtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:backgroundTint="#047CA1"
-                android:text="Reset"
-                android:textColor="#ffffff"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mortrate_display"
-                android:visibility="gone"/>
-
-            <Button
-                android:id="@+id/calculatebtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:backgroundTint="#047CA1"
-                android:text="Calculate"
-                android:textColor="#ffffff"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/mreditbtn"
-                app:layout_constraintTop_toBottomOf="@+id/mortrate_display"
-                android:visibility="gone"/>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="#023e8a"
+                android:textColor="#ffffff" />
+        </LinearLayout>
 
     </LinearLayout>
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</ScrollView>
