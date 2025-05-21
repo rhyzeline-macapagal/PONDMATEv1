@@ -55,4 +55,6 @@ dependencies {
     implementation ("com.github.Foysalofficial:NafisBottomNav:5.0")
     implementation ("com.google.code.gson:gson:2.8.9")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation ("com.itextpdf:itext7-core:7.2.3")
+
 }

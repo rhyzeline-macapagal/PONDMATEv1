@@ -392,6 +392,7 @@
             android:backgroundTint="#047CA1"
             android:text="GENERATE REPORT"
             android:drawablePadding="16dp"
+            app:cornerRadius="0dp"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
