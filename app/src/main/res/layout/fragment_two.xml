@@ -131,8 +131,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Edit"
-                android:background="@drawable/rounded_button"
-                android:textColor="#ffffff" />
+                android:layout_marginTop="5dp"
+                android:backgroundTint="#047CA1"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <!-- Production Cost Summary -->
@@ -197,7 +198,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="—"
-
                 android:background="@drawable/rounded_box"
                 android:padding="8dp"
                 android:textColor="#000000"
@@ -220,18 +220,39 @@
                 android:background="@drawable/rounded_box"
                 android:padding="8dp"
                 android:textColor="#000000"
+                android:enabled="false" />
+
+            <Button
+                android:id="@+id/mreditbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="#047CA1"
+                android:text="Edit"
+                android:textColor="#ffffff" />
+
+            <Button
+                android:id="@+id/resetbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="#047CA1"
+                android:text="Reset"
+                android:textColor="#ffffff"
+                android:visibility="gone"
                 android:layout_marginBottom="16dp"
                 android:enabled="false" />
 
             <Button
-                android:id="@+id/btn_edit_mort"
+                android:id="@+id/calculatebtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="#047CA1"
+                android:text="Calculate"
+                android:textColor="#ffffff"
+                android:visibility="gone"/>
 
-                android:background="@drawable/rounded_button"
-                android:backgroundTint="#023e8a"
-                android:textColor="#ffffff" />
         </LinearLayout>
 
     </LinearLayout>

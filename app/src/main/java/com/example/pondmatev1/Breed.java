@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,22 +33,18 @@ public class Breed extends Fragment {
     EditText estDoh, intStockFish, NoDFish;
     TextView SOA, MortResult, harvestDateView;
     Calendar calendar;
-    Button btnSelectDate, btnSelectBreed, btnEditFbreed, btnEditMort;
+    Button btnSelectDate, btnSelectBreed, btnEditFbreed;
     RadioGroup radioGroup;
 
-    // Track editing state
     boolean isEditingBreed = false;
-    boolean isEditingMort = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_two, container, false);
 
         MortResult = view.findViewById(R.id.txt_mortality_rate);
@@ -58,7 +56,9 @@ public class Breed extends Fragment {
         SOA = view.findViewById(R.id.txt_soa);
 
         btnEditFbreed = view.findViewById(R.id.btn_edit_fbreed);
-        btnEditMort = view.findViewById(R.id.btn_edit_mort);
+        Button mreditBtn = view.findViewById(R.id.mreditbtn);
+        Button resetBtn = view.findViewById(R.id.resetbtn);
+        Button calcBtn = view.findViewById(R.id.calculatebtn);
 
         calendar = Calendar.getInstance();
 
@@ -67,7 +67,6 @@ public class Breed extends Fragment {
 
         btnEditFbreed.setOnClickListener(v -> {
             if (!isEditingBreed) {
-                // Confirm before enabling editing
                 new AlertDialog.Builder(requireContext())
                         .setTitle("Confirm Edit")
                         .setMessage("Are you sure you want to edit the Fish Breed?")
@@ -84,7 +83,6 @@ public class Breed extends Fragment {
                         .setTitle("Confirm Save")
                         .setMessage("Are you sure to save?")
                         .setPositiveButton("Yes", (dialog, which) -> {
-                            // Disable editing and save
                             isEditingBreed = false;
                             setFishBreedEditable(false);
                             btnEditFbreed.setText("Edit");
@@ -94,8 +92,6 @@ public class Breed extends Fragment {
                         .show();
             }
         });
-
-
 
         btnSelectBreed.setOnClickListener(v -> {
             if (isEditingBreed) {
@@ -114,15 +110,13 @@ public class Breed extends Fragment {
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view, year1, month1, dayOfMonth) -> {
-                    // Set selected date as the start of activity
                     calendar.set(year1, month1, dayOfMonth);
                     SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault());
                     SOA.setText(sdf.format(calendar.getTime()));
 
-                    // Compute and display harvest date (7 months later)
                     Calendar harvestCalendar = (Calendar) calendar.clone();
                     harvestCalendar.add(Calendar.MONTH, 7);
-                    harvestDateView.setText(sdf.format(harvestCalendar.getTime())); // Replace with your actual TextView ID
+                    harvestDateView.setText(sdf.format(harvestCalendar.getTime()));
                 }, year, month, day);
 
                 datePickerDialog.show();
@@ -131,74 +125,86 @@ public class Breed extends Fragment {
             }
         });
 
+        mreditBtn.setOnClickListener(v -> {
+            intStockFish.setEnabled(true);
+            NoDFish.setEnabled(true);
+            intStockFish.setText("");
+            NoDFish.setText("");
 
-        // Calculate mortality rate (simple function example)
-        btnEditMort.setOnClickListener(v -> {
-            if (!isEditingMort) {
-                // Ask for confirmation before enabling edit mode
-                new AlertDialog.Builder(requireContext())
-                        .setTitle("Confirm Edit")
-                        .setMessage("Are you sure you want to edit the mortality fields?")
-                        .setPositiveButton("Yes", (dialog, which) -> {
-                            // Enable editing
-                            isEditingMort = true;
-                            setMortalityEditable(true);
-                            btnEditMort.setText("Save");
-                            Toast.makeText(getContext(), "Editing Mortality fields enabled", Toast.LENGTH_SHORT).show();
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-            } else {
-                // Show confirmation before saving
-                new AlertDialog.Builder(requireContext())
-                        .setTitle("Confirm Save")
-                        .setMessage("Are you sure to save?")
-                        .setPositiveButton("Yes", (dialog, which) -> {
-                            try {
-                                int initialStock = Integer.parseInt(intStockFish.getText().toString());
-                                int deadFish = Integer.parseInt(NoDFish.getText().toString());
-
-                                if (initialStock == 0) {
-                                    Toast.makeText(getContext(), "Initial stock cannot be zero", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
-
-                                double mortalityRate = (double) deadFish / initialStock * 100;
-                                MortResult.setText(String.format(Locale.getDefault(), "%.2f%%", mortalityRate));
-
-                                isEditingMort = false;
-                                setMortalityEditable(false);
-                                btnEditMort.setText("Edit");
-                                Toast.makeText(getContext(), "Mortality fields saved", Toast.LENGTH_SHORT).show();
-                            } catch (NumberFormatException e) {
-                                Toast.makeText(getContext(), "Please enter valid numbers", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-            }
+            mreditBtn.setEnabled(false);
+            mreditBtn.setVisibility(View.GONE);
+            resetBtn.setVisibility(View.VISIBLE);
+            calcBtn.setVisibility(View.VISIBLE);
         });
 
+        resetBtn.setOnClickListener(v -> {
+            intStockFish.setText("");
+            NoDFish.setText("");
+            MortResult.setText("");
 
+            intStockFish.setEnabled(false);
+            NoDFish.setEnabled(false);
+
+            mreditBtn.setEnabled(true);
+            mreditBtn.setVisibility(View.VISIBLE);
+
+            resetBtn.setVisibility(View.GONE);
+            calcBtn.setVisibility(View.GONE);
+        });
+
+        calcBtn.setOnClickListener(v -> {
+            String intStockFishStr = intStockFish.getText().toString();
+            String noDFishStr = NoDFish.getText().toString();
+
+            if (intStockFishStr.isEmpty() || noDFishStr.isEmpty()) {
+                Toast.makeText(requireContext(), "Please enter both values.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                double intStockFishValue = Double.parseDouble(intStockFishStr);
+                double noDFishValue = Double.parseDouble(noDFishStr);
+
+                if (intStockFishValue == 0) {
+                    Toast.makeText(requireContext(), "Initial stock of fish cannot be zero.", Toast.LENGTH_SHORT).show();
+                } else {
+                    double result = (noDFishValue / intStockFishValue) * 100;
+                    MortResult.setText(String.format(Locale.US, "%.2f%%", result));
+
+                    Calendar calendar = Calendar.getInstance();
+                    int currentMonthIndex = calendar.get(Calendar.MONTH);
+
+                    SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+                    viewModel.addMortalityEntry(currentMonthIndex, (float) result);
+                    viewModel.setContext(requireContext());
+                    viewModel.persistData();
+                    Log.d("BreedFragment", "Added mortality rate: " + result + " for month: " + currentMonthIndex);
+                    Toast.makeText(requireContext(), "Mortality rate saved for month: " + currentMonthIndex, Toast.LENGTH_SHORT).show();
+
+                    intStockFish.setEnabled(false);
+                    NoDFish.setEnabled(false);
+                    mreditBtn.setEnabled(false);
+                }
+            } catch (NumberFormatException e) {
+                Toast.makeText(requireContext(), "Invalid input, please enter valid numbers.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }
 
-    // Enable/Disable fish breed fields
     private void setFishBreedEditable(boolean enabled) {
         btnSelectBreed.setEnabled(enabled);
         btnSelectDate.setEnabled(enabled);
         SOA.setEnabled(enabled);
     }
 
-    // Enable/Disable mortality fields
     private void setMortalityEditable(boolean enabled) {
         intStockFish.setEnabled(enabled);
         NoDFish.setEnabled(enabled);
-        MortResult.setEnabled(false);  // Always disabled, just display result
+        MortResult.setEnabled(false);
 
         if (enabled) {
-            // Clear "—" if present
             if ("—".equals(intStockFish.getText().toString().trim())) {
                 intStockFish.setText("");
             }
@@ -207,7 +213,4 @@ public class Breed extends Fragment {
             }
         }
     }
-
-
-
 }
