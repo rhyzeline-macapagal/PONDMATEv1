@@ -3,6 +3,7 @@ package com.example.pondmatev1;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
+import android.icu.text.DisplayOptions;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
@@ -32,14 +33,13 @@ import java.util.Locale;
 public class pcostroi extends Fragment {
 
     ArrayList<String> breedList;
-    AutoCompleteTextView autoCompleteText;
-    ArrayAdapter<String> adapterItems;
-    Button addOptionButton, editButton, saveButton, generateReportButton;
-    EditText amtFingerlings, amtFeeders, maintenance, otherExpenses, initialMaintenancetype, initialOtherExpensetype;
-    LinearLayout maintenanceList, oexpensesList;
-    TextView totalExpenses;
-    ImageButton addMaintenanceButton, addOtherExpensesButton;
-    EditText initialMaintenanceCost, initialOtherExpenseCost;
+    //ArrayAdapter<String> adapterItems;
+        Button editButton, saveButton, generateReportButton;
+    EditText amtFingerlings, amtFeeders, maintenance, initialMaintenancetype, TypeofFeeders, Capital, Labor;
+    LinearLayout maintenanceList;
+    TextView totalExpenses, fishbreeddisplay, numfingerlingsdisplay;
+    ImageButton addMaintenanceButton;
+    EditText initialMaintenanceCost;
 
 
     @Override
@@ -65,22 +65,21 @@ public class pcostroi extends Fragment {
         amtFeeders = view.findViewById(R.id.amtoffeeders);
         initialMaintenancetype = view.findViewById(R.id.initialMaintenanceType);
         initialMaintenanceCost = view.findViewById(R.id.initialMaintenanceCost);
-        initialOtherExpensetype = view.findViewById(R.id.initialOtherExpenseType);
-        initialOtherExpenseCost = view.findViewById(R.id.initialOtherExpenseCost);
         totalExpenses = view.findViewById(R.id.totalexpenses);
         editButton = view.findViewById(R.id.editbtn);
         saveButton = view.findViewById(R.id.savebtn);
         maintenanceList = view.findViewById(R.id.maintenanceList);
-        oexpensesList = view.findViewById(R.id.otherExpensesList);
+        fishbreeddisplay = view.findViewById(R.id.fishbreedpcostdisplay);
+        numfingerlingsdisplay = view.findViewById(R.id.numoffingerlings);
+        TypeofFeeders = view.findViewById(R.id.typeoffeeders);
+        Capital = view.findViewById(R.id.capital);
+        Labor = view.findViewById(R.id.labor);
 
-        addOptionButton = view.findViewById(R.id.addOptionButton);
-        autoCompleteText = view.findViewById(R.id.auto_complete_txt1);
         addMaintenanceButton = view.findViewById(R.id.addMaintenanceButton);
-        addOtherExpensesButton = view.findViewById(R.id.addOtherExpensesButton);
         generateReportButton = view.findViewById(R.id.generatereport);
 
 
-        setupExpenseAutoSum(amtFingerlings, amtFeeders, initialMaintenanceCost, initialOtherExpenseCost);
+        setupExpenseAutoSum(amtFingerlings, amtFeeders, initialMaintenanceCost);
 
 
         // restrict to character input
@@ -94,12 +93,11 @@ public class pcostroi extends Fragment {
             }
         };
         initialMaintenancetype.setFilters(new InputFilter[]{letterOnlyFilter});
-        initialOtherExpensetype.setFilters(new InputFilter[]{letterOnlyFilter});
 
         // Set up dropdown adapter
-        adapterItems = new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_dropdown_item_1line, breedList);
-        autoCompleteText.setAdapter(adapterItems);
+        //adapterItems = new ArrayAdapter<>(requireContext(),
+        //        android.R.layout.simple_dropdown_item_1line, breedList);
+        //autoCompleteText.setAdapter(adapterItems);
 
         // Set fields to non-editable initially
         setEditable(false);
@@ -124,27 +122,24 @@ public class pcostroi extends Fragment {
 
 
         //Handle Add opt
-        addOptionButton.setOnClickListener(v -> {
-            String newItem = autoCompleteText.getText().toString().trim();
+        //addOptionButton.setOnClickListener(v -> {
+        //    String newItem = autoCompleteText.getText().toString().trim();
 
-            if (!newItem.isEmpty() && !breedList.contains(newItem)) {
-                breedList.add(newItem);
-                adapterItems = new ArrayAdapter<>(requireContext(),
-                        android.R.layout.simple_dropdown_item_1line, breedList);
-                autoCompleteText.setAdapter(adapterItems);
-                autoCompleteText.setText("");
-                autoCompleteText.showDropDown();
-                Toast.makeText(requireContext(), "Added: " + newItem, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(requireContext(), "Item is empty or already exists", Toast.LENGTH_SHORT).show();
-            }
-        });
+        //    if (!newItem.isEmpty() && !breedList.contains(newItem)) {
+        //        breedList.add(newItem);
+        //       adapterItems = new ArrayAdapter<>(requireContext(),
+        //                android.R.layout.simple_dropdown_item_1line, breedList);
+        //        autoCompleteText.setAdapter(adapterItems);
+        //        autoCompleteText.setText("");
+        //        autoCompleteText.showDropDown();
+        //        Toast.makeText(requireContext(), "Added: " + newItem, Toast.LENGTH_SHORT).show();
+        //    } else {
+        //        Toast.makeText(requireContext(), "Item is empty or already exists", Toast.LENGTH_SHORT).show();
+        //    }
+        //});
 
         // Add new maintenance row
         addMaintenanceButton.setOnClickListener(v -> addNewMaintenanceRow());
-
-        // Add new other expenses row
-        addOtherExpensesButton.setOnClickListener(v -> addNewOtherExpensesRow());
 
         //generate report button
         generateReportButton.setOnClickListener(v -> generateReport());
@@ -154,13 +149,12 @@ public class pcostroi extends Fragment {
     }
     // generate report
     private void generateReport() {
-        String breed = autoCompleteText.getText().toString().trim();
+        //String breed = autoCompleteText.getText().toString().trim();
         String fingerlings = amtFingerlings.getText().toString().trim();
         String feeders = amtFeeders.getText().toString().trim();
         String maintenancetype = initialMaintenancetype.getText().toString().trim();
         String maintenance = initialMaintenanceCost.getText().toString().trim();
-        String otherExpensestype = initialOtherExpensetype.getText().toString().trim();
-        String otherExpenses = initialOtherExpenseCost.getText().toString().trim();
+
         String total = totalExpenses.getText().toString().trim();
 
         StringBuilder maintenanceDetails = new StringBuilder();
@@ -169,15 +163,6 @@ public class pcostroi extends Fragment {
             EditText type = row.findViewById(R.id.maintenanceType);
             EditText cost = row.findViewById(R.id.maintenanceCost);
             maintenanceDetails.append("   • ").append(type.getText().toString())
-                    .append(": ₱").append(cost.getText().toString()).append("\n");
-        }
-
-        StringBuilder otherDetails = new StringBuilder();
-        for (int i = 0; i < oexpensesList.getChildCount(); i++) {
-            View row = oexpensesList.getChildAt(i);
-            EditText type = row.findViewById(R.id.otherexpenses);
-            EditText cost = row.findViewById(R.id.otherexpensesCost);
-            otherDetails.append("   • ").append(type.getText().toString())
                     .append(": ₱").append(cost.getText().toString()).append("\n");
         }
 
@@ -203,13 +188,11 @@ public class pcostroi extends Fragment {
 
             y += 40;
 
-            canvas.drawText("Breed: " + breed, x, y, paint); y += 30;
+            //canvas.drawText("Breed: " + breed, x, y, paint); y += 30;
             canvas.drawText("➤ Fingerlings:                                           ₱" + fingerlings, x, y, paint); y += 25;
             canvas.drawText("➤ Feeders:                                               ₱" + feeders, x, y, paint); y += 25;
             canvas.drawText("➤ Initial Maintenance: " +"\n"
                     + maintenancetype + " -         ₱" + maintenance, x, y, paint); y += 25;
-            canvas.drawText("➤ Initial Other Expenses: " +"\n"
-                    + otherExpensestype + " -    ₱" + otherExpenses, x, y, paint); y += 35;
 
             canvas.drawText("— Maintenance Breakdown —", x, y, paint); y += 25;
             if (maintenanceDetails.length() > 0) {
@@ -219,18 +202,6 @@ public class pcostroi extends Fragment {
                 }
             } else {
                 canvas.drawText("   No additional maintenance expenses.", x + 20, y, paint);
-                y += 22;
-            }
-
-            y += 20;
-            canvas.drawText("— Other Expenses Breakdown —", x, y, paint); y += 25;
-            if (otherDetails.length() > 0) {
-                for (String line : otherDetails.toString().split("\n")) {
-                    canvas.drawText(line, x + 20, y, paint);
-                    y += 22;
-                }
-            } else {
-                canvas.drawText("   No other expenses.", x + 20, y, paint);
                 y += 22;
             }
 
@@ -255,7 +226,7 @@ public class pcostroi extends Fragment {
     }
 
     private void setEditable(boolean editable) {
-        EditText[] fields = {amtFingerlings, amtFeeders,  initialMaintenanceCost, initialOtherExpenseCost};
+        EditText[] fields = {amtFingerlings, amtFeeders,  initialMaintenanceCost};
 
         for (EditText field : fields) {
             field.setFocusable(editable);
@@ -272,17 +243,12 @@ public class pcostroi extends Fragment {
         initialMaintenanceCost.setClickable(editable);
         initialMaintenanceCost.setCursorVisible(editable);
 
-        initialOtherExpenseCost.setFocusable(editable);
-        initialOtherExpenseCost.setFocusableInTouchMode(editable);
-        initialOtherExpenseCost.setClickable(editable);
-        initialOtherExpenseCost.setCursorVisible(editable);
-
-        autoCompleteText.setEnabled(editable);
-        addOptionButton.setEnabled(editable);
-        autoCompleteText.setFocusable(editable);
-        autoCompleteText.setFocusableInTouchMode(editable);
-        autoCompleteText.setClickable(editable);
-        autoCompleteText.setCursorVisible(editable);
+        //autoCompleteText.setEnabled(editable);
+        //addOptionButton.setEnabled(editable);
+        //autoCompleteText.setFocusable(editable);
+        //autoCompleteText.setFocusableInTouchMode(editable);
+        //autoCompleteText.setClickable(editable);
+        //autoCompleteText.setCursorVisible(editable);
     }
 
     // Method to add new maintenance row dynamically
@@ -294,43 +260,26 @@ public class pcostroi extends Fragment {
         EditText maintenanceCost = maintenanceView.findViewById(R.id.maintenanceCost);
 
         maintenanceCost.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateTotalExpenses(amtFingerlings, amtFeeders, initialMaintenanceCost, initialOtherExpenseCost);
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-            @Override public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateTotalExpenses(amtFingerlings, amtFeeders, initialMaintenanceCost);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         removeButton.setOnClickListener(v -> {
             maintenanceList.removeView(maintenanceView);
-            updateTotalExpenses(amtFingerlings, amtFeeders, initialMaintenanceCost, initialOtherExpenseCost);
+            updateTotalExpenses(amtFingerlings, amtFeeders, initialMaintenanceCost);
         });
 
         maintenanceList.addView(maintenanceView);
-    }
-
-    // Method to add new other expenses row dynamically
-    private void addNewOtherExpensesRow() {
-        View expensesView = LayoutInflater.from(requireContext()).inflate(R.layout.row_other_expenses, null);
-
-        ImageButton removeButton = expensesView.findViewById(R.id.removeOtherExpenseButton);
-        EditText expenseType = expensesView.findViewById(R.id.otherexpenses);
-        EditText expenseCost = expensesView.findViewById(R.id.otherexpensesCost);
-
-        expenseCost.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateTotalExpenses(amtFingerlings, amtFeeders, initialMaintenanceCost, initialOtherExpenseCost);
-            }
-            @Override public void afterTextChanged(Editable s) {}
-        });
-
-        removeButton.setOnClickListener(v -> {
-            oexpensesList.removeView(expensesView);
-            updateTotalExpenses(amtFingerlings, amtFeeders, initialMaintenanceCost, initialOtherExpenseCost);
-        });
-
-        oexpensesList.addView(expensesView);
     }
 
 
@@ -377,17 +326,6 @@ public class pcostroi extends Fragment {
             }
         }
 
-        // Sum dynamic other expenses
-        for (int i = 0; i < oexpensesList.getChildCount(); i++) {
-            View row = oexpensesList.getChildAt(i);
-            EditText cost = row.findViewById(R.id.otherexpensesCost);
-            if (cost != null && !cost.getText().toString().trim().isEmpty()) {
-                try {
-                    total += Double.parseDouble(cost.getText().toString().trim());
-                } catch (NumberFormatException ignored) {}
-            }
-        }
-
         totalExpenses.setText(String.format(Locale.US, "%.2f", total));
     }
 
@@ -396,26 +334,15 @@ public class pcostroi extends Fragment {
         if (amtFingerlings.getText().toString().trim().isEmpty()) return false;
         if (amtFeeders.getText().toString().trim().isEmpty()) return false;
         if (initialMaintenanceCost.getText().toString().trim().isEmpty()) return false;
-        if (initialOtherExpenseCost.getText().toString().trim().isEmpty()) return false;
+
         if (initialMaintenancetype.getText().toString().trim().isEmpty()) return false;
-        if (initialOtherExpensetype.getText().toString().trim().isEmpty()) return false;
-        if (autoCompleteText.getText().toString().trim().isEmpty()) return false;
+        //if (autoCompleteText.getText().toString().trim().isEmpty()) return false;
 
         // Check dynamic maintenance fields
         for (int i = 0; i < maintenanceList.getChildCount(); i++) {
             View row = maintenanceList.getChildAt(i);
             EditText type = row.findViewById(R.id.maintenanceType);
             EditText cost = row.findViewById(R.id.maintenanceCost);
-            if (type.getText().toString().trim().isEmpty() || cost.getText().toString().trim().isEmpty()) {
-                return false;
-            }
-        }
-
-        // Check dynamic other expenses fields
-        for (int i = 0; i < oexpensesList.getChildCount(); i++) {
-            View row = oexpensesList.getChildAt(i);
-            EditText type = row.findViewById(R.id.otherexpenses);
-            EditText cost = row.findViewById(R.id.otherexpensesCost);
             if (type.getText().toString().trim().isEmpty() || cost.getText().toString().trim().isEmpty()) {
                 return false;
             }

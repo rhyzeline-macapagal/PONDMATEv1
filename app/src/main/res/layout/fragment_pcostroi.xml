@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="80dp"
-            android:background="@drawable/rounded_container"
+            android:background="@drawable/cardviewbg"
             android:elevation="4dp"
             android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -35,11 +35,13 @@
                     android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginTop="4dp"
+                    android:fontFamily="sans-serif-light"
                     android:text="PRODUCTION COST"
                     android:textAlignment="center"
-                    android:textColor="#3A4E56"
-                    android:textSize="26sp"
+                    android:textColor="#0E1012"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -49,135 +51,243 @@
                     android:id="@+id/textView10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="10dp"
                     android:text="Type of Fingerlings:"
-                    android:textColor="#10282E"
-                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="@+id/textView8"
-                    app:layout_constraintHorizontal_bias="0.183"
+                    app:layout_constraintHorizontal_bias="0.107"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                    android:layout_width="140dp"
-                    android:layout_height="57dp"
-                    android:layout_margin="16dp"
-                    android:layout_marginTop="12dp"
-                    android:hint="@string/select_breed"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.428"
-                    app:layout_constraintStart_toEndOf="@+id/textView10"
-                    app:layout_constraintTop_toBottomOf="@+id/textView8">
 
-                    <AutoCompleteTextView
-                        android:id="@+id/auto_complete_txt1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:clickable="false"
-                        android:enabled="false"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:textColor="#3A4E56" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Button
-                    android:id="@+id/addOptionButton"
-                    android:layout_width="110dp"
-                    android:layout_height="35dp"
-                    android:backgroundTint="#047CA1"
-                    android:text="Add Option"
-                    android:textColor="@android:color/white"
-                    android:textSize="11sp"
+                <TextView
+                    android:id="@+id/fishbreedpcostdisplay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/container"
+                    android:enabled="true"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="start|center_vertical"
+                    android:inputType="number"
+                    android:textColor="#000000"
+                    android:textSize="14dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.899"
+                    app:layout_constraintHorizontal_bias="0.571"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="No. of Fingerlings:"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fishbreedpcostdisplay" />
+
+                <TextView
+                    android:id="@+id/numoffingerlings"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/container"
+                    android:fontFamily="sans-serif-light"
+                    android:padding="8dp"
+                    android:paddingStart="8dp"
+                    android:textAlignment="textEnd"
+                    android:textColorHint="#000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
                 <TextView
                     android:id="@+id/textView15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="72dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="sans-serif-medium"
                     android:text="Cost of Fingerlings:"
-                    android:textColor="#10282E"
-                    android:textSize="18sp"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.14"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView10" />
+                    app:layout_constraintHorizontal_bias="0.611"
+                    app:layout_constraintStart_toEndOf="@+id/textView3"
+                    app:layout_constraintTop_toBottomOf="@+id/fishbreedpcostdisplay" />
 
                 <EditText
                     android:id="@+id/amtoffingerlings"
-                    android:layout_width="120dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="4dp"
-                    android:backgroundTint="#8DFFFDFD"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/container"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="eg.₱1,500"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="₱1,500"
                     android:inputType="numberDecimal"
-                    android:padding="1dp"
+                    android:padding="8dp"
+                    android:paddingStart="8dp"
                     android:textAlignment="textEnd"
-                    android:textColor="#000000"
-                    android:textColorHint="#10282E"
-                    android:textSize="16sp"
+                    android:textColorHint="#000000"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.511"
-                    app:layout_constraintStart_toEndOf="@+id/textView15"
-                    app:layout_constraintTop_toBottomOf="@+id/addOptionButton" />
+                    app:layout_constraintHorizontal_bias="0.85"
+                    app:layout_constraintStart_toEndOf="@+id/numoffingerlings"
+                    app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+                <TextView
+                    android:id="@+id/textView111"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Type of Feeders:"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/numoffingerlings" />
+
+                <EditText
+                    android:id="@+id/typeoffeeders"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/container"
+                    android:fontFamily="sans-serif-light"
+                    android:padding="8dp"
+                    android:textAlignment="textEnd"
+                    android:textColorHint="#000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView111" />
 
                 <TextView
                     android:id="@+id/textView11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="sans-serif-medium"
                     android:text="Cost of Feeders:"
-                    android:textColor="#10282E"
-                    android:textSize="18sp"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.135"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                    app:layout_constraintStart_toEndOf="@+id/textView111"
+                    app:layout_constraintTop_toBottomOf="@+id/amtoffingerlings" />
 
                 <EditText
                     android:id="@+id/amtoffeeders"
-                    android:layout_width="120dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="4dp"
-                    android:backgroundTint="#8DFFFDFD"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/container"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="eg.₱1,500"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="₱1,500"
                     android:inputType="numberDecimal"
-                    android:padding="1dp"
+                    android:padding="8dp"
+                    android:paddingStart="8dp"
                     android:textAlignment="textEnd"
+                    android:textColorHint="#000000"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.8"
+                    app:layout_constraintStart_toEndOf="@+id/typeoffeeders"
+                    app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+                <TextView
+                    android:id="@+id/textView112"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Capital:"
                     android:textColor="#000000"
-                    android:textColorHint="#10282E"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/typeoffeeders" />
+
+                <EditText
+                    android:id="@+id/capital"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/container"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="₱1,500"
+                    android:inputType="numberDecimal"
+                    android:padding="8dp"
+                    android:paddingStart="8dp"
+                    android:textAlignment="textEnd"
+                    android:textColorHint="#000000"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView112" />
+
+                <TextView
+                    android:id="@+id/textView122"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Labor:"
+                    android:textColor="#000000"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.655"
-                    app:layout_constraintStart_toEndOf="@+id/textView11"
-                    app:layout_constraintTop_toBottomOf="@+id/amtoffingerlings" />
+                    app:layout_constraintHorizontal_bias="0.483"
+                    app:layout_constraintStart_toEndOf="@+id/textView112"
+                    app:layout_constraintTop_toBottomOf="@+id/amtoffeeders" />
+
+                <EditText
+                    android:id="@+id/labor"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/container"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="₱1,500"
+                    android:inputType="numberDecimal"
+                    android:padding="8dp"
+                    android:paddingStart="8dp"
+                    android:textAlignment="textEnd"
+                    android:textColorHint="#000000"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/capital"
+                    app:layout_constraintTop_toBottomOf="@+id/textView122" />
 
                 <TextView
                     android:id="@+id/maintenancelabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Maintenance:"
-                    android:textColor="#10282E"
-                    android:textSize="18sp"
+                    android:layout_marginTop="5dp"
+                    android:text="Other Maintenance:"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.116"
+                    app:layout_constraintHorizontal_bias="0.068"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView11" />
+                    app:layout_constraintTop_toBottomOf="@+id/capital" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/linearLayout3"
@@ -189,11 +299,14 @@
 
                     <EditText
                         android:id="@+id/initialMaintenanceType"
-                        android:layout_width="157dp"
-                        android:layout_height="41dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:hint="Enter maintenance type"
-                        android:textSize="14sp"
                         android:inputType="text"
+                        android:textSize="14sp"
+                        android:padding="8dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="#000000"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.093"
@@ -204,7 +317,7 @@
                     <EditText
                         android:id="@+id/initialMaintenanceCost"
                         android:layout_width="121dp"
-                        android:layout_height="41dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:clickable="true"
                         android:cursorVisible="true"
@@ -212,8 +325,12 @@
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:hint="Cost"
+                        android:padding="8dp"
                         android:inputType="numberDecimal"
                         android:textSize="14sp"
+                        android:textAlignment="textEnd"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="#000000"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -246,102 +363,23 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
-                    android:id="@+id/textView13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="Other Expenses:"
-                    android:textColor="#10282E"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.131"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/linearLayout4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toBottomOf="@+id/textView13"
-                    tools:layout_editor_absoluteX="0dp">
-
-                    <EditText
-                        android:id="@+id/initialOtherExpenseType"
-                        android:layout_width="157dp"
-                        android:layout_height="41dp"
-                        android:hint="Other Expenses"
-                        android:textSize="14sp"
-                        android:inputType="text"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.093"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
-
-                    <EditText
-                        android:id="@+id/initialOtherExpenseCost"
-                        android:layout_width="121dp"
-                        android:layout_height="41dp"
-                        android:layout_weight="1"
-                        android:clickable="true"
-                        android:cursorVisible="true"
-                        android:enabled="true"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:hint="Cost"
-                        android:inputType="numberDecimal"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toEndOf="@+id/initialOtherExpenseType"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
-
-                    <ImageButton
-                        android:id="@+id/addOtherExpensesButton"
-                        android:layout_width="26dp"
-                        android:layout_height="34dp"
-                        android:contentDescription="Add Image"
-                        android:src="@android:drawable/ic_menu_add"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/initialOtherExpenseCost"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <!-- List to display added maintenance -->
-                    <LinearLayout
-                        android:id="@+id/otherExpensesList"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="16dp"
-                        android:orientation="vertical"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/initialOtherExpenseType" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <TextView
                     android:id="@+id/textView14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="16dp"
                     android:text="Total Expenditures:"
-                    android:textColor="#10282E"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.144"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
                 <TextView
                     android:id="@+id/totalexpenses"
                     android:layout_width="120dp"
                     android:layout_height="40dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="4dp"
                     android:background="@drawable/text_box"
                     android:clickable="false"
                     android:cursorVisible="false"
@@ -353,18 +391,19 @@
                     android:textColorHint="#10282E"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.889"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+                    app:layout_constraintHorizontal_bias="0.358"
+                    app:layout_constraintStart_toEndOf="@+id/textView14"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
                 <Button
                     android:id="@+id/editbtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginTop="20dp"
                     android:backgroundTint="#047CA1"
                     android:text="Edit"
                     android:textColor="@android:color/white"
+                    app:cornerRadius="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView14" />
@@ -390,14 +429,31 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:backgroundTint="#047CA1"
-            android:text="GENERATE REPORT"
             android:drawablePadding="16dp"
-            app:cornerRadius="0dp"
+            android:text="GENERATE REPORT"
             android:textColor="@android:color/white"
+            app:cornerRadius="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+            app:layout_constraintVertical_bias="0.3" />
+
+        <Button
+            android:id="@+id/projectedroi"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="#047CA1"
+            android:drawablePadding="16dp"
+            android:text="PROJECTED ROI"
+            android:textColor="@android:color/white"
+            app:cornerRadius="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/generatereport" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fraghome"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Breed"
     android:textColor="#000000">
 
     <LinearLayout
@@ -11,23 +12,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BREEDING"
-            android:textSize="26sp"
-            android:layout_gravity="center"
-            android:textStyle="bold"
-            android:textColor="#023e8a"
-            android:layout_marginBottom="16dp" />
-
         <!-- Pond Overview Card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/rounded_container"
+            android:background="@drawable/cardviewbg"
             android:elevation="4dp"
             android:padding="16dp"
             android:layout_marginBottom="24dp"
@@ -38,37 +28,71 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fish Breed"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="#000000"
-                android:layout_marginBottom="12dp" />
+                android:layout_gravity="center"
+                android:layout_marginBottom="14dp"
+                android:fontFamily="sans-serif-light"
+                android:text="BREEDING"
+                android:textColor="#0E1012"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
             <!-- Dropdown Button (disabled initially) -->
-            <Button
-                android:id="@+id/btn_select_breed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Select Fish Breed"
-                android:background="@drawable/rounded_box"
-                android:padding="8dp"
-                android:textSize="18dp"
-                android:textColor="#000000"
-                android:layout_marginBottom="8dp"
-                android:drawableEnd="@drawable/ic_dropdown_arrow"
-                android:gravity="start|center_vertical"
-                android:enabled="false" />
 
             <!-- Activity Started Label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Activity Started "
-                android:textStyle="bold"
-                android:textSize="20sp"
+                android:text="Type of Fingerlings:"
                 android:textColor="#000000"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="12dp" />
+                android:textSize="16sp"
+                android:fontFamily="sans-serif-medium"/>
+
+            <Button
+                android:id="@+id/btn_select_breed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/container"
+                android:drawableEnd="@drawable/ic_dropdown_arrow"
+                android:enabled="true"
+                android:alpha="0.4"
+                android:fontFamily="sans-serif-light"
+                android:gravity="start|center_vertical"
+                android:hint="Select Fish Breed"
+                android:textColor="#000000"
+                android:drawableTint="@null"
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Number of Fingerlings:"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+            <EditText
+                android:id="@+id/numoffingerlings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center_vertical"
+                android:paddingStart="8dp"
+                android:hint="     Enter quantity"
+                android:textColor="#000000"
+                android:fontFamily="sans-serif-light"
+                android:textSize="14dp"
+                android:background="@drawable/container"
+                android:enabled="true"
+                android:inputType="number"
+                android:layout_marginBottom="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start of Activity:"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                />
 
             <!-- Horizontal layout for radio buttons and date picker -->
             <LinearLayout
@@ -76,18 +100,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="5dp">
 
                 <TextView
                     android:id="@+id/txt_soa"
-                    android:layout_width="wrap_content"
+                    android:layout_width="192dp"
                     android:layout_height="wrap_content"
-                    android:text="mm/dd/yyyy"
-                    android:textSize="20dp"
-                    android:background="@drawable/rounded_box"
-                    android:padding="6dp"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="8dp"
+                    android:background="@drawable/container"
+                    android:enabled="true"
+                    android:hint="      mm/dd/yyyy"
                     android:textColor="#000000"
-                    android:enabled="false" />
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="14dp"/>
 
                 <View
                     android:layout_width="0dp"
@@ -98,42 +124,47 @@
                     android:id="@+id/btn_select_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="#047CA1"
+                    android:fontFamily="sans-serif-light"
                     android:text="Select Date"
-                    android:background="@drawable/rounded_box"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:textSize="18sp"
-                    android:textColor="#000000"
-                    android:enabled="false" />
+                    android:textColor="@android:color/white"
+                    app:cornerRadius="0dp" />
 
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Harvest Date"
-                android:textStyle="bold"
-                android:textSize="20sp"
+                android:text="Harvest Date:"
+                android:fontFamily="sans-serif-medium"
                 android:textColor="#000000"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="12dp" />
+                android:textSize="16sp"
+                android:paddingTop="5dp"
+                />
 
             <TextView
                 android:id="@+id/harvestdate"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="7 months after the start of Activity"
+                android:gravity="start|center_vertical"
+                android:text="      7 months after the start of Activity"
+                android:fontFamily="sans-serif-light"
+                android:paddingStart="8dp"
+                android:background="@drawable/container"
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:layout_marginBottom="20dp"
+                android:textSize="14sp" />
+
 
             <Button
                 android:id="@+id/btn_edit_fbreed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit"
-                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
                 android:backgroundTint="#047CA1"
-                android:textColor="@android:color/white" />
+                android:text="Edit"
+                android:textColor="@android:color/white"
+                app:cornerRadius="0dp" />
         </LinearLayout>
 
         <!-- Production Cost Summary -->
@@ -141,7 +172,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/rounded_container"
+            android:background="@drawable/cardviewbg"
             android:elevation="4dp"
             android:padding="16dp"
             android:layout_marginBottom="24dp">
@@ -149,12 +180,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
                 android:text="Mortality Rate"
-                android:textStyle="bold"
-                android:textSize="20sp"
+                android:layout_gravity="center"
                 android:textColor="#000000"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="12dp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <!-- Formula Image -->
             <ImageView
@@ -163,74 +194,93 @@
                 android:src="@drawable/formula"
                 android:contentDescription="Mortality Rate Formula"
                 android:layout_gravity="center"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="5dp" />
 
             <!-- Initial Stock -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Initial Stock:"
-                android:textStyle="bold"
+                android:text="Number of Fingerlings:"
+                android:fontFamily="sans-serif-medium"
                 android:textColor="#000000"
                 android:textSize="16sp" />
             <EditText
                 android:id="@+id/txt_initial_stock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="—"
-                android:background="@drawable/rounded_box"
+                android:hint="—"
                 android:padding="8dp"
                 android:textColor="#000000"
-                android:layout_marginBottom="12dp"
-                android:enabled="false"
-                android:inputType="number"/>
+                android:fontFamily="sans-serif-light"
+                android:textSize="14dp"
+                android:background="@drawable/container"
+                android:layout_marginBottom="5dp"
+                android:inputType="number"
+                android:focusable="false"
+                android:clickable="false" />
+
 
             <!-- Estimated No. of Dead Fish -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Est. No. of Dead Fish:"
-                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
                 android:textColor="#000000"
                 android:textSize="16sp" />
+
                 <EditText
                 android:id="@+id/txt_est_dead"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="—"
-                android:background="@drawable/rounded_box"
+                android:hint="—"
                 android:padding="8dp"
-                android:textColor="#000000"
-                android:layout_marginBottom="12dp"
                 android:enabled="false"
-                    android:inputType="number"/>
+                    android:inputType="number"
+                    android:textColor="#000000"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="14dp"
+                    android:background="@drawable/container"
+                    android:layout_marginBottom="5dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mortality Rate:"
-                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
                 android:textColor="#000000"
                 android:textSize="16sp" />
             <EditText
                 android:id="@+id/txt_mortality_rate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="—"
-                android:background="@drawable/rounded_box"
-                android:padding="8dp"
+                android:hint="%"
                 android:textColor="#000000"
-                android:enabled="false" />
+                android:fontFamily="sans-serif-light"
+                android:textSize="14dp"
+                android:background="@drawable/container"
+                android:layout_marginBottom="5dp"
+                android:padding="8dp"
+                android:focusable="false"
+                android:clickable="false"
+                android:enabled="false"/>
 
             <Button
                 android:id="@+id/mreditbtn"
                 android:layout_width="wrap_content"
-                android:layout_height="38dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:backgroundTint="#047CA1"
                 android:text="Edit"
+                android:layout_gravity="center"
+                app:cornerRadius="0dp"
                 android:textColor="#ffffff" />
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="5dp">
             <Button
                 android:id="@+id/resetbtn"
                 android:layout_width="wrap_content"
@@ -240,8 +290,13 @@
                 android:text="Reset"
                 android:textColor="#ffffff"
                 android:visibility="gone"
-                android:layout_marginBottom="16dp"
-                android:enabled="false" />
+                app:cornerRadius="0dp"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/calculatebtn"
@@ -250,8 +305,11 @@
                 android:layout_marginTop="4dp"
                 android:backgroundTint="#047CA1"
                 android:text="Calculate"
+                app:cornerRadius="0dp"
                 android:textColor="#ffffff"
                 android:visibility="gone"/>
+
+        </LinearLayout>
 
         </LinearLayout>
 
