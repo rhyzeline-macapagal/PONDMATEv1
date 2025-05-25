@@ -21,7 +21,7 @@
             android:elevation="4dp"
             android:padding="16dp"
             android:layout_marginBottom="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="20dp"
             android:clipToPadding="false"
             android:backgroundTintMode="src_in">
 
@@ -35,8 +35,6 @@
                 android:textColor="#0E1012"
                 android:textSize="24sp"
                 android:textStyle="bold" />
-
-            <!-- Dropdown Button (disabled initially) -->
 
             <!-- Activity Started Label -->
             <TextView

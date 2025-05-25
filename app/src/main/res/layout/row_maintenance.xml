@@ -8,25 +8,32 @@
 
     <EditText
         android:id="@+id/maintenanceType"
-        android:layout_width="157dp"
-        android:layout_height="41dp"
-        android:hint="Add maintenance"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter maintenance type"
         android:inputType="text"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:padding="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="#000000" />
 
     <EditText
         android:id="@+id/maintenanceCost"
-        android:layout_width="121dp"
-        android:layout_height="41dp"
-        android:layout_weight="1"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
         android:clickable="true"
         android:cursorVisible="true"
         android:enabled="true"
+        android:layout_marginStart="5dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:hint="Cost"
+        android:padding="8dp"
         android:inputType="numberDecimal"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:textAlignment="textEnd"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="#000000"/>
 
     <ImageButton
         android:id="@+id/removeMaintenanceButton"
