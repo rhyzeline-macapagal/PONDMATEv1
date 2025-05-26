@@ -6,6 +6,7 @@ import android.graphics.pdf.PdfDocument;
 import android.icu.text.DisplayOptions;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.text.Editable;
 import android.text.InputFilter;
@@ -34,10 +35,10 @@ public class pcostroi extends Fragment {
 
     ArrayList<String> breedList;
     //ArrayAdapter<String> adapterItems;
-        Button editButton, saveButton, generateReportButton;
-    EditText amtFingerlings, amtFeeders, maintenance, initialMaintenancetype, TypeofFeeders, Capital, Labor;
+    Button editButton, saveButton, generateReportButton;
+    EditText amtFeeders, maintenance, initialMaintenancetype, TypeofFeeders, Capital, Labor, fperpiece;
     LinearLayout maintenanceList;
-    TextView totalExpenses, fishbreeddisplay, numfingerlingsdisplay;
+    TextView totalExpenses, fishbreeddisplay, numfingerlingsdisplay, amtFingerlings;
     ImageButton addMaintenanceButton;
     EditText initialMaintenanceCost;
 
@@ -63,6 +64,7 @@ public class pcostroi extends Fragment {
         // Initialize views
         amtFingerlings = view.findViewById(R.id.amtoffingerlings);
         amtFeeders = view.findViewById(R.id.amtoffeeders);
+        fperpiece = view.findViewById(R.id.amtperpiece);
         initialMaintenancetype = view.findViewById(R.id.initialMaintenanceType);
         initialMaintenanceCost = view.findViewById(R.id.initialMaintenanceCost);
         totalExpenses = view.findViewById(R.id.totalexpenses);
@@ -79,8 +81,28 @@ public class pcostroi extends Fragment {
         generateReportButton = view.findViewById(R.id.generatereport);
 
 
-        setupExpenseAutoSum(amtFingerlings, amtFeeders, initialMaintenanceCost);
+        setupExpenseAutoSum(amtFeeders, initialMaintenanceCost);
 
+        SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        viewModel.getSelectedBreed().observe(getViewLifecycleOwner(), breed -> {
+            fishbreeddisplay.setText(breed);
+        });
+        viewModel.getNumOfFingerlings().observe(getViewLifecycleOwner(), num -> {
+            if (num != null) {
+                numfingerlingsdisplay.setText(String.valueOf(num));
+            } else {
+                numfingerlingsdisplay.setText("");
+            }
+            calculateAmtFingerlings();
+        });
+
+        fperpiece.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                calculateAmtFingerlings();
+            }
+            @Override public void afterTextChanged(Editable s) {}
+        });
 
         // restrict to character input
         InputFilter letterOnlyFilter = new InputFilter() {
@@ -93,11 +115,6 @@ public class pcostroi extends Fragment {
             }
         };
         initialMaintenancetype.setFilters(new InputFilter[]{letterOnlyFilter});
-
-        // Set up dropdown adapter
-        //adapterItems = new ArrayAdapter<>(requireContext(),
-        //        android.R.layout.simple_dropdown_item_1line, breedList);
-        //autoCompleteText.setAdapter(adapterItems);
 
         // Set fields to non-editable initially
         setEditable(false);
@@ -226,7 +243,7 @@ public class pcostroi extends Fragment {
     }
 
     private void setEditable(boolean editable) {
-        EditText[] fields = {amtFingerlings, amtFeeders,  initialMaintenanceCost};
+        EditText[] fields = {amtFeeders,  initialMaintenanceCost};
 
         for (EditText field : fields) {
             field.setFocusable(editable);
@@ -266,7 +283,7 @@ public class pcostroi extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateTotalExpenses(amtFingerlings, amtFeeders, initialMaintenanceCost);
+                updateTotalExpenses(amtFeeders, initialMaintenanceCost);
             }
 
             @Override
@@ -276,7 +293,7 @@ public class pcostroi extends Fragment {
 
         removeButton.setOnClickListener(v -> {
             maintenanceList.removeView(maintenanceView);
-            updateTotalExpenses(amtFingerlings, amtFeeders, initialMaintenanceCost);
+            updateTotalExpenses(amtFeeders, initialMaintenanceCost);
         });
 
         maintenanceList.addView(maintenanceView);
@@ -351,6 +368,18 @@ public class pcostroi extends Fragment {
         return true;
     }
 
+    private void calculateAmtFingerlings() {
+        String perPieceStr = fperpiece.getText().toString();
+        String numFingerlingsStr = numfingerlingsdisplay.getText().toString();
 
+        try {
+            double perPiece = perPieceStr.isEmpty() ? 0 : Double.parseDouble(perPieceStr);
+            double numFingerlings = numFingerlingsStr.isEmpty() ? 0 : Double.parseDouble(numFingerlingsStr);
+            double total = perPiece * numFingerlings;
+            amtFingerlings.setText(String.format(Locale.US, "₱%.2f", total));
+        } catch (NumberFormatException e) {
+            amtFingerlings.setText("₱0.00");
+        }
+    }
 
 }

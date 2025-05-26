@@ -24,23 +24,23 @@ public class BreedDialogFragment extends DialogFragment {
 
     private OnBreedSelectedListener listener;
 
+    public void setOnBreedSelectedListener(OnBreedSelectedListener listener) {
+        this.listener = listener;
+    }
+
     private final String[] breedNames = {
             "Tilapia", "Milkfish", "Shrimp", "Seaweed", "Carp", "Oyster", "Mussel", "Other"
     };
 
     private final int[] breedImages = {
-            R.drawable.tilapia,     // Replace with real images if available
-            R.drawable.tilapia,
-            R.drawable.tilapia,
-            R.drawable.tilapia,
-            R.drawable.tilapia,
-            R.drawable.tilapia,
-            R.drawable.tilapia,
-            0 // "Other" has no image
+            R.drawable.tilapia, R.drawable.tilapia, R.drawable.tilapia,
+            R.drawable.tilapia, R.drawable.tilapia, R.drawable.tilapia,
+            R.drawable.tilapia, 0
     };
 
+    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Select Fish Breed");
 
@@ -56,13 +56,12 @@ public class BreedDialogFragment extends DialogFragment {
                 if (position < breedImages.length && breedImages[position] != 0) {
                     Drawable img = ContextCompat.getDrawable(requireContext(), breedImages[position]);
                     if (img != null) {
-                        img.setBounds(0, 0, 80, 80); // Adjust size as needed
+                        img.setBounds(0, 0, 80, 80);
                         textView.setCompoundDrawables(img, null, null, null);
                     }
                 } else {
                     textView.setCompoundDrawables(null, null, null, null);
                 }
-
                 return view;
             }
         };
@@ -96,9 +95,5 @@ public class BreedDialogFragment extends DialogFragment {
 
         inputDialog.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
         inputDialog.show();
-    }
-
-    public void setOnBreedSelectedListener(OnBreedSelectedListener listener) {
-        this.listener = listener;
     }
 }

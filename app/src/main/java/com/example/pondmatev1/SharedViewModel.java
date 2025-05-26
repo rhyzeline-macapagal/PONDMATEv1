@@ -18,9 +18,26 @@ import java.util.Map;
 public class SharedViewModel extends ViewModel {
     // Map month index -> list of mortality rates for that month
     private final MutableLiveData<Map<Integer, List<Float>>> mortalityRates = new MutableLiveData<>(new HashMap<>());
-
     public LiveData<Map<Integer, List<Float>>> getMortalityRates() {
         return mortalityRates;
+    }
+    private final MutableLiveData<String> selectedBreed = new MutableLiveData<>();
+    private final MutableLiveData<Integer> numofFingerlings = new MutableLiveData<>();
+
+    public void setSelectedBreed(String breed) {
+        selectedBreed.setValue(breed);
+    }
+
+    public LiveData<String> getSelectedBreed() {
+        return selectedBreed;
+    }
+
+    public void setNumofFingerlings (Integer num) {
+        numofFingerlings.setValue(num);
+    }
+
+    public LiveData<Integer> getNumOfFingerlings() {
+        return numofFingerlings;
     }
 
     public void addMortalityEntry(int month, float value) {

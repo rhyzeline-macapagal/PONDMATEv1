@@ -32,34 +32,79 @@
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="14dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="Type of Fingerlings:"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/fishbreedpcostdisplay"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Type of Fingerlings:"
+                    android:textColor="#000000"
+                    android:padding="8dp"
+                    android:textSize="16sp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginStart="31dp"
+                    android:text="Amt. per Piece:"
+                    android:textColor="#000000"
+                    android:padding="8dp"
+                    android:textSize="16sp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:id="@+id/fishbreedpcostdisplay"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/container"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="--"
+                    android:padding="8dp"
+                    android:paddingStart="8dp"
+                    android:textAlignment="textEnd"
+                    android:textColorHint="#000000"
+                    android:textSize="14sp"/>
+
+                <EditText
+                android:id="@+id/amtperpiece"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="39dp"
                 android:background="@drawable/container"
-                android:enabled="true"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true"
                 android:fontFamily="sans-serif-light"
-                android:gravity="start|center_vertical"
-                android:inputType="number"
-                android:textColor="#000000"
-                android:layout_marginBottom="5dp"
-                android:textSize="14dp"/>
+                android:hint="₱10"
+                android:inputType="numberDecimal"
+                android:padding="8dp"
+                android:paddingStart="8dp"
+                android:textAlignment="textEnd"
+                android:textColorHint="#000000"
+                android:textSize="14sp"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
-                >
+                android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -95,23 +140,20 @@
                     android:background="@drawable/container"
                     android:fontFamily="sans-serif-light"
                     android:padding="8dp"
+                    android:hint="--"
                     android:paddingStart="8dp"
                     android:textAlignment="textEnd"
                     android:textColorHint="#000000"
                     android:textSize="14sp"/>
 
-                <EditText
+                <TextView
                     android:id="@+id/amtoffingerlings"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="39dp"
                     android:background="@drawable/container"
-                    android:clickable="false"
-                    android:cursorVisible="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     android:fontFamily="sans-serif-light"
-                    android:hint="₱1,500"
+                    android:hint="--"
                     android:inputType="numberDecimal"
                     android:padding="8dp"
                     android:paddingStart="8dp"
@@ -303,9 +345,9 @@
 
                 <ImageButton
                     android:id="@+id/addMaintenanceButton"
-                    android:layout_width="26dp"
-                    android:layout_height="34dp"
-                    android:layout_marginStart="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="33dp"
+                    android:padding="8dp"
                     android:contentDescription="Add Image"
                     android:src="@android:drawable/ic_menu_add"/>
             </LinearLayout>
@@ -367,11 +409,13 @@
                 android:id="@+id/savebtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="#047CA1"
                 android:text="Save"
                 android:textColor="@android:color/white"
-                android:visibility="gone"/>
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                app:cornerRadius="0dp"/>
         </LinearLayout>
 
         <LinearLayout

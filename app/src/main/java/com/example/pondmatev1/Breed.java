@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,8 +32,8 @@ public class Breed extends Fragment {
     AutoCompleteTextView autoCompleteText;
     ArrayAdapter<String> adapterItems;
     View view;
-    EditText estDoh, intStockFish, NoDFish;
-    TextView SOA, MortResult, harvestDateView;
+    EditText estDoh, NoDFish, numfingerlings;
+    TextView SOA, MortResult, harvestDateView, intStockFish;
     Calendar calendar;
     Button btnSelectDate, btnSelectBreed, btnEditFbreed;
     RadioGroup radioGroup;
@@ -51,9 +53,10 @@ public class Breed extends Fragment {
         btnSelectDate = view.findViewById(R.id.btn_select_date);
         btnSelectBreed = view.findViewById(R.id.btn_select_breed);
         harvestDateView = view.findViewById(R.id.harvestdate);
-        intStockFish = view.findViewById(R.id.txt_initial_stock);
+        intStockFish = view.findViewById(R.id.initialstockfingerlings);
         NoDFish = view.findViewById(R.id.txt_est_dead);
         SOA = view.findViewById(R.id.txt_soa);
+        numfingerlings = view.findViewById(R.id.numoffingerlings);
 
         btnEditFbreed = view.findViewById(R.id.btn_edit_fbreed);
         Button mreditBtn = view.findViewById(R.id.mreditbtn);
@@ -93,10 +96,41 @@ public class Breed extends Fragment {
             }
         });
 
+        SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
+        // Set initial EditText value if any saved in ViewModel
+        Integer currentValue = viewModel.getNumOfFingerlings().getValue();
+        if (currentValue != null) {
+            numfingerlings.setText(String.valueOf(currentValue));
+        }
+
+        // Add TextWatcher to update ViewModel on input changes
+        numfingerlings.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    int value = Integer.parseInt(s.toString());
+                    viewModel.setNumofFingerlings(value);
+                } catch (NumberFormatException e) {
+                    viewModel.setNumofFingerlings(null);
+                }
+                intStockFish.setText(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
         btnSelectBreed.setOnClickListener(v -> {
             if (isEditingBreed) {
                 BreedDialogFragment dialog = new BreedDialogFragment();
-                dialog.setOnBreedSelectedListener(breedName -> btnSelectBreed.setText(breedName));
+                dialog.setOnBreedSelectedListener(breedName -> {
+                    btnSelectBreed.setText(breedName);
+                    viewModel.setSelectedBreed(breedName);
+                });
                 dialog.show(getParentFragmentManager(), "breedDialog");
             } else {
                 Toast.makeText(getContext(), "Click Edit to enable breed selection", Toast.LENGTH_SHORT).show();
@@ -174,7 +208,6 @@ public class Breed extends Fragment {
                     Calendar calendar = Calendar.getInstance();
                     int currentMonthIndex = calendar.get(Calendar.MONTH);
 
-                    SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
                     viewModel.addMortalityEntry(currentMonthIndex, (float) result);
                     viewModel.setContext(requireContext());
                     viewModel.persistData();
@@ -197,6 +230,13 @@ public class Breed extends Fragment {
         btnSelectBreed.setEnabled(enabled);
         btnSelectDate.setEnabled(enabled);
         SOA.setEnabled(enabled);
+        numfingerlings.setEnabled(enabled);
+
+        if (enabled) {
+            if ("—".equals(numfingerlings.getText().toString().trim())) {
+                numfingerlings.setText("");
+            }
+        }
     }
 
     private void setMortalityEditable(boolean enabled) {
