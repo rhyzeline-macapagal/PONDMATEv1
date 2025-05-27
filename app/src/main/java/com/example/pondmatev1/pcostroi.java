@@ -39,12 +39,11 @@ import java.util.Locale;
 public class pcostroi extends Fragment {
 
     ArrayList<String> breedList, maintenanceOptions;
-    //ArrayAdapter<String> adapterItems;
-    Button editButton, saveButton, generateReportButton,TypeofFeeders, initialMaintenancetype;
-    EditText amtFeeders, maintenance, Capital, Labor, fperpiece;
-    LinearLayout maintenanceList;
+    Button editButton, saveButton, generateReportButton,TypeofFeeders, initialMaintenancetype, initialMaintenanceType, maintenanceType;
+    EditText amtFeeders, maintenance, Capital, Labor, fperpiece, maintenanceCost;
+    LinearLayout maintenanceList, feedersContainer, maintenanceContainer;
     TextView totalExpenses, fishbreeddisplay, numfingerlingsdisplay, amtFingerlings;
-    ImageButton addMaintenanceButton;
+    ImageButton addMaintenanceButton, addBtn, removeBtn;
     EditText initialMaintenanceCost;
 
 
@@ -71,12 +70,11 @@ public class pcostroi extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pcostroi, container, false);
-
         // Initialize views
         amtFingerlings = view.findViewById(R.id.amtoffingerlings);
         amtFeeders = view.findViewById(R.id.amtoffeeders);
-        fperpiece = view.findViewById(R.id.amtperpiece);
         initialMaintenancetype = view.findViewById(R.id.initialMaintenanceType);
+        fperpiece = view.findViewById(R.id.amtperpiece);
         initialMaintenanceCost = view.findViewById(R.id.initialMaintenanceCost);
         totalExpenses = view.findViewById(R.id.totalexpenses);
         editButton = view.findViewById(R.id.editbtn);
@@ -91,14 +89,12 @@ public class pcostroi extends Fragment {
         addMaintenanceButton = view.findViewById(R.id.addMaintenanceButton);
         generateReportButton = view.findViewById(R.id.generatereport);
 
-        LinearLayout feedersContainer = view.findViewById(R.id.feeders_container);
-        ImageButton addBtn = view.findViewById(R.id.addToFeedsbtn);
+        feedersContainer = view.findViewById(R.id.feeders_container);
+        addBtn = view.findViewById(R.id.addToFeedsbtn);
 
         addBtn.setOnClickListener(v -> {
             addFeederRow(feedersContainer);
         });
-
-        setupExpenseAutoSum(amtFeeders, initialMaintenanceCost);
 
         SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         viewModel.getSelectedBreed().observe(getViewLifecycleOwner(), breed -> {
@@ -111,16 +107,37 @@ public class pcostroi extends Fragment {
             } else {
                 numfingerlingsdisplay.setText("");
             }
-            calculateAmtFingerlings();
+            calculateFingerlingsAmount();
         });
 
         fperpiece.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                calculateAmtFingerlings();
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(Editable s) {
+                calculateFingerlingsAmount();
             }
-            @Override public void afterTextChanged(Editable s) {}
         });
+
+        amtFeeders.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(Editable s) {
+                updateTotalExpenses();
+            }
+        });
+
+        TextWatcher expenseWatcher = new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(Editable s) {
+                updateTotalExpenses();
+            }
+        };
+        amtFingerlings.addTextChangedListener(expenseWatcher);
+        amtFeeders.addTextChangedListener(expenseWatcher);
+        Capital.addTextChangedListener(expenseWatcher);
+        Labor.addTextChangedListener(expenseWatcher);
+        initialMaintenanceCost.addTextChangedListener(expenseWatcher);
 
         // restrict to character input
         InputFilter letterOnlyFilter = new InputFilter() {
@@ -132,8 +149,8 @@ public class pcostroi extends Fragment {
                 return "";
             }
         };
-        initialMaintenancetype.setFilters(new InputFilter[]{letterOnlyFilter});
 
+        initialMaintenancetype.setFilters(new InputFilter[]{letterOnlyFilter});
         // Set fields to non-editable initially
         setEditable(false);
 
@@ -155,16 +172,10 @@ public class pcostroi extends Fragment {
             }
         });
 
-        Button TypeofFeeders = view.findViewById(R.id.typeoffeeders);
         List<String> feederOptions = new ArrayList<>(Arrays.asList("Starter", "Grower", "Finisher", "Others"));
-
         TypeofFeeders.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(getContext(), TypeofFeeders);
-
-            for (String option : feederOptions) {
-                popupMenu.getMenu().add(option);
-            }
-
+            for (String option : feederOptions) popupMenu.getMenu().add(option);
             popupMenu.setOnMenuItemClickListener(item -> {
                 String selected = item.getTitle().toString();
                 if (selected.equals("Others")) {
@@ -174,121 +185,72 @@ public class pcostroi extends Fragment {
                 }
                 return true;
             });
-
             popupMenu.show();
         });
 
-        LinearLayout maintenanceContainer = view.findViewById(R.id.maintenance_container);
-        ImageButton addMaintenanceButton = view.findViewById(R.id.addMaintenanceButton);
-
+        maintenanceContainer = view.findViewById(R.id.maintenance_container);
         addMaintenanceButton.setOnClickListener(v -> addMaintenanceRow(maintenanceContainer));
-
-        //generate report button
-        generateReportButton.setOnClickListener(v -> generateReport());
-
-        Button initialMaintenanceType = view.findViewById(R.id.initialMaintenanceType);
-
-        initialMaintenanceType.setOnClickListener(v -> showMaintenanceMenu(initialMaintenanceType));
-
+        initialMaintenancetype.setOnClickListener(v -> showMaintenanceMenu(initialMaintenancetype));
 
         return view;
     }
 
-    // generate report
-    private void generateReport() {
-        //String breed = autoCompleteText.getText().toString().trim();
-        String fingerlings = amtFingerlings.getText().toString().trim();
-        String feeders = amtFeeders.getText().toString().trim();
-        String maintenancetype = initialMaintenancetype.getText().toString().trim();
-        String maintenance = initialMaintenanceCost.getText().toString().trim();
-
-        String total = totalExpenses.getText().toString().trim();
-
-        StringBuilder maintenanceDetails = new StringBuilder();
-        for (int i = 0; i < maintenanceList.getChildCount(); i++) {
-            View row = maintenanceList.getChildAt(i);
-            EditText type = row.findViewById(R.id.maintenanceType);
-            EditText cost = row.findViewById(R.id.maintenanceCost);
-            maintenanceDetails.append("   • ").append(type.getText().toString())
-                    .append(": ₱").append(cost.getText().toString()).append("\n");
-        }
-
-        try {
-            PdfDocument pdfDocument = new PdfDocument();
-            Paint paint = new Paint();
-            paint.setTextSize(14);
-
-            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create(); // A4
-            PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-            Canvas canvas = page.getCanvas();
-
-            int x = 40;
-            int y = 60;
-
-            // Title
-            Paint titlePaint = new Paint();
-            titlePaint.setTextSize(18);
-            titlePaint.setFakeBoldText(true);
-            String title = "*** Production Cost Summary ***";
-            float titleWidth = titlePaint.measureText(title);
-            canvas.drawText(title, (pageInfo.getPageWidth() - titleWidth) / 2, y, titlePaint);
-
-            y += 40;
-
-            //canvas.drawText("Breed: " + breed, x, y, paint); y += 30;
-            canvas.drawText("➤ Fingerlings:                                           ₱" + fingerlings, x, y, paint); y += 25;
-            canvas.drawText("➤ Feeders:                                               ₱" + feeders, x, y, paint); y += 25;
-            canvas.drawText("➤ Initial Maintenance: " +"\n"
-                    + maintenancetype + " -         ₱" + maintenance, x, y, paint); y += 25;
-
-            canvas.drawText("— Maintenance Breakdown —", x, y, paint); y += 25;
-            if (maintenanceDetails.length() > 0) {
-                for (String line : maintenanceDetails.toString().split("\n")) {
-                    canvas.drawText(line, x + 20, y, paint);
-                    y += 22;
-                }
-            } else {
-                canvas.drawText("   No additional maintenance expenses.", x + 20, y, paint);
-                y += 22;
-            }
-
-            y += 30;
-            Paint totalPaint = new Paint(paint);
-            totalPaint.setFakeBoldText(true);
-            canvas.drawText("============================", x, y, paint); y += 25;
-            canvas.drawText("TOTAL EXPENSES: ₱" + total, x, y, totalPaint);
-
-            pdfDocument.finishPage(page);
-
-            File file = new File(requireContext().getExternalFilesDir(null), "ProductionCostReport.pdf");
-            FileOutputStream fos = new FileOutputStream(file);
-            pdfDocument.writeTo(fos);
-            pdfDocument.close();
-
-            Toast.makeText(requireContext(), "PDF saved to: " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(requireContext(), "Failed to save PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
     private void setEditable(boolean editable) {
-        EditText[] fields = {amtFeeders,  initialMaintenanceCost};
-
+        EditText[] fields = {amtFeeders,  initialMaintenanceCost, Capital, Labor};
         for (EditText field : fields) {
             field.setFocusable(editable);
             field.setFocusableInTouchMode(editable);
             field.setClickable(editable);
             field.setCursorVisible(editable);
-
-            if (editable) {
-                field.requestFocus(); // Manually request focus when making editable
-            }
         }
-        initialMaintenanceCost.setFocusable(editable);
-        initialMaintenanceCost.setFocusableInTouchMode(editable);
-        initialMaintenanceCost.setClickable(editable);
-        initialMaintenanceCost.setCursorVisible(editable);
+        for (int i = 0; i < maintenanceList.getChildCount(); i++) {
+            View row = maintenanceList.getChildAt(i);
+            EditText cost = row.findViewById(R.id.maintenanceCost);
+            cost.setFocusable(editable);
+            cost.setFocusableInTouchMode(editable);
+            cost.setClickable(editable);
+            cost.setCursorVisible(editable);
+        }
+    }
+    private void updateTotalExpenses() {
+        double total = 0;
+
+        total += parseDoubleFromTextView(amtFingerlings);
+        total += parseDoubleFromEditText(Capital);
+        total += parseDoubleFromEditText(Labor);
+        total += parseDoubleFromEditText(amtFeeders);
+        total += parseDoubleFromEditText(initialMaintenanceCost);
+
+        for (int i = 0; i < feedersContainer.getChildCount(); i++) {
+            View row = feedersContainer.getChildAt(i);
+            EditText feedCost = row.findViewById(R.id.amtoffeeders);
+            total += parseDoubleFromEditText(feedCost);
+        }
+
+        for (int i = 0; i < maintenanceList.getChildCount(); i++) {
+            View row = maintenanceList.getChildAt(i);
+            EditText cost = row.findViewById(R.id.maintenanceCost);
+            total += parseDoubleFromEditText(cost);
+        }
+
+        totalExpenses.setText(String.format("Total: %.2f", total));
+    }
+
+
+    private double parseDoubleFromEditText(EditText editText) {
+        try {
+            return Double.parseDouble(editText.getText().toString().replace("₱", ""));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    private double parseDoubleFromTextView(TextView tv) {
+        try {
+            return Double.parseDouble(tv.getText().toString());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     // Method to add new maintenance row dynamically
@@ -296,16 +258,20 @@ public class pcostroi extends Fragment {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View maintenanceRow = inflater.inflate(R.layout.row_maintenance, container, false);
 
-        Button maintenanceType = maintenanceRow.findViewById(R.id.maintenanceType);
-        EditText maintenanceCost = maintenanceRow.findViewById(R.id.maintenanceCost);
-        ImageButton removeBtn = maintenanceRow.findViewById(R.id.removeMaintenanceButton);
+        maintenanceType = maintenanceRow.findViewById(R.id.maintenanceType);
+        maintenanceCost = maintenanceRow.findViewById(R.id.maintenanceCost);
+        removeBtn = maintenanceRow.findViewById(R.id.removeMaintenanceButton);
+
+        maintenanceCost.setFocusable(true);
+        maintenanceCost.setFocusableInTouchMode(true);
+        maintenanceCost.setClickable(true);
+        maintenanceCost.setCursorVisible(true);
 
         maintenanceType.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(getContext(), maintenanceType);
             for (String option : maintenanceOptions) {
                 popupMenu.getMenu().add(option);
             }
-
             popupMenu.setOnMenuItemClickListener(item -> {
                 String selected = item.getTitle().toString();
                 if (selected.equals("Others")) {
@@ -320,14 +286,11 @@ public class pcostroi extends Fragment {
         });
 
         removeBtn.setOnClickListener(v -> container.removeView(maintenanceRow));
-
         container.addView(maintenanceRow);
     }
-
     private void showAddCustomMaintenanceDialog(Button targetButton, List<String> optionsList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Add Custom Maintenance");
-
         final EditText input = new EditText(getContext());
         input.setHint("Enter custom type");
         input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -340,60 +303,38 @@ public class pcostroi extends Fragment {
                 targetButton.setText(customOption);
             }
         });
-
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
         builder.show();
     }
 
-
-
-    private void setupExpenseAutoSum(EditText... staticFields) {
-        TextWatcher watcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateTotalExpenses(staticFields);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        };
-
-        for (EditText field : staticFields) {
-            field.addTextChangedListener(watcher);
+    // Helper method to safely parse a double from a string
+    private double parseDouble(String value) {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return 0;
         }
     }
 
-    private void updateTotalExpenses(EditText... staticFields) {
-        double total = 0;
+    private void calculateFingerlingsAmount() {
+        double perPiece = 0;
+        int numFingerlings = 0;
 
-        // Sum static fields
-        for (EditText field : staticFields) {
-            String value = field.getText().toString().trim();
-            if (!value.isEmpty()) {
-                try {
-                    total += Double.parseDouble(value);
-                } catch (NumberFormatException ignored) {}
-            }
+        try {
+            perPiece = Double.parseDouble(fperpiece.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            perPiece = 0;
         }
 
-        // Sum dynamic maintenance costs
-        for (int i = 0; i < maintenanceList.getChildCount(); i++) {
-            View row = maintenanceList.getChildAt(i);
-            EditText cost = row.findViewById(R.id.maintenanceCost);
-            if (cost != null && !cost.getText().toString().trim().isEmpty()) {
-                try {
-                    total += Double.parseDouble(cost.getText().toString().trim());
-                } catch (NumberFormatException ignored) {}
-            }
+        try {
+            numFingerlings = Integer.parseInt(numfingerlingsdisplay.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            numFingerlings = 0;
         }
 
-        totalExpenses.setText(String.format(Locale.US, "%.2f", total));
+        double total = perPiece * numFingerlings;
+        amtFingerlings.setText(String.format("%.2f", total));
     }
-
     private boolean validateInputs() {
         // Check static required fields
         if (amtFingerlings.getText().toString().trim().isEmpty()) return false;
@@ -415,21 +356,6 @@ public class pcostroi extends Fragment {
 
         return true;
     }
-
-    private void calculateAmtFingerlings() {
-        String perPieceStr = fperpiece.getText().toString();
-        String numFingerlingsStr = numfingerlingsdisplay.getText().toString();
-
-        try {
-            double perPiece = perPieceStr.isEmpty() ? 0 : Double.parseDouble(perPieceStr);
-            double numFingerlings = numFingerlingsStr.isEmpty() ? 0 : Double.parseDouble(numFingerlingsStr);
-            double total = perPiece * numFingerlings;
-            amtFingerlings.setText(String.format(Locale.US, "₱%.2f", total));
-        } catch (NumberFormatException e) {
-            amtFingerlings.setText("₱0.00");
-        }
-    }
-
     private void showAddFeederDialog(Button feederButton, List<String> feederOptions) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Enter custom feeder type");
@@ -460,15 +386,18 @@ public class pcostroi extends Fragment {
         EditText amount = row.findViewById(R.id.amtoffeeders);
         ImageButton removeBtn = row.findViewById(R.id.removeMaintenanceButton);
 
+        amount.setFocusable(true);
+        amount.setFocusableInTouchMode(true);
+        amount.setClickable(true);
+        amount.setCursorVisible(true);
+
         // Dropdown logic (same as previous popup menu)
         List<String> feederOptions = new ArrayList<>(Arrays.asList("Starter", "Grower", "Finisher", "Others"));
-
         feederType.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(getContext(), feederType);
             for (String option : feederOptions) {
                 popupMenu.getMenu().add(option);
             }
-
             popupMenu.setOnMenuItemClickListener(item -> {
                 String selected = item.getTitle().toString();
                 if (selected.equals("Others")) {
@@ -478,10 +407,8 @@ public class pcostroi extends Fragment {
                 }
                 return true;
             });
-
             popupMenu.show();
         });
-
         removeBtn.setOnClickListener(v -> {
             container.removeView(row);
         });
@@ -491,7 +418,6 @@ public class pcostroi extends Fragment {
 
     private void showMaintenanceMenu(Button button) {
         PopupMenu popupMenu = new PopupMenu(getContext(), button);
-
         // Dynamically populate the menu
         for (String option : maintenanceOptions) {
             popupMenu.getMenu().add(option);
@@ -515,23 +441,18 @@ public class pcostroi extends Fragment {
     private void showAddCustomMaintenanceDialog(Button button) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Add Custom Maintenance Type");
-
         final EditText input = new EditText(getContext());
         input.setHint("Enter custom type");
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
-
         builder.setPositiveButton("Add", (dialog, which) -> {
             String customOption = input.getText().toString().trim();
             if (!customOption.isEmpty()) {
-                // Add new item above "Others"
                 maintenanceOptions.add(maintenanceOptions.size() - 1, customOption);
                 button.setText(customOption);
             }
         });
-
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-
         builder.show();
     }
 
