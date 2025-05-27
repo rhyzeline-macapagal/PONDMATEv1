@@ -32,8 +32,8 @@ public class Breed extends Fragment {
     AutoCompleteTextView autoCompleteText;
     ArrayAdapter<String> adapterItems;
     View view;
-    EditText estDoh, NoDFish, numfingerlings;
-    TextView SOA, MortResult, harvestDateView, intStockFish;
+    EditText estDoh, numfingerlings;
+    TextView SOA, MortResult, harvestDateView, intStockFish, NoDFish;
     Calendar calendar;
     Button btnSelectDate, btnSelectBreed, btnEditFbreed;
     RadioGroup radioGroup;
@@ -59,14 +59,10 @@ public class Breed extends Fragment {
         numfingerlings = view.findViewById(R.id.numoffingerlings);
 
         btnEditFbreed = view.findViewById(R.id.btn_edit_fbreed);
-        Button mreditBtn = view.findViewById(R.id.mreditbtn);
-        Button resetBtn = view.findViewById(R.id.resetbtn);
-        Button calcBtn = view.findViewById(R.id.calculatebtn);
 
         calendar = Calendar.getInstance();
 
         setFishBreedEditable(false);
-        setMortalityEditable(false);
 
         btnEditFbreed.setOnClickListener(v -> {
             if (!isEditingBreed) {
@@ -82,6 +78,17 @@ public class Breed extends Fragment {
                         .setNegativeButton("No", null)
                         .show();
             } else {
+                String selectedDate = SOA.getText().toString().trim();
+                String breed = btnSelectBreed.getText().toString().trim();
+                String fingerlings = numfingerlings.getText().toString().trim();
+                String harvestDate = harvestDateView.getText().toString().trim();
+
+                if (selectedDate.isEmpty() || breed.isEmpty() || fingerlings.isEmpty() || harvestDate.isEmpty()
+                        || selectedDate.equals("—") || breed.equals("Select Breed") || harvestDate.equals("—")) {
+                    Toast.makeText(getContext(), "Please fill out all required fields before saving.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 new AlertDialog.Builder(requireContext())
                         .setTitle("Confirm Save")
                         .setMessage("Are you sure to save?")
@@ -118,6 +125,14 @@ public class Breed extends Fragment {
                     viewModel.setNumofFingerlings(null);
                 }
                 intStockFish.setText(s);
+                try {
+                    int stock = Integer.parseInt(s.toString());
+                    int estDead = (int) Math.floor(stock * 0.10); // 10% rounded down
+                    NoDFish.setText(String.valueOf(estDead));
+                } catch (NumberFormatException e) {
+                    NoDFish.setText("—");
+                }
+                updateMortalityRate();
             }
 
             @Override
@@ -159,70 +174,6 @@ public class Breed extends Fragment {
             }
         });
 
-        mreditBtn.setOnClickListener(v -> {
-            intStockFish.setEnabled(true);
-            NoDFish.setEnabled(true);
-            intStockFish.setText("");
-            NoDFish.setText("");
-
-            mreditBtn.setEnabled(false);
-            mreditBtn.setVisibility(View.GONE);
-            resetBtn.setVisibility(View.VISIBLE);
-            calcBtn.setVisibility(View.VISIBLE);
-        });
-
-        resetBtn.setOnClickListener(v -> {
-            intStockFish.setText("");
-            NoDFish.setText("");
-            MortResult.setText("");
-
-            intStockFish.setEnabled(false);
-            NoDFish.setEnabled(false);
-
-            mreditBtn.setEnabled(true);
-            mreditBtn.setVisibility(View.VISIBLE);
-
-            resetBtn.setVisibility(View.GONE);
-            calcBtn.setVisibility(View.GONE);
-        });
-
-        calcBtn.setOnClickListener(v -> {
-            String intStockFishStr = intStockFish.getText().toString();
-            String noDFishStr = NoDFish.getText().toString();
-
-            if (intStockFishStr.isEmpty() || noDFishStr.isEmpty()) {
-                Toast.makeText(requireContext(), "Please enter both values.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            try {
-                double intStockFishValue = Double.parseDouble(intStockFishStr);
-                double noDFishValue = Double.parseDouble(noDFishStr);
-
-                if (intStockFishValue == 0) {
-                    Toast.makeText(requireContext(), "Initial stock of fish cannot be zero.", Toast.LENGTH_SHORT).show();
-                } else {
-                    double result = (noDFishValue / intStockFishValue) * 100;
-                    MortResult.setText(String.format(Locale.US, "%.2f%%", result));
-
-                    Calendar calendar = Calendar.getInstance();
-                    int currentMonthIndex = calendar.get(Calendar.MONTH);
-
-                    viewModel.addMortalityEntry(currentMonthIndex, (float) result);
-                    viewModel.setContext(requireContext());
-                    viewModel.persistData();
-                    Log.d("BreedFragment", "Added mortality rate: " + result + " for month: " + currentMonthIndex);
-                    Toast.makeText(requireContext(), "Mortality rate saved for month: " + currentMonthIndex, Toast.LENGTH_SHORT).show();
-
-                    intStockFish.setEnabled(false);
-                    NoDFish.setEnabled(false);
-                    mreditBtn.setEnabled(false);
-                }
-            } catch (NumberFormatException e) {
-                Toast.makeText(requireContext(), "Invalid input, please enter valid numbers.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         return view;
     }
 
@@ -238,19 +189,27 @@ public class Breed extends Fragment {
             }
         }
     }
+    private void updateMortalityRate() {
+        String intStockStr = intStockFish.getText().toString().trim();
+        String estDeadStr = NoDFish.getText().toString().trim();
 
-    private void setMortalityEditable(boolean enabled) {
-        intStockFish.setEnabled(enabled);
-        NoDFish.setEnabled(enabled);
-        MortResult.setEnabled(false);
+        if (!intStockStr.isEmpty() && !estDeadStr.isEmpty()) {
+            try {
+                double stock = Double.parseDouble(intStockStr);
+                double dead = Double.parseDouble(estDeadStr);
 
-        if (enabled) {
-            if ("—".equals(intStockFish.getText().toString().trim())) {
-                intStockFish.setText("");
+                if (stock != 0) {
+                    double result = (dead / stock) * 100;
+                    MortResult.setText(String.format(Locale.US, "%.2f%%", result));
+                } else {
+                    MortResult.setText("0.00%");
+                }
+            } catch (NumberFormatException e) {
+                MortResult.setText("—");
             }
-            if ("—".equals(NoDFish.getText().toString().trim())) {
-                NoDFish.setText("");
-            }
+        } else {
+            MortResult.setText("—");
         }
     }
+
 }

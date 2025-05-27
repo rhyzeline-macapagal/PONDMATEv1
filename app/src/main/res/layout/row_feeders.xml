@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/maintenanceList"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_marginTop="5dp">
 
     <Button
-        android:id="@+id/maintenanceType"
+        android:id="@+id/typeoffeeders"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:hint="Select"
-        android:textAlignment="textStart"
-        android:textSize="14sp"
-        android:padding="8dp"
         android:backgroundTint="#66D3D3D3"
+        android:hint="Select"
         android:fontFamily="sans-serif-light"
+        android:padding="8dp"
+        android:textAlignment="textStart"
+        android:textColorHint="#000000"
+        android:textSize="14sp"
         android:textColor="#000000"
         app:cornerRadius="10dp"
+        app:iconTint="#12FFFFFF"
         android:drawableEnd="@drawable/ic_dropdown_arrow"/>
 
     <EditText
-        android:id="@+id/maintenanceCost"
+        android:id="@+id/amtoffeeders"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:background="@drawable/container"
@@ -37,7 +40,7 @@
         android:paddingStart="8dp"
         android:textAlignment="textEnd"
         android:textColorHint="#000000"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
     <ImageButton
         android:id="@+id/removeMaintenanceButton"
@@ -46,6 +49,5 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Remove"
         android:padding="8dp"
-        android:layout_marginTop="7dp"
         android:src="@android:drawable/ic_menu_delete" />
 </LinearLayout>

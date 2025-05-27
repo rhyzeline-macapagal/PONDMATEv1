@@ -1,5 +1,6 @@
 package com.example.pondmatev1;
 
+import android.app.AlertDialog;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,14 +32,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public class pcostroi extends Fragment {
 
-    ArrayList<String> breedList;
+    ArrayList<String> breedList, maintenanceOptions;
     //ArrayAdapter<String> adapterItems;
-    Button editButton, saveButton, generateReportButton;
-    EditText amtFeeders, maintenance, initialMaintenancetype, TypeofFeeders, Capital, Labor, fperpiece;
+    Button editButton, saveButton, generateReportButton,TypeofFeeders, initialMaintenancetype;
+    EditText amtFeeders, maintenance, Capital, Labor, fperpiece;
     LinearLayout maintenanceList;
     TextView totalExpenses, fishbreeddisplay, numfingerlingsdisplay, amtFingerlings;
     ImageButton addMaintenanceButton;
@@ -54,6 +59,12 @@ public class pcostroi extends Fragment {
         breedList.add("Carp");
         breedList.add("Oyster");
         breedList.add("Mussel");
+
+        maintenanceOptions = new ArrayList<>(Arrays.asList(
+                "Water Change", "Water Monitoring", "Waste Removal", "Algae Control",
+                "Cleaning Ponds & Filters", "Leak Repair", "Inspection",
+                "Pump & Pipe Maintenance", "Parasite Treatment", "Net or Screen Repair", "Others"
+        ));
     }
 
     @Override
@@ -80,6 +91,12 @@ public class pcostroi extends Fragment {
         addMaintenanceButton = view.findViewById(R.id.addMaintenanceButton);
         generateReportButton = view.findViewById(R.id.generatereport);
 
+        LinearLayout feedersContainer = view.findViewById(R.id.feeders_container);
+        ImageButton addBtn = view.findViewById(R.id.addToFeedsbtn);
+
+        addBtn.setOnClickListener(v -> {
+            addFeederRow(feedersContainer);
+        });
 
         setupExpenseAutoSum(amtFeeders, initialMaintenanceCost);
 
@@ -87,6 +104,7 @@ public class pcostroi extends Fragment {
         viewModel.getSelectedBreed().observe(getViewLifecycleOwner(), breed -> {
             fishbreeddisplay.setText(breed);
         });
+
         viewModel.getNumOfFingerlings().observe(getViewLifecycleOwner(), num -> {
             if (num != null) {
                 numfingerlingsdisplay.setText(String.valueOf(num));
@@ -137,33 +155,45 @@ public class pcostroi extends Fragment {
             }
         });
 
+        Button TypeofFeeders = view.findViewById(R.id.typeoffeeders);
+        List<String> feederOptions = new ArrayList<>(Arrays.asList("Starter", "Grower", "Finisher", "Others"));
 
-        //Handle Add opt
-        //addOptionButton.setOnClickListener(v -> {
-        //    String newItem = autoCompleteText.getText().toString().trim();
+        TypeofFeeders.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(getContext(), TypeofFeeders);
 
-        //    if (!newItem.isEmpty() && !breedList.contains(newItem)) {
-        //        breedList.add(newItem);
-        //       adapterItems = new ArrayAdapter<>(requireContext(),
-        //                android.R.layout.simple_dropdown_item_1line, breedList);
-        //        autoCompleteText.setAdapter(adapterItems);
-        //        autoCompleteText.setText("");
-        //        autoCompleteText.showDropDown();
-        //        Toast.makeText(requireContext(), "Added: " + newItem, Toast.LENGTH_SHORT).show();
-        //    } else {
-        //        Toast.makeText(requireContext(), "Item is empty or already exists", Toast.LENGTH_SHORT).show();
-        //    }
-        //});
+            for (String option : feederOptions) {
+                popupMenu.getMenu().add(option);
+            }
 
-        // Add new maintenance row
-        addMaintenanceButton.setOnClickListener(v -> addNewMaintenanceRow());
+            popupMenu.setOnMenuItemClickListener(item -> {
+                String selected = item.getTitle().toString();
+                if (selected.equals("Others")) {
+                    showAddFeederDialog(TypeofFeeders, feederOptions);
+                } else {
+                    TypeofFeeders.setText(selected);
+                }
+                return true;
+            });
+
+            popupMenu.show();
+        });
+
+        LinearLayout maintenanceContainer = view.findViewById(R.id.maintenance_container);
+        ImageButton addMaintenanceButton = view.findViewById(R.id.addMaintenanceButton);
+
+        addMaintenanceButton.setOnClickListener(v -> addMaintenanceRow(maintenanceContainer));
 
         //generate report button
         generateReportButton.setOnClickListener(v -> generateReport());
 
+        Button initialMaintenanceType = view.findViewById(R.id.initialMaintenanceType);
+
+        initialMaintenanceType.setOnClickListener(v -> showMaintenanceMenu(initialMaintenanceType));
+
 
         return view;
     }
+
     // generate report
     private void generateReport() {
         //String breed = autoCompleteText.getText().toString().trim();
@@ -259,45 +289,63 @@ public class pcostroi extends Fragment {
         initialMaintenanceCost.setFocusableInTouchMode(editable);
         initialMaintenanceCost.setClickable(editable);
         initialMaintenanceCost.setCursorVisible(editable);
-
-        //autoCompleteText.setEnabled(editable);
-        //addOptionButton.setEnabled(editable);
-        //autoCompleteText.setFocusable(editable);
-        //autoCompleteText.setFocusableInTouchMode(editable);
-        //autoCompleteText.setClickable(editable);
-        //autoCompleteText.setCursorVisible(editable);
     }
 
     // Method to add new maintenance row dynamically
-    private void addNewMaintenanceRow() {
-        View maintenanceView = LayoutInflater.from(requireContext()).inflate(R.layout.row_maintenance, null);
+    private void addMaintenanceRow(LinearLayout container) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View maintenanceRow = inflater.inflate(R.layout.row_maintenance, container, false);
 
-        ImageButton removeButton = maintenanceView.findViewById(R.id.removeMaintenanceButton);
-        EditText maintenanceType = maintenanceView.findViewById(R.id.maintenanceType);
-        EditText maintenanceCost = maintenanceView.findViewById(R.id.maintenanceCost);
+        Button maintenanceType = maintenanceRow.findViewById(R.id.maintenanceType);
+        EditText maintenanceCost = maintenanceRow.findViewById(R.id.maintenanceCost);
+        ImageButton removeBtn = maintenanceRow.findViewById(R.id.removeMaintenanceButton);
 
-        maintenanceCost.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        maintenanceType.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(getContext(), maintenanceType);
+            for (String option : maintenanceOptions) {
+                popupMenu.getMenu().add(option);
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateTotalExpenses(amtFeeders, initialMaintenanceCost);
-            }
+            popupMenu.setOnMenuItemClickListener(item -> {
+                String selected = item.getTitle().toString();
+                if (selected.equals("Others")) {
+                    showAddCustomMaintenanceDialog(maintenanceType, maintenanceOptions);
+                } else {
+                    maintenanceType.setText(selected);
+                }
+                return true;
+            });
 
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
+            popupMenu.show();
         });
 
-        removeButton.setOnClickListener(v -> {
-            maintenanceList.removeView(maintenanceView);
-            updateTotalExpenses(amtFeeders, initialMaintenanceCost);
-        });
+        removeBtn.setOnClickListener(v -> container.removeView(maintenanceRow));
 
-        maintenanceList.addView(maintenanceView);
+        container.addView(maintenanceRow);
     }
+
+    private void showAddCustomMaintenanceDialog(Button targetButton, List<String> optionsList) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Add Custom Maintenance");
+
+        final EditText input = new EditText(getContext());
+        input.setHint("Enter custom type");
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String customOption = input.getText().toString().trim();
+            if (!customOption.isEmpty()) {
+                optionsList.add(customOption);
+                targetButton.setText(customOption);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
 
 
     private void setupExpenseAutoSum(EditText... staticFields) {
@@ -380,6 +428,111 @@ public class pcostroi extends Fragment {
         } catch (NumberFormatException e) {
             amtFingerlings.setText("₱0.00");
         }
+    }
+
+    private void showAddFeederDialog(Button feederButton, List<String> feederOptions) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Enter custom feeder type");
+
+        final EditText input = new EditText(requireContext());
+        input.setHint("e.g. Booster");
+        builder.setView(input);
+
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String newOption = input.getText().toString().trim();
+            if (!newOption.isEmpty()) {
+                feederOptions.add(feederOptions.size() - 1, newOption); // Add before "Others"
+                feederButton.setText(newOption);
+            } else {
+                Toast.makeText(getContext(), "Input cannot be empty", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
+    }
+
+    private void addFeederRow(LinearLayout container) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View row = inflater.inflate(R.layout.row_feeders, container, false);
+
+        Button feederType = row.findViewById(R.id.typeoffeeders);
+        EditText amount = row.findViewById(R.id.amtoffeeders);
+        ImageButton removeBtn = row.findViewById(R.id.removeMaintenanceButton);
+
+        // Dropdown logic (same as previous popup menu)
+        List<String> feederOptions = new ArrayList<>(Arrays.asList("Starter", "Grower", "Finisher", "Others"));
+
+        feederType.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(getContext(), feederType);
+            for (String option : feederOptions) {
+                popupMenu.getMenu().add(option);
+            }
+
+            popupMenu.setOnMenuItemClickListener(item -> {
+                String selected = item.getTitle().toString();
+                if (selected.equals("Others")) {
+                    showAddFeederDialog(feederType, feederOptions);
+                } else {
+                    feederType.setText(selected);
+                }
+                return true;
+            });
+
+            popupMenu.show();
+        });
+
+        removeBtn.setOnClickListener(v -> {
+            container.removeView(row);
+        });
+
+        container.addView(row);
+    }
+
+    private void showMaintenanceMenu(Button button) {
+        PopupMenu popupMenu = new PopupMenu(getContext(), button);
+
+        // Dynamically populate the menu
+        for (String option : maintenanceOptions) {
+            popupMenu.getMenu().add(option);
+        }
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+            String selected = item.getTitle().toString();
+
+            if (selected.equals("Others")) {
+                showAddCustomMaintenanceDialog(button, maintenanceOptions);
+            } else {
+                button.setText(selected);
+            }
+
+            return true;
+        });
+
+        popupMenu.show();
+    }
+
+    private void showAddCustomMaintenanceDialog(Button button) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Add Custom Maintenance Type");
+
+        final EditText input = new EditText(getContext());
+        input.setHint("Enter custom type");
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String customOption = input.getText().toString().trim();
+            if (!customOption.isEmpty()) {
+                // Add new item above "Others"
+                maintenanceOptions.add(maintenanceOptions.size() - 1, customOption);
+                button.setText(customOption);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
     }
 
 }
