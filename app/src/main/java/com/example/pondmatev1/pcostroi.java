@@ -88,7 +88,6 @@ public class pcostroi extends Fragment {
 
         addMaintenanceButton = view.findViewById(R.id.addMaintenanceButton);
         generateReportButton = view.findViewById(R.id.generatereport);
-
         feedersContainer = view.findViewById(R.id.feeders_container);
         addBtn = view.findViewById(R.id.addToFeedsbtn);
 
@@ -192,6 +191,15 @@ public class pcostroi extends Fragment {
         addMaintenanceButton.setOnClickListener(v -> addMaintenanceRow(maintenanceContainer));
         initialMaintenancetype.setOnClickListener(v -> showMaintenanceMenu(initialMaintenancetype));
 
+        addFeederButton.setOnClickListener(v -> {
+            addFeederRow(feedersContainer);
+        });
+
+        addMaintenanceButton.setOnClickListener(v -> {
+            addMaintenanceRow(maintenanceList);
+        });
+
+
         return view;
     }
 
@@ -202,6 +210,7 @@ public class pcostroi extends Fragment {
             field.setFocusableInTouchMode(editable);
             field.setClickable(editable);
             field.setCursorVisible(editable);
+
         }
         for (int i = 0; i < maintenanceList.getChildCount(); i++) {
             View row = maintenanceList.getChildAt(i);
@@ -218,7 +227,6 @@ public class pcostroi extends Fragment {
         total += parseDoubleFromTextView(amtFingerlings);
         total += parseDoubleFromEditText(Capital);
         total += parseDoubleFromEditText(Labor);
-        total += parseDoubleFromEditText(amtFeeders);
         total += parseDoubleFromEditText(initialMaintenanceCost);
 
         for (int i = 0; i < feedersContainer.getChildCount(); i++) {
@@ -305,15 +313,6 @@ public class pcostroi extends Fragment {
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
-    }
-
-    // Helper method to safely parse a double from a string
-    private double parseDouble(String value) {
-        try {
-            return Double.parseDouble(value);
-        } catch (NumberFormatException e) {
-            return 0;
-        }
     }
 
     private void calculateFingerlingsAmount() {
