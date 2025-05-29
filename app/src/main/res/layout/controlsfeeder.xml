@@ -11,8 +11,95 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
         android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@drawable/cardviewbg"
+            android:elevation="4dp"
+            android:padding="16dp"
+            android:orientation="vertical"
+            android:layout_marginBottom="14dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="FEEDING STATUS"
+                android:textColor="#0E1012"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/currentdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Date here"
+                android:textColor="#0E1012"
+                android:fontFamily="sans-serif-light"
+                android:textSize="18sp"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Feeding Time:"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#0E1012"
+                android:fontFamily="sans-serif-light"
+                android:textSize="16sp"
+                android:layout_marginBottom="5dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/lastfeedingtime"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/container"
+                android:fontFamily="sans-serif-light"
+                android:hint="00:00"
+                android:padding="8dp"
+                android:textAlignment="center"
+                android:textColorHint="#000000"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next Feeding Time:"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#0E1012"
+                android:fontFamily="sans-serif-light"
+                android:textSize="16sp"
+                android:layout_marginBottom="5dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/nextfeedingtime"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/container"
+                android:fontFamily="sans-serif-light"
+                android:hint="00:00"
+                android:padding="8dp"
+                android:textAlignment="center"
+                android:textColorHint="#000000"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"/>
+
+
+
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -20,7 +107,7 @@
             android:fontFamily="sans-serif-medium"
             android:text="FEED DISPENSER"
             android:textColor="#0E1012"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginBottom="5dp"/>
 
@@ -28,14 +115,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="14dp">
 
             <ImageButton
                 android:id="@+id/dispenseron"
                 android:layout_width="108dp"
                 android:layout_height="53dp"
                 android:src="@drawable/on"
-                android:layout_marginStart="60dp"/>
+                android:layout_marginStart="76dp"/>
 
             <ImageButton
                 android:id="@+id/dispenseroff"
@@ -51,11 +138,83 @@
             android:fontFamily="sans-serif-medium"
             android:text="FEED LEVEL"
             android:textColor="#0E1012"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginBottom="14dp"/>
+            android:layout_marginBottom="5dp"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="143dp"
+                android:layout_height="215dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/dispensericon" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Amount per Cycle:"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#0E1012"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/feedsamtpcycle"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="90dp"
+                    android:background="@drawable/container"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="--"
+                    android:padding="8dp"
+                    android:textAlignment="textEnd"
+                    android:textColorHint="#000000"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Status:"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="16sp"
+                    android:textColor="#0E1012"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/statslevel"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="90dp"
+                    android:background="@drawable/container"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="TOO LOW"
+                    android:padding="8dp"
+                    android:textAlignment="textEnd"
+                    android:textColorHint="#000000"
+                    android:textSize="14sp"/>
+
+                <ImageButton
+                    android:layout_width="120dp"
+                    android:layout_height="45dp"
+                    android:src="@drawable/monitorbtn"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center_horizontal"/>
 
 
-
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
