@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_marginBottom="5dp"
+    android:foregroundGravity="center_vertical">
+
+    <TextView
+        android:id="@+id/timeoffeeding"
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/container"
+        android:padding="8dp"
+        android:enabled="true"
+        android:layout_marginStart="10dp"
+        android:hint="00:00"
+        android:textAlignment="textEnd"
+        android:textColor="#000000"
+        android:fontFamily="sans-serif-light"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btnselecttime"
+        android:layout_width="122dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#047CA1"
+        android:fontFamily="sans-serif-light"
+        android:text="Select Time"
+        android:layout_marginStart="5dp"
+        android:textColor="@android:color/white"
+        app:cornerRadius="0dp"/>
+
+    <ImageButton
+        android:id="@+id/removetime"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Remove"
+        android:padding="8dp"
+        android:layout_marginTop="7dp"
+        android:src="@android:drawable/ic_menu_delete" />
+</LinearLayout>

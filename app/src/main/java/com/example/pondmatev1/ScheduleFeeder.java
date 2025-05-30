@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -24,6 +25,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.itextpdf.kernel.geom.Line;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -34,220 +38,129 @@ import java.util.Locale;
 
 public class ScheduleFeeder extends Fragment {
 
-    EditText startOfAct, chooseTime, amtOfFeeders;
-    Button saveSchedule;
-    Calendar calendar;
-    LinearLayout scheduleListContainer;
-    List<Schedule> scheduleList = new ArrayList<>();
+    private LinearLayout containerd, containert;
+
+    private ImageButton addDbtn, addTbtn;
+
+    private Button selectDate, selectTime;
+
+    private TextView dateFS, timeFS;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.schedulefeeder, container, false);
 
-        // UI elements
-        startOfAct = view.findViewById(R.id.start_of_act);
-        chooseTime = view.findViewById(R.id.choose_time);
-        amtOfFeeders = view.findViewById(R.id.amtoffeeders);
-        saveSchedule = view.findViewById(R.id.save_schedule);
-        scheduleListContainer = view.findViewById(R.id.schedule_list_container);
+        containerd = view.findViewById(R.id.datecontainer);
+        addDbtn = view.findViewById(R.id.adddatebtn);
+        containert = view.findViewById(R.id.timecontainer);
+        addTbtn = view.findViewById(R.id.addtimebtn);
+        dateFS = view.findViewById(R.id.dateoffeedingschedule);
+        timeFS = view.findViewById(R.id.timeoffeeding);
+        selectDate = view.findViewById(R.id.btnselectdate);
+        selectTime = view.findViewById(R.id.btnselecttime);
 
-        calendar = Calendar.getInstance();
+        //select date and time
+        selectDate.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        // Date Picker
-        startOfAct.setOnClickListener(v -> {
             DatePickerDialog datePickerDialog = new DatePickerDialog(
                     requireContext(),
-                    (view1, year, month, dayOfMonth) -> {
-                        calendar.set(Calendar.YEAR, year);
-                        calendar.set(Calendar.MONTH, month);
-                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", new Locale("en", "PH"));
-                        startOfAct.setText(dateFormat.format(calendar.getTime()));
+                    (view1, selectedYear, selectedMonth, selectedDay) -> {
+                        String formattedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d",
+                                selectedMonth + 1, selectedDay, selectedYear);
+                        dateFS.setText(formattedDate);
                     },
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)
-            );
+                    year, month, day);
             datePickerDialog.show();
         });
 
-        // Time Picker
-        chooseTime.setOnClickListener(v -> {
+        selectTime.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+
             TimePickerDialog timePickerDialog = new TimePickerDialog(
                     requireContext(),
-                    (TimePicker timePicker, int hourOfDay, int minute) -> {
-                        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d %s",
-                                (hourOfDay % 12 == 0) ? 12 : hourOfDay % 12,
-                                minute,
-                                (hourOfDay < 12) ? "AM" : "PM");
-                        chooseTime.setText(formattedTime);
+                    (view1, selectedHour, selectedMinute) -> {
+                        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d",
+                                selectedHour, selectedMinute);
+                        timeFS.setText(formattedTime);
                     },
-                    12, 0, false
-            );
+                    hour, minute, true);
             timePickerDialog.show();
         });
 
-        // Save Button
-        saveSchedule.setOnClickListener(v -> {
-            String date = startOfAct.getText().toString().trim();
-            String time = chooseTime.getText().toString().trim();
-            String amount = amtOfFeeders.getText().toString().trim();
+        //dynamically added row
+        addDbtn.setOnClickListener(v ->addDateRow(inflater));
+        addTbtn.setOnClickListener(v ->addTimeRow(inflater));
 
-            if (!date.isEmpty() && !time.isEmpty() && !amount.isEmpty()) {
-                Schedule newSchedule = new Schedule(date, time, amount);
-                scheduleList.add(newSchedule);
-                displaySchedules();
-                saveToPreferences();
-
-                startOfAct.setText("");
-                chooseTime.setText("");
-                amtOfFeeders.setText("");
-            }
-        });
-
-        loadFromPreferences();
-        displaySchedules();
 
         return view;
     }
 
-    private void displaySchedules() {
-        scheduleListContainer.removeAllViews();
+    private void addDateRow (LayoutInflater inflater){
+        View row = inflater.inflate(R.layout.row_date, containerd, false);
 
-        // Create TableLayout to hold the table rows
-        TableLayout tableLayout = new TableLayout(getContext());
-        tableLayout.setStretchAllColumns(true); // Make all columns stretch to fill the screen
+        //ids inside row_date
+        TextView datedar = row.findViewById(R.id.dateoffeedingschedule);
+        Button selectdatedar = row.findViewById(R.id.btnselectdate);
+        ImageButton removedatedar = row.findViewById(R.id.removedate);
 
-        // Create the header row (optional)
-        TableRow headerRow = new TableRow(getContext());
-        headerRow.setBackgroundColor(Color.parseColor("#f1f1f1")); // Set background color for header row
+        selectdatedar.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        TextView dateHeader = new TextView(getContext());
-        dateHeader.setText("Date");
-        dateHeader.setTextSize(18);
-        dateHeader.setPadding(10, 10, 10, 10);
-        dateHeader.setGravity(Gravity.CENTER);
-        dateHeader.setTextColor(getResources().getColor(android.R.color.black));
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    requireContext(),
+                    (DatePicker view, int selectedYear, int selectedMonth, int selectedDay) -> {
+                        String formattedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d",
+                                selectedMonth + 1, selectedDay, selectedYear);
+                        datedar.setText(formattedDate);
+                    },
+                    year, month, day);
+            datePickerDialog.show();
+        });
 
-        TextView timeHeader = new TextView(getContext());
-        timeHeader.setText("Time");
-        timeHeader.setTextSize(18);
-        timeHeader.setPadding(10, 10, 10, 10);
-        timeHeader.setGravity(Gravity.CENTER);
-        timeHeader.setTextColor(getResources().getColor(android.R.color.black));
-
-        TextView amountHeader = new TextView(getContext());
-        amountHeader.setText("Amount");
-        amountHeader.setTextSize(18);
-        amountHeader.setPadding(10, 10, 10, 10);
-        amountHeader.setGravity(Gravity.CENTER);
-        amountHeader.setTextColor(getResources().getColor(android.R.color.black));
-
-        TextView deleteHeader = new TextView(getContext());
-        deleteHeader.setText("Pending");
-        deleteHeader.setTextSize(18);
-        deleteHeader.setPadding(10, 10, 10, 10);
-        deleteHeader.setGravity(Gravity.CENTER);
-        deleteHeader.setTextColor(getResources().getColor(android.R.color.black));
-
-        // Add the headers to the header row
-        headerRow.addView(dateHeader);
-        headerRow.addView(timeHeader);
-        headerRow.addView(amountHeader);
-        headerRow.addView(deleteHeader);
-        tableLayout.addView(headerRow);  // Add the header row to the table
-
-        // Loop through schedule list and create a row for each schedule
-        for (int i = 0; i < scheduleList.size(); i++) {
-            final int index = i;
-
-            Schedule s = scheduleList.get(index);
-
-            // Create a row for each schedule item
-            TableRow scheduleRow = new TableRow(getContext());
-            scheduleRow.setBackgroundResource(R.drawable.transparentbg);
-            scheduleRow.setPadding(5, 5, 5, 5);
-
-            // Date column
-            TextView dateColumn = new TextView(getContext());
-            dateColumn.setText(s.date);
-            dateColumn.setTextSize(16);
-            dateColumn.setPadding(10, 10, 10, 10);
-            dateColumn.setGravity(Gravity.CENTER);
-
-            // Time column
-            TextView timeColumn = new TextView(getContext());
-            timeColumn.setText(s.time);
-            timeColumn.setTextSize(16);
-            timeColumn.setPadding(10, 10, 10, 10);
-            timeColumn.setGravity(Gravity.CENTER);
-
-            // Amount column
-            TextView amountColumn = new TextView(getContext());
-            amountColumn.setText(s.amount + " kg");
-            amountColumn.setTextSize(16);
-            amountColumn.setPadding(10, 10, 10, 10);
-            amountColumn.setGravity(Gravity.CENTER);
-
-            // Delete column
-            Button deleteButton = new Button(getContext());
-            deleteButton.setText("❌");
-            deleteButton.setTextSize(16);
-            deleteButton.setPadding(0, 0, 10, 0);
-            deleteButton.setBackgroundColor(Color.TRANSPARENT);
-            deleteButton.setTextColor(Color.RED);
-            deleteButton.setOnClickListener(v -> {
-                scheduleList.remove(index);
-                saveToPreferences();
-                displaySchedules();
-            });
-
-            // Add columns to the schedule row
-            scheduleRow.addView(dateColumn);
-            scheduleRow.addView(timeColumn);
-            scheduleRow.addView(amountColumn);
-            scheduleRow.addView(deleteButton);
-
-            // Add the row to the table
-            tableLayout.addView(scheduleRow);
-        }
-
-        // Add the TableLayout to the container
-        scheduleListContainer.addView(tableLayout);
+        removedatedar.setOnClickListener(v -> containerd.removeView(row));
+        containerd.addView (row);
     }
 
+    private void addTimeRow (LayoutInflater inflater){
+        View row = inflater.inflate(R.layout.row_time, containert, false);
+        //IDs in row_time
+        TextView timedar = row.findViewById(R.id.timeoffeeding);
+        Button selecttimedar = row.findViewById(R.id.btnselecttime);
+        ImageButton removetimedar = row.findViewById(R.id.removetime);
 
-    private void saveToPreferences() {
-        SharedPreferences prefs = requireContext().getSharedPreferences("SchedulePrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+        selecttimedar.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
 
-        Gson gson = new Gson();
-        String json = gson.toJson(scheduleList);
-        editor.putString("schedules", json);
-        editor.apply();
-    }
+            TimePickerDialog timePickerDialog = new TimePickerDialog(
+                    requireContext(),
+                    (TimePicker view, int selectedHour, int selectedMinute) -> {
+                        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute);
+                        timedar.setText(formattedTime);
+                    },
+                    hour, minute, true // true = 24 hour format
+            );
+            timePickerDialog.show();
+        });
 
-    private void loadFromPreferences() {
-        SharedPreferences prefs = requireContext().getSharedPreferences("SchedulePrefs", Context.MODE_PRIVATE);
-        String json = prefs.getString("schedules", null);
-
-        if (json != null) {
-            Type type = new TypeToken<List<Schedule>>() {}.getType();
-            scheduleList = new Gson().fromJson(json, type);
-        }
-    }
-
-    // Simple POJO for storing schedule data
-    public static class Schedule {
-        public String date;
-        public String time;
-        public String amount;
-
-        public Schedule(String date, String time, String amount) {
-            this.date = date;
-            this.time = time;
-            this.amount = amount;
-        }
+        removetimedar.setOnClickListener(v -> containert.removeView(row));
+        containert.addView(row);
     }
 }
+
+
+
+
+
+

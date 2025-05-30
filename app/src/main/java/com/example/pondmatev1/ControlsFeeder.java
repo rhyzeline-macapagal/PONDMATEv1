@@ -22,7 +22,7 @@ import java.util.TimeZone;
 public class ControlsFeeder extends Fragment {
 
     private TextView feedleveltv;
-    private ImageButton monitorbtn, dispenseon, dispenseoff;
+    private Button monitorbtn, dispenseon, dispenseoff;
 
     private ImageView feedlvlicon;
 
