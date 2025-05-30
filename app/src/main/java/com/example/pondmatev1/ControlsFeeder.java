@@ -1,18 +1,34 @@
 package com.example.pondmatev1;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
 public class ControlsFeeder extends Fragment {
+
+    private TextView feedleveltv;
+    private ImageButton monitorbtn, dispenseon, dispenseoff;
+
+    private ImageView feedlvlicon;
+
+    //for feed level status
+    private final String[] levels = {"LOW", "MEDIUM", "HIGH"};
+    private int currentIndex = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +51,31 @@ public class ControlsFeeder extends Fragment {
         TextView textCurrentDate = view.findViewById(R.id.currentdate);
         textCurrentDate.setText(currentDateTime);
 
+        feedleveltv = view.findViewById(R.id.feedlevel); //text view ng feed lvl
+        monitorbtn = view.findViewById(R.id.monitorbttn); // to monitor feed lvl
+        feedlvlicon = view.findViewById(R.id.feedLevelIcon); //icon ng feed lvl
+
+        //monitoring feed level
+        monitorbtn.setOnClickListener(v -> {
+            String level = levels[currentIndex];
+            feedleveltv.setText(level);
+            //to set color based on level
+            switch (level) {
+                case "LOW":
+                    feedleveltv.setTextColor(Color.RED);
+                    feedlvlicon.setImageResource(R.drawable.red);
+                    break;
+                case "MEDIUM":
+                    feedleveltv.setTextColor(Color.rgb(255, 165, 0));
+                    feedlvlicon.setImageResource(R.drawable.orange);
+                    break;
+                case "HIGH":
+                    feedleveltv.setTextColor(Color.GREEN);
+                    feedlvlicon.setImageResource(R.drawable.green);
+                    break;
+            }
+            currentIndex = (currentIndex + 1) % levels.length;
+        });
         return view;
     }
 }

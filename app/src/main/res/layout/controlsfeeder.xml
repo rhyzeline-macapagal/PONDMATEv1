@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".ControlsFeeder">
@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="260dp"
             android:background="@drawable/cardviewbg"
             android:elevation="4dp"
             android:padding="16dp"
@@ -117,19 +117,27 @@
             android:orientation="horizontal"
             android:layout_marginBottom="14dp">
 
-            <ImageButton
+            <Button
                 android:id="@+id/dispenseron"
                 android:layout_width="108dp"
                 android:layout_height="53dp"
-                android:src="@drawable/on"
-                android:layout_marginStart="76dp"/>
+                android:layout_marginStart="76dp"
+                android:backgroundTint="#047CA1"
+                android:text="ON"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                app:cornerRadius="0dp"/>
 
-            <ImageButton
+            <Button
                 android:id="@+id/dispenseroff"
                 android:layout_width="108dp"
                 android:layout_height="53dp"
-                android:src="@drawable/off"
-                android:layout_marginStart="6dp"/>
+                android:layout_marginStart="6dp"
+                android:backgroundTint="#047CA1"
+                android:text="OFF"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                app:cornerRadius="0dp"/>
         </LinearLayout>
 
         <TextView
@@ -175,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="90dp"
                     android:background="@drawable/container"
-                    android:fontFamily="sans-serif-light"
+                    android:fontFamily="sans-serif-medium"
                     android:hint="--"
                     android:padding="8dp"
                     android:textAlignment="textEnd"
@@ -193,26 +201,44 @@
                     android:layout_marginBottom="5dp"
                     android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/statslevel"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="90dp"
-                    android:background="@drawable/container"
-                    android:fontFamily="sans-serif-light"
-                    android:hint="TOO LOW"
-                    android:padding="8dp"
-                    android:textAlignment="textEnd"
-                    android:textColorHint="#000000"
-                    android:textSize="14sp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-                <ImageButton
+                    <ImageView
+                        android:id="@+id/feedLevelIcon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="60dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/unknown" />
+
+                    <TextView
+                        android:id="@+id/feedlevel"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:background="@drawable/container"
+                        android:text="UNKNOWN"
+                        android:padding="8dp"
+                        android:layout_marginStart="5dp"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:textSize="14sp"/>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/monitorbttn"
                     android:layout_width="120dp"
                     android:layout_height="45dp"
-                    android:src="@drawable/monitorbtn"
-                    android:layout_margin="10dp"
-                    android:layout_gravity="center_horizontal"/>
-
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="#047CA1"
+                    android:text="MONITOR"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@android:color/white"
+                    app:cornerRadius="0dp"/>
 
             </LinearLayout>
         </LinearLayout>
