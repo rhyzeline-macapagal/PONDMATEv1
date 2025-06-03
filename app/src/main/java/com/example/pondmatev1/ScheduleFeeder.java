@@ -2,8 +2,6 @@ package com.example.pondmatev1;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -20,20 +18,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-
-import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.itextpdf.kernel.geom.Line;
-
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 public class ScheduleFeeder extends Fragment {
@@ -42,9 +29,10 @@ public class ScheduleFeeder extends Fragment {
 
     private ImageButton addDbtn, addTbtn;
 
-    private Button selectDate, selectTime;
+    private Button selectDate, selectTime, setManual, Createbtn, Savebtn;
 
-    private TextView dateFS, timeFS;
+    private TextView dateFS, timeFS, feedqttycont;
+    private TableLayout SummaryT;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +47,11 @@ public class ScheduleFeeder extends Fragment {
         timeFS = view.findViewById(R.id.timeoffeeding);
         selectDate = view.findViewById(R.id.btnselectdate);
         selectTime = view.findViewById(R.id.btnselecttime);
+        setManual = view.findViewById(R.id.btnsetmanually);
+        feedqttycont = view.findViewById(R.id.feedquantity);
+        Createbtn = view.findViewById(R.id.createbtn);
+        Savebtn = view.findViewById(R.id.savebtn);
+        SummaryT= view.findViewById(R.id.summaryTable);
 
         //select date and time
         selectDate.setOnClickListener(v -> {
@@ -98,6 +91,101 @@ public class ScheduleFeeder extends Fragment {
         addDbtn.setOnClickListener(v ->addDateRow(inflater));
         addTbtn.setOnClickListener(v ->addTimeRow(inflater));
 
+        //editbutton
+        Createbtn.setOnClickListener(v -> {
+            selectDate.setEnabled(true);
+            selectTime.setEnabled(true);
+            setManual.setEnabled(true);
+            addDbtn.setEnabled(true);
+            addTbtn.setEnabled(true);
+            feedqttycont.setEnabled(true);
+
+            for (int i = 0; i < containerd.getChildCount(); i++) {
+                View dateRow = containerd.getChildAt(i);
+                Button selectDateBtn = dateRow.findViewById(R.id.btnselectdate);
+                ImageButton removeDateBtn = dateRow.findViewById(R.id.removedate);
+                if (selectDateBtn != null) selectDateBtn.setEnabled(true);
+                if (removeDateBtn != null) removeDateBtn.setEnabled(true);
+            }
+            for (int i = 0; i < containert.getChildCount(); i++) {
+                View timeRow = containert.getChildAt(i);
+                Button selectTimeBtn = timeRow.findViewById(R.id.btnselecttime);
+                ImageButton removeTimeBtn = timeRow.findViewById(R.id.removetime);
+                if (selectTimeBtn != null) selectTimeBtn.setEnabled(true);
+                if (removeTimeBtn != null) removeTimeBtn.setEnabled(true);
+            }
+
+            Savebtn.setVisibility(View.VISIBLE);
+        });
+
+        //savebutton
+        Savebtn.setOnClickListener(v -> {
+            SummaryT.removeViews(1, SummaryT.getChildCount() - 1);
+            String staticDate = dateFS.getText().toString();
+            String staticTime = timeFS.getText().toString();
+            String feedQuantity = feedqttycont.getText().toString();
+            String status = getStatus(staticDate, staticTime);
+
+            addTableRow(staticDate, staticTime, feedQuantity, status);
+
+            selectDate.setEnabled(false);
+            selectTime.setEnabled(false);
+            addDbtn.setEnabled(false);
+            addTbtn.setEnabled(false);
+            setManual.setEnabled(false);
+            feedqttycont.setEnabled(false);
+            Savebtn.setVisibility(View.GONE);
+
+            for (int i = 0; i < containerd.getChildCount(); i++) {
+                View dateRow = containerd.getChildAt(i);
+                Button selectDateBtn = dateRow.findViewById(R.id.btnselectdate);
+                ImageButton removeDateBtn = dateRow.findViewById(R.id.removedate);
+                if (selectDateBtn != null) selectDateBtn.setEnabled(false);
+                if (removeDateBtn != null) removeDateBtn.setEnabled(false);
+            }
+
+            for (int i = 0; i < containert.getChildCount(); i++) {
+                View timeRow = containert.getChildAt(i);
+                Button selectTimeBtn = timeRow.findViewById(R.id.btnselecttime);
+                ImageButton removeTimeBtn = timeRow.findViewById(R.id.removetime);
+                if (selectTimeBtn != null) selectTimeBtn.setEnabled(false);
+                if (removeTimeBtn != null) removeTimeBtn.setEnabled(false);
+            }
+
+            int dateCount = containerd.getChildCount();
+            int timeCount = containert.getChildCount();
+            int maxCount = Math.max(dateCount, timeCount);
+
+            for (int i = 1; i < maxCount; i++) {
+                String dynDate = "";
+                String dynTime = "";
+
+                if (i < dateCount) {
+                    View dateRow = containerd.getChildAt(i);
+                    TextView dateText = dateRow.findViewById(R.id.dateoffeedingschedule);
+                    dynDate = dateText.getText().toString();
+                }
+
+                if (i < timeCount) {
+                    View timeRow = containert.getChildAt(i);
+                    TextView timeText = timeRow.findViewById(R.id.timeoffeeding);
+                    dynTime = timeText.getText().toString();
+                }
+
+                String dynamicStatus = getStatus(dynDate, dynTime);
+                addTableRow(dynDate, dynTime, "", dynamicStatus); // No feed quantity for dynamic rows
+            }
+
+        });
+
+        // Disable initially
+        selectDate.setEnabled(false);
+        selectTime.setEnabled(false);
+        setManual.setEnabled(false);
+        feedqttycont.setEnabled(false);
+        addDbtn.setEnabled(false);
+        addTbtn.setEnabled(false);
+        Savebtn.setVisibility(View.GONE);
 
         return view;
     }
@@ -157,6 +245,51 @@ public class ScheduleFeeder extends Fragment {
         removetimedar.setOnClickListener(v -> containert.removeView(row));
         containert.addView(row);
     }
+
+    private void addTableRow(String date, String time, String feedQty, String status) {
+        TableRow row = new TableRow(getContext());
+
+        row.addView(createCell(date));
+        row.addView(createCell(time));
+        row.addView(createCell(feedQty));
+        row.addView(createCell(status));
+
+        SummaryT.addView(row);
+    }
+
+    private TextView createCell(String text) {
+        TextView tv = new TextView(getContext());
+        tv.setText(text);
+        tv.setPadding(8, 8, 8, 8);
+        tv.setGravity(Gravity.CENTER);
+        tv.setTextSize(14);
+        tv.setTextColor(Color.BLACK);
+        return tv;
+    }
+
+    private String getStatus(String dateStr, String timeStr) {
+        if (dateStr == null || dateStr.isEmpty() || timeStr == null || timeStr.isEmpty()) {
+            return "Incomplete";
+        }
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault());
+            Calendar now = Calendar.getInstance();
+            Calendar schedule = Calendar.getInstance();
+            schedule.setTime(sdf.parse(dateStr + " " + timeStr));
+
+            long diffMillis = schedule.getTimeInMillis() - now.getTimeInMillis();
+
+            if (diffMillis < 0) return "Past due";
+
+            long mins = diffMillis / (60 * 1000);
+            return mins + " mins left";
+        } catch (Exception e) {
+            return "Invalid";
+        }
+    }
+
+
 }
 
 
