@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class pcostroi extends Fragment {
-
     ArrayList<String> breedList, maintenanceOptions;
     Button editButton, saveButton, generateReportButton, TypeofFeeders, initialMaintenancetype, maintenanceType;
     EditText amtFeeders, maintenance, Capital, Labor, fperpiece, maintenanceCost;
@@ -43,7 +42,7 @@ public class pcostroi extends Fragment {
     TextView totalExpenses, fishbreeddisplay, numfingerlingsdisplay, amtFingerlings;
     ImageButton addMaintenanceButton, addFeederBtn, removeBtn;
     EditText initialMaintenanceCost;
-
+    private boolean isDataSaved = false;
     public abstract class SimpleTextWatcher implements TextWatcher {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -53,8 +52,6 @@ public class pcostroi extends Fragment {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
         }
     }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +70,6 @@ public class pcostroi extends Fragment {
                 "Pump & Pipe Maintenance", "Parasite Treatment", "Net or Screen Repair", "Others"
         ));
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -93,23 +89,22 @@ public class pcostroi extends Fragment {
         TypeofFeeders = view.findViewById(R.id.typeoffeeders);
         Capital = view.findViewById(R.id.capital);
         Labor = view.findViewById(R.id.labor);
-
         addMaintenanceButton = view.findViewById(R.id.addMaintenanceButton);
-        generateReportButton = view.findViewById(R.id.generatereport);
         feedersContainer = view.findViewById(R.id.feeders_container);
         addFeederBtn = view.findViewById(R.id.addToFeedsbtn);
+
+        generateReportButton = view.findViewById(R.id.generatereport);
+        generateReportButton.setEnabled(false);
 
         addFeederBtn.setOnClickListener(v -> {
             addFeederRow(feedersContainer);
             updateTotalExpenses();
         });
 
-
         SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         viewModel.getSelectedBreed().observe(getViewLifecycleOwner(), breed -> {
             fishbreeddisplay.setText(breed);
         });
-
         viewModel.getNumOfFingerlings().observe(getViewLifecycleOwner(), num -> {
             if (num != null) {
                 numfingerlingsdisplay.setText(String.valueOf(num));
@@ -123,11 +118,11 @@ public class pcostroi extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isDataSaved = false;
+                generateReportButton.setEnabled(false);
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 calculateFingerlingsAmount();
@@ -138,11 +133,11 @@ public class pcostroi extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isDataSaved = false;
+                generateReportButton.setEnabled(false);
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 updateTotalExpenses();
@@ -153,11 +148,11 @@ public class pcostroi extends Fragment {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                isDataSaved = false;
+                generateReportButton.setEnabled(false);
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 updateTotalExpenses();
@@ -168,7 +163,6 @@ public class pcostroi extends Fragment {
         Capital.addTextChangedListener(expenseWatcher);
         Labor.addTextChangedListener(expenseWatcher);
         initialMaintenanceCost.addTextChangedListener(expenseWatcher);
-
         // restrict to character input
         InputFilter letterOnlyFilter = new InputFilter() {
             @Override
@@ -183,7 +177,6 @@ public class pcostroi extends Fragment {
         initialMaintenancetype.setFilters(new InputFilter[]{letterOnlyFilter});
         // Set fields to non-editable initially
         setEditable(false);
-
         // Handle Edit button
         editButton.setOnClickListener(v -> {
             setEditable(true);
@@ -191,20 +184,18 @@ public class pcostroi extends Fragment {
             editButton.setVisibility(View.GONE);
             isDataSaved = false;
         });
-
-
         // Handle Save button
         saveButton.setOnClickListener(v -> {
             if (validateInputs()) {
                 setEditable(false);
                 saveButton.setVisibility(View.GONE);
                 editButton.setVisibility(View.VISIBLE);
-                isDataSaved = true; // ✅ Data is now saved
+                isDataSaved = true;
+                generateReportButton.setEnabled(true);
             } else {
                 Toast.makeText(requireContext(), "Please fill out all required fields", Toast.LENGTH_SHORT).show();
             }
         });
-
 
         List<String> feederOptions = new ArrayList<>(Arrays.asList("Starter", "Grower", "Finisher", "Others"));
         TypeofFeeders.setOnClickListener(v -> {
@@ -228,7 +219,6 @@ public class pcostroi extends Fragment {
             updateTotalExpenses();
         });
 
-
         initialMaintenancetype.setOnClickListener(v -> showMaintenanceMenu(initialMaintenancetype));
 
         generateReportButton.setOnClickListener(v -> {
@@ -238,96 +228,76 @@ public class pcostroi extends Fragment {
             }
             generatePdfReport();
         });
-
-
         return view;
     }
-
     private void setEditable(boolean editable) {
         // Static EditText fields
         EditText[] editTextFields = {
                 amtFeeders, initialMaintenanceCost, Capital, Labor, fperpiece
         };
-
         for (EditText field : editTextFields) {
             field.setFocusable(editable);
             field.setFocusableInTouchMode(editable);
             field.setClickable(editable);
             field.setCursorVisible(editable);
         }
-
         // Static Button dropdowns
         Button[] buttonFields = {
                 initialMaintenancetype, TypeofFeeders
         };
-
         for (Button button : buttonFields) {
             button.setEnabled(editable);
             button.setClickable(editable);
         }
-
         // Dynamically added maintenance rows
         for (int i = 0; i < maintenanceList.getChildCount(); i++) {
             View row = maintenanceList.getChildAt(i);
             EditText cost = row.findViewById(R.id.maintenanceCost);
             Button type = row.findViewById(R.id.maintenanceType);
-
             cost.setFocusable(editable);
             cost.setFocusableInTouchMode(editable);
             cost.setClickable(editable);
             cost.setCursorVisible(editable);
-
             type.setEnabled(editable);
             type.setClickable(editable);
         }
-
         // Dynamically added feeder rows
         for (int i = 0; i < feedersContainer.getChildCount(); i++) {
             View row = feedersContainer.getChildAt(i);
             EditText amount = row.findViewById(R.id.amtoffeeders);
             Button type = row.findViewById(R.id.typeoffeeders);
-
             amount.setFocusable(editable);
             amount.setFocusableInTouchMode(editable);
             amount.setClickable(editable);
             amount.setCursorVisible(editable);
-
             type.setEnabled(editable);
             type.setClickable(editable);
         }
-
         // Enable/disable Add buttons if needed
         addFeederBtn.setEnabled(editable);
         addMaintenanceButton.setEnabled(editable);
     }
-
-
     private void updateTotalExpenses() {
         double total = 0;
-
         // Static fields
         total += parseDoubleFromTextView(amtFingerlings);
         total += parseDoubleFromEditText(Capital);
         total += parseDoubleFromEditText(Labor);
         total += parseDoubleFromEditText(initialMaintenanceCost);
-
         // Dynamic feeder rows
         for (int i = 0; i < feedersContainer.getChildCount(); i++) {
             View row = feedersContainer.getChildAt(i);
             EditText amount = row.findViewById(R.id.amtoffeeders);
             total += parseDoubleSafely(amount);
         }
-
         // Dynamic maintenance rows
         for (int i = 0; i < maintenanceList.getChildCount(); i++) {
             View row = maintenanceList.getChildAt(i);
             EditText cost = row.findViewById(R.id.maintenanceCost);
             total += parseDoubleSafely(cost);
         }
-
         totalExpenses.setText(String.format("%.2f", total));
     }
-
     private double parseDoubleSafely(EditText editText) {
         if (editText != null) {
             String text = editText.getText().toString().trim();
@@ -340,7 +310,6 @@ public class pcostroi extends Fragment {
         }
         return 0;
     }
-
     private double parseDoubleFromEditText(EditText editText) {
         String input = editText.getText().toString().replace("₱", "").trim();
         if (input.isEmpty()) return 0;
@@ -350,7 +319,6 @@ public class pcostroi extends Fragment {
             return 0;
         }
     }
-
     private double parseDoubleFromTextView(TextView tv) {
         try {
             return Double.parseDouble(tv.getText().toString());
@@ -358,21 +326,17 @@ public class pcostroi extends Fragment {
             return 0;
         }
     }
-
     // Method to add new maintenance row dynamically
     private void addMaintenanceRow(LinearLayout container) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View maintenanceRow = inflater.inflate(R.layout.row_maintenance, container, false);
-
         maintenanceType = maintenanceRow.findViewById(R.id.maintenanceType);
         maintenanceCost = maintenanceRow.findViewById(R.id.maintenanceCost);
         removeBtn = maintenanceRow.findViewById(R.id.removeMaintenanceButton);
-
         maintenanceCost.setFocusable(true);
         maintenanceCost.setFocusableInTouchMode(true);
         maintenanceCost.setClickable(true);
         maintenanceCost.setCursorVisible(true);
-
         maintenanceType.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(getContext(), maintenanceType);
             for (String option : maintenanceOptions) {
@@ -390,11 +354,9 @@ public class pcostroi extends Fragment {
 
             popupMenu.show();
         });
-
         removeBtn.setOnClickListener(v -> container.removeView(maintenanceRow));
         container.addView(maintenanceRow);
     }
-
     private void showAddCustomMaintenanceDialog(Button targetButton, List<String> optionsList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Add Custom Maintenance");
@@ -402,7 +364,6 @@ public class pcostroi extends Fragment {
         input.setHint("Enter custom type");
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
-
         builder.setPositiveButton("Add", (dialog, which) -> {
             String customOption = input.getText().toString().trim();
             if (!customOption.isEmpty()) {
@@ -413,27 +374,22 @@ public class pcostroi extends Fragment {
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
     }
-
     private void calculateFingerlingsAmount() {
         double perPiece = 0;
         int numFingerlings = 0;
-
         try {
             perPiece = Double.parseDouble(fperpiece.getText().toString().trim());
         } catch (NumberFormatException e) {
             perPiece = 0;
         }
-
         try {
             numFingerlings = Integer.parseInt(numfingerlingsdisplay.getText().toString().trim());
         } catch (NumberFormatException e) {
             numFingerlings = 0;
         }
-
         double total = perPiece * numFingerlings;
         amtFingerlings.setText(String.format("%.2f", total));
     }
-
     private boolean validateInputs() {
         // Check static required fields
         if (fishbreeddisplay.getText().toString().trim().isEmpty()) return false;
@@ -442,11 +398,10 @@ public class pcostroi extends Fragment {
         if (amtFingerlings.getText().toString().trim().isEmpty()) return false;
         if (amtFeeders.getText().toString().trim().isEmpty()) return false;
         if (TypeofFeeders.getText().toString().trim().isEmpty()) return false;
-        if (initialMaintenancetype.getText().toString().trim().isEmpty()) return false;
-        if (initialMaintenanceCost.getText().toString().trim().isEmpty()) return false;
+        //if (initialMaintenancetype.getText().toString().trim().isEmpty()) return false;
+        //if (initialMaintenanceCost.getText().toString().trim().isEmpty()) return false;
         if (Capital.getText().toString().trim().isEmpty()) return false;
         if (Labor.getText().toString().trim().isEmpty()) return false;
-
         // Validate all feeder rows
         for (int i = 0; i < feedersContainer.getChildCount(); i++) {
             View row = feedersContainer.getChildAt(i);
@@ -456,29 +411,23 @@ public class pcostroi extends Fragment {
                 return false;
             }
         }
-
         // Validate all maintenance rows
-        for (int i = 0; i < maintenanceList.getChildCount(); i++) {
-            View row = maintenanceList.getChildAt(i);
-            Button type = row.findViewById(R.id.maintenanceType);
-            EditText cost = row.findViewById(R.id.maintenanceCost);
-            if (type.getText().toString().trim().isEmpty() || cost.getText().toString().trim().isEmpty()) {
-                return false;
-            }
-        }
-
+        //for (int i = 0; i < maintenanceList.getChildCount(); i++) {
+        //    View row = maintenanceList.getChildAt(i);
+        //    Button type = row.findViewById(R.id.maintenanceType);
+        //    EditText cost = row.findViewById(R.id.maintenanceCost);
+        //    if (type.getText().toString().trim().isEmpty() || cost.getText().toString().trim().isEmpty()) {
+        //        return false;
+        //    }
+        //}
         return true;
     }
-
-
     private void showAddFeederDialog(Button feederButton, List<String> feederOptions) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Enter custom feeder type");
-
         final EditText input = new EditText(requireContext());
         input.setHint("e.g. Booster");
         builder.setView(input);
-
         builder.setPositiveButton("Add", (dialog, which) -> {
             String newOption = input.getText().toString().trim();
             if (!newOption.isEmpty()) {
@@ -488,24 +437,19 @@ public class pcostroi extends Fragment {
                 Toast.makeText(getContext(), "Input cannot be empty", Toast.LENGTH_SHORT).show();
             }
         });
-
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
     }
-
     private void addFeederRow(LinearLayout container) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View row = inflater.inflate(R.layout.row_feeders, container, false);
-
         Button feederType = row.findViewById(R.id.typeoffeeders);
         EditText amount = row.findViewById(R.id.amtoffeeders);
         ImageButton removeBtn = row.findViewById(R.id.removeMaintenanceButton);
-
         amount.setFocusable(true);
         amount.setFocusableInTouchMode(true);
         amount.setClickable(true);
         amount.setCursorVisible(true);
-
         // Dropdown logic (same as previous popup menu)
         List<String> feederOptions = new ArrayList<>(Arrays.asList("Starter", "Grower", "Finisher", "Others"));
         feederType.setOnClickListener(v -> {
@@ -530,14 +474,12 @@ public class pcostroi extends Fragment {
 
         container.addView(row);
     }
-
     private void showMaintenanceMenu(Button button) {
         PopupMenu popupMenu = new PopupMenu(getContext(), button);
         // Dynamically populate the menu
         for (String option : maintenanceOptions) {
             popupMenu.getMenu().add(option);
         }
-
         popupMenu.setOnMenuItemClickListener(item -> {
             String selected = item.getTitle().toString();
 
@@ -549,10 +491,8 @@ public class pcostroi extends Fragment {
 
             return true;
         });
-
         popupMenu.show();
     }
-
     private void showAddCustomMaintenanceDialog(Button button) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Add Custom Maintenance Type");
@@ -570,19 +510,16 @@ public class pcostroi extends Fragment {
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
     }
-
     private void generatePdfReport() {
         PdfDocument document = new PdfDocument();
         Paint paint = new Paint();
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create(); // A4
         PdfDocument.Page page = document.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
-
         int xLeft = 40;
         int xRight = 500;
         int y = 60;
         int lineSpacing = 25;
-
         // Title
         paint.setTypeface(Typeface.MONOSPACE);
         paint.setTextSize(14);
@@ -590,7 +527,6 @@ public class pcostroi extends Fragment {
         String title = "PondMate Production Cost Report";
         float titleWidth = paint.measureText(title);
         canvas.drawText(title, (pageInfo.getPageWidth() - titleWidth) / 2, y, paint);
-
         // Timestamp below title
         paint.setFakeBoldText(false);
         paint.setTextSize(10);
@@ -598,10 +534,8 @@ public class pcostroi extends Fragment {
         float timestampWidth = paint.measureText(timestamp);
         y += lineSpacing;
         canvas.drawText(timestamp, (pageInfo.getPageWidth() - timestampWidth) / 2, y, paint);
-
         paint.setTextSize(12);
         y += lineSpacing;
-
         // Basic Info
         canvas.drawText(String.format("%-30s", "Breed: ") + fishbreeddisplay.getText(), xLeft, y, paint);
         y += lineSpacing;
@@ -610,11 +544,9 @@ public class pcostroi extends Fragment {
         canvas.drawText("Total Cost of Fingerlings:", xLeft, y, paint);
         canvas.drawText("₱" + amtFingerlings.getText(), xRight, y, paint);
         y += lineSpacing * 2;
-
         // Feeders
         canvas.drawText("Feeders:", xLeft, y, paint);
         y += lineSpacing;
-
         for (int i = 0; i < feedersContainer.getChildCount(); i++) {
             View row = feedersContainer.getChildAt(i);
             Button type = row.findViewById(R.id.typeoffeeders);
@@ -623,18 +555,15 @@ public class pcostroi extends Fragment {
             canvas.drawText("₱" + amount.getText(), xRight, y, paint);
             y += lineSpacing;
         }
-
         y += lineSpacing / 2;
         canvas.drawText("------------------------------------------", xLeft, y, paint);
         y += lineSpacing;
-
         // Maintenance
         canvas.drawText("Maintenance:", xLeft, y, paint);
         y += lineSpacing;
         canvas.drawText(" - " + initialMaintenancetype.getText(), xLeft + 20, y, paint);
         canvas.drawText("₱" + initialMaintenanceCost.getText(), xRight, y, paint);
         y += lineSpacing;
-
         for (int i = 0; i < maintenanceList.getChildCount(); i++) {
             View row = maintenanceList.getChildAt(i);
             Button type = row.findViewById(R.id.maintenanceType);
@@ -643,45 +572,34 @@ public class pcostroi extends Fragment {
             canvas.drawText("₱" + cost.getText(), xRight, y, paint);
             y += lineSpacing;
         }
-
         y += lineSpacing / 2;
         canvas.drawText("------------------------------------------", xLeft, y, paint);
         y += lineSpacing;
-
         // Capital & Labor
         canvas.drawText("Capital:", xLeft, y, paint);
         canvas.drawText("₱" + Capital.getText(), xRight, y, paint);
         y += lineSpacing;
-
         canvas.drawText("Labor:", xLeft, y, paint);
         canvas.drawText("₱" + Labor.getText(), xRight, y, paint);
         y += lineSpacing;
-
         y += lineSpacing / 2;
         canvas.drawText("------------------------------------------", xLeft, y, paint);
         y += lineSpacing;
-
         // Total
         paint.setFakeBoldText(true);
         canvas.drawText("TOTAL EXPENSES:", xLeft, y, paint);
         canvas.drawText("₱" + totalExpenses.getText(), xRight, y, paint);
         paint.setFakeBoldText(false);
-
         document.finishPage(page);
-
         try {
             String filename = "PondMate_Report.pdf";
             File file = new File(requireContext().getExternalFilesDir(null), filename);
             FileOutputStream fos = new FileOutputStream(file);
             document.writeTo(fos);
             document.close();
-
             Toast.makeText(getContext(), "PDF saved to " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             Toast.makeText(getContext(), "Failed to generate PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
-    private boolean isDataSaved = true;
-
 }

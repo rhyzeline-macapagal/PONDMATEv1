@@ -139,8 +139,7 @@
                 android:padding="12dp"
                 android:textColor="#000000"
                 android:textColorHint="#000000"
-                android:textSize="18sp"
-                android:onClick="toggleConfirmPasswordVisibility" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/usertype"

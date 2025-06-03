@@ -8,35 +8,24 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class Breed extends Fragment {
-
-    ArrayList<String> breedList;
-    AutoCompleteTextView autoCompleteText;
-    ArrayAdapter<String> adapterItems;
     View view;
-    EditText estDoh, numfingerlings;
-    TextView SOA, MortResult, harvestDateView, intStockFish, NoDFish;
+    EditText numfingerlings;
+    TextView SOA, MortResult, harvestDateView, NoDFish;
     Calendar calendar;
     Button btnSelectDate, btnSelectBreed, btnEditFbreed;
-    RadioGroup radioGroup;
 
     boolean isEditingBreed = false;
 
@@ -49,11 +38,11 @@ public class Breed extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_two, container, false);
 
+        BreedDataManager dataManager = new BreedDataManager(requireContext());
         MortResult = view.findViewById(R.id.txt_mortality_rate);
         btnSelectDate = view.findViewById(R.id.btn_select_date);
         btnSelectBreed = view.findViewById(R.id.btn_select_breed);
         harvestDateView = view.findViewById(R.id.harvestdate);
-        intStockFish = view.findViewById(R.id.initialstockfingerlings);
         NoDFish = view.findViewById(R.id.txt_est_dead);
         SOA = view.findViewById(R.id.txt_soa);
         numfingerlings = view.findViewById(R.id.numoffingerlings);
@@ -74,6 +63,14 @@ public class Breed extends Fragment {
                             setFishBreedEditable(true);
                             btnEditFbreed.setText("Save");
                             Toast.makeText(getContext(), "Editing Fish Breed enabled", Toast.LENGTH_SHORT).show();
+                            dataManager.saveBreedData(
+                                    btnSelectBreed.getText().toString().trim(),
+                                    SOA.getText().toString().trim(),
+                                    harvestDateView.getText().toString().trim(),
+                                    numfingerlings.getText().toString().trim(),
+                                    NoDFish.getText().toString().trim(),
+                                    MortResult.getText().toString().trim()
+                            );
                         })
                         .setNegativeButton("No", null)
                         .show();
@@ -97,6 +94,14 @@ public class Breed extends Fragment {
                             setFishBreedEditable(false);
                             btnEditFbreed.setText("Edit");
                             Toast.makeText(getContext(), "Fish Breed saved", Toast.LENGTH_SHORT).show();
+                            dataManager.saveBreedData(
+                                    btnSelectBreed.getText().toString().trim(),
+                                    SOA.getText().toString().trim(),
+                                    harvestDateView.getText().toString().trim(),
+                                    numfingerlings.getText().toString().trim(),
+                                    NoDFish.getText().toString().trim(),
+                                    MortResult.getText().toString().trim()
+                            );
                         })
                         .setNegativeButton("No", null)
                         .show();
@@ -124,7 +129,6 @@ public class Breed extends Fragment {
                 } catch (NumberFormatException e) {
                     viewModel.setNumofFingerlings(null);
                 }
-                intStockFish.setText(s);
                 try {
                     int stock = Integer.parseInt(s.toString());
                     int estDead = (int) Math.floor(stock * 0.10); // 10% rounded down
@@ -174,6 +178,31 @@ public class Breed extends Fragment {
             }
         });
 
+        String savedBreed = dataManager.getBreed();
+        if (savedBreed != null) btnSelectBreed.setText(savedBreed);
+        viewModel.setSelectedBreed(savedBreed);
+
+        String savedDate = dataManager.getSOADate();
+        if (savedDate != null) SOA.setText(savedDate);
+
+        String savedHarvest = dataManager.getHarvestDate();
+        if (savedHarvest != null) harvestDateView.setText(savedHarvest);
+
+        String savedFingerlings = dataManager.getFingerlings();
+        if (savedFingerlings != null) numfingerlings.setText(savedFingerlings);
+        try {
+            viewModel.setNumofFingerlings(Integer.parseInt(savedFingerlings));
+        } catch (NumberFormatException e) {
+            viewModel.setNumofFingerlings(null);
+        }
+
+        String savedEstDead = dataManager.getEstDead();
+        if (savedEstDead != null) NoDFish.setText(savedEstDead);
+
+        String savedMortality = dataManager.getMortalityRate();
+        if (savedMortality != null) MortResult.setText(savedMortality);
+
+
         return view;
     }
 
@@ -190,7 +219,7 @@ public class Breed extends Fragment {
         }
     }
     private void updateMortalityRate() {
-        String intStockStr = intStockFish.getText().toString().trim();
+        String intStockStr = numfingerlings.getText().toString().trim();
         String estDeadStr = NoDFish.getText().toString().trim();
 
         if (!intStockStr.isEmpty() && !estDeadStr.isEmpty()) {
