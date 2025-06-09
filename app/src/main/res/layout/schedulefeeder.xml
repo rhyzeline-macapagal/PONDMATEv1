@@ -44,53 +44,35 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:id="@+id/datecontainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:foregroundGravity="center_vertical"
-                android:layout_marginBottom="5dp">
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/dateoffeedingschedule"
+                    android:layout_width="192dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/container"
+                    android:enabled="true"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="mm/dd/yyyy"
+                    android:padding="8dp"
+                    android:textAlignment="textEnd"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
 
-                    <TextView
-                        android:id="@+id/dateoffeedingschedule"
-                        android:layout_width="192dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/container"
-                        android:enabled="true"
-                        android:fontFamily="sans-serif-light"
-                        android:hint="mm/dd/yyyy"
-                        android:padding="8dp"
-                        android:textAlignment="textEnd"
-                        android:textColor="#000000"
-                        android:textSize="14sp" />
-
-                    <Button
-                        android:id="@+id/btnselectdate"
-                        android:layout_width="122dp"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#047CA1"
-                        android:fontFamily="sans-serif-light"
-                        android:text="Select Date"
-                        android:layout_marginStart="5dp"
-                        android:textColor="@android:color/white"
-                        app:cornerRadius="0dp" />
-
-                    <ImageButton
-                        android:id="@+id/adddatebtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_menu_add"
-                        android:layout_gravity="center"
-                        android:background="?attr/selectableItemBackgroundBorderless" />
-
+                <Button
+                    android:id="@+id/btnselectdate"
+                    android:layout_width="122dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#047CA1"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Select Date"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@android:color/white"
+                    app:cornerRadius="0dp" />
                 </LinearLayout>
-            </LinearLayout>
 
             <!-- Time -->
             <TextView
@@ -188,7 +170,7 @@
 
                 <Button
                     android:id="@+id/btnsetmanually"
-                    android:layout_width="116dp"
+                    android:layout_width="122dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#047CA1"
                     android:fontFamily="sans-serif-light"
@@ -204,19 +186,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:gravity="center">
+                android:layout_marginTop="20dp">
 
                 <Button
                     android:id="@+id/createbtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:backgroundTint="#047CA1"
                     android:fontFamily="sans-serif-light"
                     android:textSize="11sp"
                     android:text="CREATE"
                     android:textColor="@android:color/white"
+                    app:cornerRadius="0dp"
+                    android:layout_marginStart="130dp"/>
+
+                <Button
+                    android:id="@+id/resetbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#047CA1"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="11sp"
+                    android:text="RESET"
+                    android:layout_marginStart="80dp"
+                    android:textColor="@android:color/white"
+                    android:visibility="gone"
                     app:cornerRadius="0dp" />
 
                 <Button
@@ -255,31 +249,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:stretchColumns="*"
-                android:padding="8dp"
                 android:elevation="2dp"
-                android:background="@drawable/rounded_container">
+                android:background="@drawable/tablebg">
 
-                <TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="2dp"
+                    android:background="@drawable/tableheader">
                     <TextView android:text="Date"
                         android:padding="8dp"
                         android:layout_gravity="center"
                         android:fontFamily="sans-serif-light"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
                     <TextView android:text="Time"
                         android:padding="8dp"
                         android:layout_gravity="center"
                         android:fontFamily="sans-serif-light"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
                     <TextView android:text="Feed Quantity"
                         android:padding="8dp"
                         android:layout_gravity="center"
                         android:fontFamily="sans-serif-light"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
                     <TextView android:text="Status"
                         android:padding="8dp"
                         android:layout_gravity="center"
                         android:fontFamily="sans-serif-light"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
                 </TableRow>
             </TableLayout>
 

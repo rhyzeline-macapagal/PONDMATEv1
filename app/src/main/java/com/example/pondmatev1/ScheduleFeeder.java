@@ -1,5 +1,6 @@
 package com.example.pondmatev1;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
@@ -17,19 +18,25 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class ScheduleFeeder extends Fragment {
 
-    private LinearLayout containerd, containert;
+    private LinearLayout containert;
 
-    private ImageButton addDbtn, addTbtn;
+    private ImageButton addTbtn;
 
-    private Button selectDate, selectTime, setManual, Createbtn, Savebtn;
+    private Button selectDate, selectTime, setManual, Createbtn, Savebtn, Resetbtn;
 
     private TextView dateFS, timeFS, feedqttycont;
     private TableLayout SummaryT;
@@ -39,8 +46,6 @@ public class ScheduleFeeder extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.schedulefeeder, container, false);
 
-        containerd = view.findViewById(R.id.datecontainer);
-        addDbtn = view.findViewById(R.id.adddatebtn);
         containert = view.findViewById(R.id.timecontainer);
         addTbtn = view.findViewById(R.id.addtimebtn);
         dateFS = view.findViewById(R.id.dateoffeedingschedule);
@@ -51,44 +56,74 @@ public class ScheduleFeeder extends Fragment {
         feedqttycont = view.findViewById(R.id.feedquantity);
         Createbtn = view.findViewById(R.id.createbtn);
         Savebtn = view.findViewById(R.id.savebtn);
+        Resetbtn = view.findViewById(R.id.resetbtn);
         SummaryT= view.findViewById(R.id.summaryTable);
 
         //select date and time
         selectDate.setOnClickListener(v -> {
-            final Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            Calendar now = Calendar.getInstance();
 
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    requireContext(),
-                    (view1, selectedYear, selectedMonth, selectedDay) -> {
-                        String formattedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d",
-                                selectedMonth + 1, selectedDay, selectedYear);
-                        dateFS.setText(formattedDate);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                    (view1, year, month, dayOfMonth) -> {
+                        Calendar selected = Calendar.getInstance();
+                        selected.set(year, month, dayOfMonth);
+
+                        if (selected.before(now)) {
+                            Toast.makeText(getContext(), "Cannot select a past date.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            @SuppressLint("DefaultLocale")
+                            String selectedDate = String.format("%02d/%02d/%04d", month + 1, dayOfMonth, year);
+                            dateFS.setText(selectedDate);
+                        }
                     },
-                    year, month, day);
+                    now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
+            );
+
+            datePickerDialog.getDatePicker().setMinDate(now.getTimeInMillis()); // prevent past dates
             datePickerDialog.show();
         });
 
         selectTime.setOnClickListener(v -> {
-            final Calendar calendar = Calendar.getInstance();
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int minute = calendar.get(Calendar.MINUTE);
+            String selectedDateStr = dateFS.getText().toString();
+            if (selectedDateStr.isEmpty()) {
+                Toast.makeText(getContext(), "Please select a date first.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            TimePickerDialog timePickerDialog = new TimePickerDialog(
-                    requireContext(),
-                    (view1, selectedHour, selectedMinute) -> {
-                        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d",
-                                selectedHour, selectedMinute);
-                        timeFS.setText(formattedTime);
+            Calendar now = Calendar.getInstance();
+            int hour = now.get(Calendar.HOUR_OF_DAY);
+            int minute = now.get(Calendar.MINUTE);
+
+            TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+                    (view12, selectedHour, selectedMinute) -> {
+                        try {
+                            SimpleDateFormat parser = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault());
+                            Calendar selectedTime = Calendar.getInstance();
+                            selectedTime.setTime(parser.parse(selectedDateStr + " " + selectedHour + ":" + selectedMinute));
+
+                            if (selectedTime.before(now)) {
+                                Toast.makeText(getContext(), "Cannot select a past time.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Format to 12-hour with AM/PM
+                                Calendar displayCal = Calendar.getInstance();
+                                displayCal.set(Calendar.HOUR_OF_DAY, selectedHour);
+                                displayCal.set(Calendar.MINUTE, selectedMinute);
+                                SimpleDateFormat displayFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+                                String formattedTime = displayFormat.format(displayCal.getTime());
+
+                                timeFS.setText(formattedTime);
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(getContext(), "Invalid date or time.", Toast.LENGTH_SHORT).show();
+                        }
                     },
-                    hour, minute, true);
+                    hour, minute, false // 'false' for 12-hour format in TimePickerDialog
+            );
+
             timePickerDialog.show();
         });
 
         //dynamically added row
-        addDbtn.setOnClickListener(v ->addDateRow(inflater));
         addTbtn.setOnClickListener(v ->addTimeRow(inflater));
 
         //editbutton
@@ -96,17 +131,9 @@ public class ScheduleFeeder extends Fragment {
             selectDate.setEnabled(true);
             selectTime.setEnabled(true);
             setManual.setEnabled(true);
-            addDbtn.setEnabled(true);
             addTbtn.setEnabled(true);
             feedqttycont.setEnabled(true);
 
-            for (int i = 0; i < containerd.getChildCount(); i++) {
-                View dateRow = containerd.getChildAt(i);
-                Button selectDateBtn = dateRow.findViewById(R.id.btnselectdate);
-                ImageButton removeDateBtn = dateRow.findViewById(R.id.removedate);
-                if (selectDateBtn != null) selectDateBtn.setEnabled(true);
-                if (removeDateBtn != null) removeDateBtn.setEnabled(true);
-            }
             for (int i = 0; i < containert.getChildCount(); i++) {
                 View timeRow = containert.getChildAt(i);
                 Button selectTimeBtn = timeRow.findViewById(R.id.btnselecttime);
@@ -116,33 +143,67 @@ public class ScheduleFeeder extends Fragment {
             }
 
             Savebtn.setVisibility(View.VISIBLE);
+            Resetbtn.setVisibility(View.VISIBLE);
+            Createbtn.setVisibility(View.GONE);
+        });
+
+        //resetbutton
+        Resetbtn.setOnClickListener(v -> {
+            dateFS.setText("");
+            timeFS.setText("");
+            feedqttycont.setText("");
+
+            // Remove dynamically added date and time rows (if any), keeping the first one if needed
+            containert.removeViews(1, containert.getChildCount() - 1);
+
+            // Reset first row text if necessary
+            View firstTimeRow = containert.getChildAt(0);
+            if (firstTimeRow != null) {
+                TextView timeText = firstTimeRow.findViewById(R.id.timeoffeeding);
+                if (timeText != null) timeText.setText("");
+            }
+
         });
 
         //savebutton
         Savebtn.setOnClickListener(v -> {
-            SummaryT.removeViews(1, SummaryT.getChildCount() - 1);
             String staticDate = dateFS.getText().toString();
             String staticTime = timeFS.getText().toString();
             String feedQuantity = feedqttycont.getText().toString();
-            String status = getStatus(staticDate, staticTime);
 
-            addTableRow(staticDate, staticTime, feedQuantity, status);
+            int dynamicTimeCount = containert.getChildCount();
+
+            if (staticDate.isEmpty()) {
+                Toast.makeText(getContext(), "Please select a date.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Add static time entry
+            if (!staticTime.isEmpty()) {
+                String status = getStatus(staticDate, staticTime);
+                addTableRow(staticDate, staticTime, feedQuantity, status);
+            }
+
+            // Add dynamic time entries
+            for (int i = 0; i < dynamicTimeCount; i++) {
+                View timeRow = containert.getChildAt(i);
+                TextView timeText = timeRow.findViewById(R.id.timeoffeeding);
+                String time = timeText.getText().toString();
+
+                if (!time.isEmpty() && !time.equals(staticTime)) {
+                    String dynamicStatus = getStatus(staticDate, time);
+                    addTableRow(staticDate, time, "", dynamicStatus);
+                }
+            }
 
             selectDate.setEnabled(false);
             selectTime.setEnabled(false);
-            addDbtn.setEnabled(false);
             addTbtn.setEnabled(false);
             setManual.setEnabled(false);
             feedqttycont.setEnabled(false);
             Savebtn.setVisibility(View.GONE);
-
-            for (int i = 0; i < containerd.getChildCount(); i++) {
-                View dateRow = containerd.getChildAt(i);
-                Button selectDateBtn = dateRow.findViewById(R.id.btnselectdate);
-                ImageButton removeDateBtn = dateRow.findViewById(R.id.removedate);
-                if (selectDateBtn != null) selectDateBtn.setEnabled(false);
-                if (removeDateBtn != null) removeDateBtn.setEnabled(false);
-            }
+            Resetbtn.setVisibility(View.GONE);
+            Createbtn.setVisibility(View.VISIBLE);
 
             for (int i = 0; i < containert.getChildCount(); i++) {
                 View timeRow = containert.getChildAt(i);
@@ -152,28 +213,19 @@ public class ScheduleFeeder extends Fragment {
                 if (removeTimeBtn != null) removeTimeBtn.setEnabled(false);
             }
 
-            int dateCount = containerd.getChildCount();
-            int timeCount = containert.getChildCount();
-            int maxCount = Math.max(dateCount, timeCount);
+            // Clear static inputs
+            dateFS.setText("");
+            timeFS.setText("");
+            feedqttycont.setText("");
 
-            for (int i = 1; i < maxCount; i++) {
-                String dynDate = "";
-                String dynTime = "";
+            // Remove dynamically added rows
+            containert.removeViews(1, containert.getChildCount() - 1);
 
-                if (i < dateCount) {
-                    View dateRow = containerd.getChildAt(i);
-                    TextView dateText = dateRow.findViewById(R.id.dateoffeedingschedule);
-                    dynDate = dateText.getText().toString();
-                }
-
-                if (i < timeCount) {
-                    View timeRow = containert.getChildAt(i);
-                    TextView timeText = timeRow.findViewById(R.id.timeoffeeding);
-                    dynTime = timeText.getText().toString();
-                }
-
-                String dynamicStatus = getStatus(dynDate, dynTime);
-                addTableRow(dynDate, dynTime, "", dynamicStatus); // No feed quantity for dynamic rows
+            // Reset text in first row (if needed)
+            View firstTimeRow = containert.getChildAt(0);
+            if (firstTimeRow != null) {
+                TextView timeText = firstTimeRow.findViewById(R.id.timeoffeeding);
+                if (timeText != null) timeText.setText("");
             }
 
         });
@@ -183,40 +235,10 @@ public class ScheduleFeeder extends Fragment {
         selectTime.setEnabled(false);
         setManual.setEnabled(false);
         feedqttycont.setEnabled(false);
-        addDbtn.setEnabled(false);
         addTbtn.setEnabled(false);
         Savebtn.setVisibility(View.GONE);
 
         return view;
-    }
-
-    private void addDateRow (LayoutInflater inflater){
-        View row = inflater.inflate(R.layout.row_date, containerd, false);
-
-        //ids inside row_date
-        TextView datedar = row.findViewById(R.id.dateoffeedingschedule);
-        Button selectdatedar = row.findViewById(R.id.btnselectdate);
-        ImageButton removedatedar = row.findViewById(R.id.removedate);
-
-        selectdatedar.setOnClickListener(v -> {
-            final Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    requireContext(),
-                    (DatePicker view, int selectedYear, int selectedMonth, int selectedDay) -> {
-                        String formattedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d",
-                                selectedMonth + 1, selectedDay, selectedYear);
-                        datedar.setText(formattedDate);
-                    },
-                    year, month, day);
-            datePickerDialog.show();
-        });
-
-        removedatedar.setOnClickListener(v -> containerd.removeView(row));
-        containerd.addView (row);
     }
 
     private void addTimeRow (LayoutInflater inflater){
@@ -273,27 +295,32 @@ public class ScheduleFeeder extends Fragment {
         }
 
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm", Locale.getDefault());
-            Calendar now = Calendar.getInstance();
-            Calendar schedule = Calendar.getInstance();
-            schedule.setTime(sdf.parse(dateStr + " " + timeStr));
+            // Expecting format like "06/09/2025" and "01:45 PM"
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.getDefault());
+            sdf.setLenient(false); // for stricter parsing
 
-            long diffMillis = schedule.getTimeInMillis() - now.getTimeInMillis();
+            Date scheduledDate = sdf.parse(dateStr + " " + timeStr);
+            if (scheduledDate == null) return "Invalid";
+
+            long currentMillis = System.currentTimeMillis();
+            long diffMillis = scheduledDate.getTime() - currentMillis;
 
             if (diffMillis < 0) return "Past due";
 
-            long mins = diffMillis / (60 * 1000);
-            return mins + " mins left";
-        } catch (Exception e) {
+            long totalMinutes = diffMillis / (60 * 1000);
+            long hours = totalMinutes / 60;
+            long minutes = totalMinutes % 60;
+
+            if (hours > 0) {
+                return hours + " hr" + (hours > 1 ? "s" : "") + " and " + minutes + " mn" + (minutes != 1 ? "s" : "") + " left";
+            } else {
+                return minutes + " mn" + (minutes != 1 ? "s" : "") + " left";
+            }
+
+        } catch (ParseException e) {
             return "Invalid";
         }
     }
 
 
 }
-
-
-
-
-
-
