@@ -166,6 +166,7 @@ public class Breed extends Fragment {
                     calendar.set(year1, month1, dayOfMonth);
                     SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault());
                     SOA.setText(sdf.format(calendar.getTime()));
+                    viewModel.setSOADate(calendar.getTime());
 
                     Calendar harvestCalendar = (Calendar) calendar.clone();
                     harvestCalendar.add(Calendar.MONTH, 7);
@@ -176,6 +177,7 @@ public class Breed extends Fragment {
             } else {
                 Toast.makeText(getContext(), "Click Edit to enable date selection", Toast.LENGTH_SHORT).show();
             }
+
         });
 
         String savedBreed = dataManager.getBreed();

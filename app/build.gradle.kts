@@ -58,5 +58,8 @@ dependencies {
     implementation ("com.itextpdf:itext7-core:7.2.3")
     implementation ("androidx.lifecycle:lifecycle-viewmodel:2.7.0")
     implementation ("androidx.lifecycle:lifecycle-livedata:2.7.0")
+    implementation ("com.prolificinteractive:material-calendarview:1.4.3")
+
+
 
 }

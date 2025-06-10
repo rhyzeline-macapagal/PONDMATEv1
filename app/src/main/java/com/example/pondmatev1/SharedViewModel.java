@@ -24,6 +24,16 @@ public class SharedViewModel extends ViewModel {
     private final MutableLiveData<String> selectedBreed = new MutableLiveData<>();
     private final MutableLiveData<Integer> numofFingerlings = new MutableLiveData<>();
 
+    private final MutableLiveData<java.util.Date> soaDate = new MutableLiveData<>();
+
+    public void setSOADate(java.util.Date date) {
+        soaDate.setValue(date);
+    }
+
+    public LiveData<java.util.Date> getSOADate() {
+        return soaDate;
+    }
+
     public void setSelectedBreed(String breed) {
         selectedBreed.setValue(breed);
     }

@@ -29,7 +29,7 @@ public class BreedDialogFragment extends DialogFragment {
     }
 
     private final String[] breedNames = {
-            "Tilapia", "Milkfish", "Shrimp", "Seaweed", "Carp", "Oyster", "Mussel", "Other"
+            "Tilapia", "Bangus", "Alimango", "Other"
     };
 
     private final int[] breedImages = {

@@ -1,19 +1,14 @@
 package com.example.pondmatev1;
 
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -22,21 +17,41 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
+import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 public class ActProd extends Fragment {
 
-    private EditText typeEditText, dateTimeEditText, descEditText;
-    private LinearLayout logTable;
+    private MaterialCalendarView calendarView;
+    private final SimpleDateFormat dateOnlyFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
+    private LinearLayout logTable;
     private final List<String[]> activityLogs = new ArrayList<>();
+    private final HashMap<CalendarDay, List<String>> scheduledActivityMap = new HashMap<>();
+
+    private TextView noteText;
+
     private SharedPreferences sharedPreferences;
+    private SharedViewModel sharedViewModel;
+
     private static final String PREF_NAME = "ActivityPrefs";
     private static final String LOGS_KEY = "logs";
 
@@ -51,89 +66,53 @@ public class ActProd extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         sharedPreferences = requireContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 
-        // Bind views
-        typeEditText = view.findViewById(R.id.ToA);
-        dateTimeEditText = view.findViewById(R.id.dateTimeEditText);
-        descEditText = view.findViewById(R.id.descEditText);
-        Button createBtn = view.findViewById(R.id.createbtn);
+        calendarView = view.findViewById(R.id.calendarView);
         logTable = view.findViewById(R.id.logTable);
 
-        // restrict to character input
-        InputFilter letterOnlyFilter = new InputFilter() {
-            @Override
-            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                if (source.toString().matches("[a-zA-Z ]+")) {
-                    return source;
-                }
-                return "";
-            }
-        };
-        descEditText.setFilters(new InputFilter[]{letterOnlyFilter});
-        typeEditText.setFilters(new InputFilter[]{letterOnlyFilter});
-
-        // Date-Time picker
-        dateTimeEditText.setOnClickListener(v -> showDateTimePicker());
-
-        // Add log on button click
-        createBtn.setOnClickListener(v -> addActivityLog());
-
-        // Load existing logs
         loadLogs();
         displayLogs();
-    }
+        observeBreedAndStartDate();
 
-    private void showDateTimePicker() {
-        Calendar calendar = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                getContext(),
-                (view1, year, month, dayOfMonth) -> {
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(
-                            getContext(),
-                            (view2, hourOfDay, minute) -> {
-                                String dateTime = String.format("%04d-%02d-%02d %02d:%02d",
-                                        year, month + 1, dayOfMonth, hourOfDay, minute);
-                                dateTimeEditText.setText(dateTime);
-                            },
-                            calendar.get(Calendar.HOUR_OF_DAY),
-                            calendar.get(Calendar.MINUTE),
-                            false
-                    );
-                    timePickerDialog.show();
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-        );
-        datePickerDialog.show();
-    }
+        calendarView.setOnDateChangedListener((widget, date, selected) -> {
+            if (scheduledActivityMap.containsKey(date)) {
+                showActivityDialog(date);
+            }
+        });
 
-    private void addActivityLog() {
-        String type = typeEditText.getText().toString().trim();
-        String dateTime = dateTimeEditText.getText().toString().trim();
-        String desc = descEditText.getText().toString().trim();
-
-        if (!type.isEmpty() && !dateTime.isEmpty() && !desc.isEmpty()) {
-            String[] log = {type, dateTime, desc};
-            activityLogs.add(log);
-            saveLogs();
-            displayLogs();
-
-            // Clear input fields
-            typeEditText.setText("");
-            dateTimeEditText.setText("");
-            descEditText.setText("");
+        Date soa = sharedViewModel.getSOADate().getValue();
+        String breed = sharedViewModel.getSelectedBreed().getValue();
+        if (soa != null && breed != null) {
+            generateFishScheduleAndDecorateCalendar(breed, soa);
         }
+        noteText = view.findViewById(R.id.noteText);
+
     }
+
+    private void showActivityDialog(CalendarDay date) {
+        List<String> activities = scheduledActivityMap.get(date);
+        if (activities == null || activities.isEmpty()) {
+            noteText.setText("No scheduled activities.");
+            return;
+        }
+
+        StringBuilder noteContent = new StringBuilder();
+        noteContent.append("📅 ").append(dateOnlyFormat.format(date.getDate())).append("\n\n");
+        for (String activity : activities) {
+            noteContent.append("• ").append(activity).append("\n");
+        }
+
+        noteText.setText(noteContent.toString().trim());
+    }
+
 
     private void displayLogs() {
-        logTable.removeAllViews(); // Clear previous content
+        logTable.removeAllViews();
 
-        // Header row
         TableRow headerRow = new TableRow(getContext());
         headerRow.setBackgroundColor(Color.parseColor("#f1f1f1"));
-
         TableRow.LayoutParams cellParams = new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
 
         String[] headers = {"Type", "Date & Time", "Description"};
@@ -150,7 +129,6 @@ public class ActProd extends Fragment {
 
         logTable.addView(headerRow);
 
-        // Data rows
         for (String[] log : activityLogs) {
             TableRow row = new TableRow(getContext());
             row.setBackgroundResource(R.drawable.transparentbg);
@@ -170,6 +148,54 @@ public class ActProd extends Fragment {
         }
     }
 
+    private void highlightActivityDates() {
+        calendarView.removeDecorators();
+
+        // RED: User-logged dates
+        List<CalendarDay> logDates = new ArrayList<>();
+        for (String[] log : activityLogs) {
+            if (log.length > 1) {
+                try {
+                    String[] parts = log[1].split(" ")[0].split("-"); // yyyy-MM-dd
+                    int year = Integer.parseInt(parts[0]);
+                    int month = Integer.parseInt(parts[1]) - 1;
+                    int day = Integer.parseInt(parts[2]);
+                    logDates.add(CalendarDay.from(year, month, day));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (!logDates.isEmpty()) {
+            calendarView.addDecorator(new EventDecorator(Color.RED, logDates));
+        }
+
+        // BLUE: Fish schedule
+        List<CalendarDay> scheduleDates = new ArrayList<>(scheduledActivityMap.keySet());
+        if (!scheduleDates.isEmpty()) {
+            calendarView.addDecorator(new EventDecorator(Color.BLUE, scheduleDates));
+        }
+    }
+
+    private void generateFishScheduleAndDecorateCalendar(String breed, Date soaDate) {
+        calendarView.removeDecorators();
+
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTime(soaDate);
+
+        List<FishActivityScheduler.FishActivity> schedule =
+                FishActivityScheduler.generateSchedule(breed, startDate);
+
+        scheduledActivityMap.clear();
+
+        for (FishActivityScheduler.FishActivity act : schedule) {
+            CalendarDay day = act.date;
+            scheduledActivityMap.computeIfAbsent(day, k -> new ArrayList<>()).add(act.description);
+        }
+
+        displayLogs();
+        highlightActivityDates();
+    }
 
     private void saveLogs() {
         JSONArray jsonArray = new JSONArray();
@@ -200,6 +226,42 @@ public class ActProd extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void observeBreedAndStartDate() {
+        sharedViewModel.getSelectedBreed().observe(getViewLifecycleOwner(), breed -> {
+            Date soa = sharedViewModel.getSOADate().getValue();
+            if (breed != null && soa != null) {
+                generateFishScheduleAndDecorateCalendar(breed, soa);
+            }
+        });
+
+        sharedViewModel.getSOADate().observe(getViewLifecycleOwner(), date -> {
+            String breed = sharedViewModel.getSelectedBreed().getValue();
+            if (breed != null && date != null) {
+                generateFishScheduleAndDecorateCalendar(breed, date);
+            }
+        });
+    }
+
+    public static class EventDecorator implements DayViewDecorator {
+        private final int color;
+        private final HashSet<CalendarDay> dates;
+
+        public EventDecorator(int color, List<CalendarDay> dates) {
+            this.color = color;
+            this.dates = new HashSet<>(dates);
+        }
+
+        @Override
+        public boolean shouldDecorate(CalendarDay day) {
+            return dates.contains(day);
+        }
+
+        @Override
+        public void decorate(DayViewFacade view) {
+            view.addSpan(new DotSpan(10, color));
         }
     }
 }
