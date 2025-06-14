@@ -43,7 +43,7 @@ public class ActProd extends Fragment {
     private MaterialCalendarView calendarView;
     private final SimpleDateFormat dateOnlyFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-    private LinearLayout logTable;
+    private TableLayout logTable;
     private final List<String[]> activityLogs = new ArrayList<>();
     private final HashMap<CalendarDay, List<String>> scheduledActivityMap = new HashMap<>();
 
@@ -73,7 +73,6 @@ public class ActProd extends Fragment {
         logTable = view.findViewById(R.id.logTable);
 
         loadLogs();
-        displayLogs();
         observeBreedAndStartDate();
 
         calendarView.setOnDateChangedListener((widget, date, selected) -> {
@@ -105,47 +104,6 @@ public class ActProd extends Fragment {
         }
 
         noteText.setText(noteContent.toString().trim());
-    }
-
-
-    private void displayLogs() {
-        logTable.removeAllViews();
-
-        TableRow headerRow = new TableRow(getContext());
-        headerRow.setBackgroundColor(Color.parseColor("#f1f1f1"));
-        TableRow.LayoutParams cellParams = new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-
-        String[] headers = {"Type", "Date & Time", "Description"};
-        for (String title : headers) {
-            TextView header = new TextView(getContext());
-            header.setText(title);
-            header.setTextSize(18);
-            header.setTextColor(getResources().getColor(android.R.color.black));
-            header.setGravity(Gravity.CENTER);
-            header.setPadding(16, 16, 16, 16);
-            header.setLayoutParams(cellParams);
-            headerRow.addView(header);
-        }
-
-        logTable.addView(headerRow);
-
-        for (String[] log : activityLogs) {
-            TableRow row = new TableRow(getContext());
-            row.setBackgroundResource(R.drawable.transparentbg);
-            row.setPadding(8, 8, 8, 8);
-
-            for (String value : log) {
-                TextView cell = new TextView(getContext());
-                cell.setText(value);
-                cell.setTextSize(16);
-                cell.setGravity(Gravity.CENTER);
-                cell.setPadding(8, 8, 8, 8);
-                cell.setLayoutParams(cellParams);
-                row.addView(cell);
-            }
-
-            logTable.addView(row);
-        }
     }
 
     private void highlightActivityDates() {
@@ -193,7 +151,6 @@ public class ActProd extends Fragment {
             scheduledActivityMap.computeIfAbsent(day, k -> new ArrayList<>()).add(act.description);
         }
 
-        displayLogs();
         highlightActivityDates();
     }
 
