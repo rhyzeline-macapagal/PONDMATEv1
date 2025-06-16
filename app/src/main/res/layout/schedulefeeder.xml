@@ -12,6 +12,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="SET SCHEDULE"
+            android:textColor="#0E1012"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="center" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,14 +34,50 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="SET SCHEDULE"
-                android:textColor="#0E1012"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                android:text="Current weight of fingerling:"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
-                android:layout_gravity="center" />
+                android:textColor="#0E1012"
+                android:fontFamily="sans-serif-light"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/weight"
+                    android:layout_width="192dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/container"
+                    android:clickable="true"
+                    android:cursorVisible="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="grams per piece"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="textEnd"
+                    android:padding="8dp"
+                    android:layout_marginStart="10dp"
+                    android:textColorHint="#908D8D"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btnsetweight"
+                    android:layout_width="122dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#047CA1"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Set"
+                    android:textSize="11sp"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@android:color/white"
+                    app:cornerRadius="0dp" />
+
+            </LinearLayout>
             <!-- Date -->
             <TextView
                 android:layout_width="wrap_content"
@@ -68,6 +115,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="#047CA1"
                     android:fontFamily="sans-serif-light"
+                    android:textSize="11sp"
                     android:text="Select Date"
                     android:layout_marginStart="5dp"
                     android:textColor="@android:color/white"
@@ -120,6 +168,7 @@
                         android:fontFamily="sans-serif-light"
                         android:text="Select Time"
                         android:layout_marginStart="5dp"
+                        android:textSize="11sp"
                         android:textColor="@android:color/white"
                         app:cornerRadius="0dp" />
 

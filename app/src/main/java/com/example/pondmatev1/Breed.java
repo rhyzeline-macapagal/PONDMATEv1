@@ -2,6 +2,8 @@ package com.example.pondmatev1;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -46,7 +48,6 @@ public class Breed extends Fragment {
         NoDFish = view.findViewById(R.id.txt_est_dead);
         SOA = view.findViewById(R.id.txt_soa);
         numfingerlings = view.findViewById(R.id.numoffingerlings);
-
         btnEditFbreed = view.findViewById(R.id.btn_edit_fbreed);
 
         calendar = Calendar.getInstance();
@@ -94,6 +95,13 @@ public class Breed extends Fragment {
                             setFishBreedEditable(false);
                             btnEditFbreed.setText("Edit");
                             Toast.makeText(getContext(), "Fish Breed saved", Toast.LENGTH_SHORT).show();
+
+                            //for shared pref in numoffingerlings
+                            SharedPreferences prefs = requireContext().getSharedPreferences("SharedData", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putFloat("numFingerlings", Float.parseFloat(fingerlings));
+                            editor.apply();
+
                             dataManager.saveBreedData(
                                     btnSelectBreed.getText().toString().trim(),
                                     SOA.getText().toString().trim(),
@@ -242,5 +250,4 @@ public class Breed extends Fragment {
             MortResult.setText("—");
         }
     }
-
 }

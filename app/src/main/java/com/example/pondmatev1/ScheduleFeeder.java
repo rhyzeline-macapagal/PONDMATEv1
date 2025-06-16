@@ -3,8 +3,12 @@ package com.example.pondmatev1;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +40,8 @@ public class ScheduleFeeder extends Fragment {
 
     private ImageButton addTbtn;
 
-    private Button selectDate, selectTime, setManual, Createbtn, Savebtn, Resetbtn;
+    private EditText Fweight;
+    private Button selectDate, selectTime, setManual, Createbtn, Savebtn, Resetbtn, SetWeightbtn;
 
     private TextView dateFS, timeFS, feedqttycont;
     private TableLayout SummaryT;
@@ -53,11 +58,66 @@ public class ScheduleFeeder extends Fragment {
         selectDate = view.findViewById(R.id.btnselectdate);
         selectTime = view.findViewById(R.id.btnselecttime);
         setManual = view.findViewById(R.id.btnsetmanually);
-        feedqttycont = view.findViewById(R.id.feedquantity);
         Createbtn = view.findViewById(R.id.createbtn);
         Savebtn = view.findViewById(R.id.savebtn);
         Resetbtn = view.findViewById(R.id.resetbtn);
         SummaryT= view.findViewById(R.id.summaryTable);
+        feedqttycont = view.findViewById(R.id.feedquantity);
+        Fweight = view.findViewById(R.id.weight);
+        SetWeightbtn = view.findViewById(R.id.btnsetweight);
+
+        // Enable Fweight input when SetWeightbtn is clicked
+        SetWeightbtn.setOnClickListener(v -> {
+            Fweight.setFocusable(true);
+            Fweight.setFocusableInTouchMode(true);
+            Fweight.setClickable(true);
+            Fweight.setCursorVisible(true);
+            Fweight.requestFocus();
+
+            Toast.makeText(getContext(), "You can now enter fish weight", Toast.LENGTH_SHORT).show();
+        });
+
+        // Auto-compute feed quantity when weight is entered
+        Fweight.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String weightStr = s.toString().trim();
+
+                if (weightStr.isEmpty()) {
+                    feedqttycont.setText("--");
+                    return;
+                }
+
+                try {
+                    float fishweight = Float.parseFloat(weightStr);
+
+                    // Retrieve numFingerlings from SharedPreferences
+                    SharedPreferences prefs = requireContext().getSharedPreferences("SharedData", Context.MODE_PRIVATE);
+                    float numFingerlings = prefs.getFloat("numFingerlings", 0f);
+
+                    if (numFingerlings == 0f) {
+                        feedqttycont.setText("--");
+                        return;
+                    }
+
+                    float feedPercentage = 0.04f; // 4% default
+                    float computedFeedQty = feedPercentage * fishweight * numFingerlings;
+
+                    feedqttycont.setText(String.format(Locale.getDefault(), "%.2f grams", computedFeedQty));
+
+                } catch (NumberFormatException e) {
+                    feedqttycont.setText("--");
+                }
+            }
+        });
+
+
 
         //select date and time
         selectDate.setOnClickListener(v -> {
@@ -126,12 +186,14 @@ public class ScheduleFeeder extends Fragment {
         //dynamically added row
         addTbtn.setOnClickListener(v ->addTimeRow(inflater));
 
-        //editbutton
+        //createbutton
         Createbtn.setOnClickListener(v -> {
             selectDate.setEnabled(true);
             selectTime.setEnabled(true);
             setManual.setEnabled(true);
             addTbtn.setEnabled(true);
+            SetWeightbtn.setEnabled(true);
+            Fweight.setEnabled(true);
             feedqttycont.setEnabled(true);
 
             for (int i = 0; i < containert.getChildCount(); i++) {
@@ -152,6 +214,7 @@ public class ScheduleFeeder extends Fragment {
             dateFS.setText("");
             timeFS.setText("");
             feedqttycont.setText("");
+            Fweight.setText("");
 
             // Remove dynamically added date and time rows (if any), keeping the first one if needed
             containert.removeViews(1, containert.getChildCount() - 1);
@@ -201,6 +264,8 @@ public class ScheduleFeeder extends Fragment {
             addTbtn.setEnabled(false);
             setManual.setEnabled(false);
             feedqttycont.setEnabled(false);
+            Fweight.setEnabled(false);
+            SetWeightbtn.setEnabled(false);
             Savebtn.setVisibility(View.GONE);
             Resetbtn.setVisibility(View.GONE);
             Createbtn.setVisibility(View.VISIBLE);
@@ -217,6 +282,7 @@ public class ScheduleFeeder extends Fragment {
             dateFS.setText("");
             timeFS.setText("");
             feedqttycont.setText("");
+            Fweight.setText("");
 
             // Remove dynamically added rows
             containert.removeViews(1, containert.getChildCount() - 1);
@@ -236,6 +302,8 @@ public class ScheduleFeeder extends Fragment {
         setManual.setEnabled(false);
         feedqttycont.setEnabled(false);
         addTbtn.setEnabled(false);
+        SetWeightbtn.setEnabled(false);
+        Fweight.setEnabled(false);
         Savebtn.setVisibility(View.GONE);
 
         return view;
