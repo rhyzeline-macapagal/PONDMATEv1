@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,6 +72,7 @@ public class ActProd extends Fragment {
 
         calendarView = view.findViewById(R.id.calendarView);
         logTable = view.findViewById(R.id.logTable);
+        noteText = view.findViewById(R.id.noteText);
 
         loadLogs();
         observeBreedAndStartDate();
@@ -86,8 +88,17 @@ public class ActProd extends Fragment {
         if (soa != null && breed != null) {
             generateFishScheduleAndDecorateCalendar(breed, soa);
         }
-        noteText = view.findViewById(R.id.noteText);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Date soa = sharedViewModel.getSOADate().getValue();
+        String breed = sharedViewModel.getSelectedBreed().getValue();
+        if (soa != null && breed != null) {
+            generateFishScheduleAndDecorateCalendar(breed, soa);
+            Toast.makeText(getContext(), "Fish schedule refreshed.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showActivityDialog(CalendarDay date) {
@@ -109,12 +120,11 @@ public class ActProd extends Fragment {
     private void highlightActivityDates() {
         calendarView.removeDecorators();
 
-        // RED: User-logged dates
         List<CalendarDay> logDates = new ArrayList<>();
         for (String[] log : activityLogs) {
             if (log.length > 1) {
                 try {
-                    String[] parts = log[1].split(" ")[0].split("-"); // yyyy-MM-dd
+                    String[] parts = log[1].split(" ")[0].split("-");
                     int year = Integer.parseInt(parts[0]);
                     int month = Integer.parseInt(parts[1]) - 1;
                     int day = Integer.parseInt(parts[2]);
@@ -128,7 +138,6 @@ public class ActProd extends Fragment {
             calendarView.addDecorator(new EventDecorator(Color.RED, logDates));
         }
 
-        // BLUE: Fish schedule
         List<CalendarDay> scheduleDates = new ArrayList<>(scheduledActivityMap.keySet());
         if (!scheduleDates.isEmpty()) {
             calendarView.addDecorator(new EventDecorator(Color.BLUE, scheduleDates));

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ActProd">
 
     <LinearLayout
@@ -23,28 +23,30 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="14dp" />
 
+        <!-- Responsive horizontal layout -->
         <LinearLayout
             android:id="@+id/calendarNoteLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:weightSum="1">
 
-            <!-- Calendar -->
+            <!-- Calendar using layout_weight instead of fixed width -->
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
                 android:id="@+id/calendarView"
-                android:layout_width="600dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.7"
+                android:layout_weight="0.7"
                 android:padding="8dp"
                 app:mcv_showOtherDates="all"
                 app:mcv_selectionColor="#047CA1" />
 
             <!-- Side Note -->
             <ScrollView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="0.3"
                 android:padding="8dp">
 
                 <TextView
@@ -71,7 +73,7 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="14dp"/>
+            android:layout_marginBottom="14dp" />
 
         <TableLayout
             android:id="@+id/logTable"
@@ -93,7 +95,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="sans-serif-light"
                     android:textSize="14sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:text="Date"
@@ -101,7 +103,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="sans-serif-light"
                     android:textSize="14sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:text="Description"
@@ -109,11 +111,8 @@
                     android:layout_gravity="center"
                     android:fontFamily="sans-serif-light"
                     android:textSize="14sp"
-                    android:textStyle="bold"/>
-
+                    android:textStyle="bold" />
             </TableRow>
-
-
 
         </TableLayout>
 
