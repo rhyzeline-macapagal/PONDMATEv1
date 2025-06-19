@@ -9,14 +9,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    //dbname
     private static final String DATABASE_NAME = "UserDB";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2; //for onUpgrade to work
 
-    // table name in db
     private static final String TABLE_USERS = "users";
 
-    // columns
+    // NEW COLUMN
+    private static final String COLUMN_ID = "id";
     private static final String COLUMN_USERNAME = "username";
     private static final String COLUMN_PASSWORD = "password";
     private static final String COLUMN_FULLNAME = "fullname";
@@ -27,11 +26,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    // table query
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " ("
-                + COLUMN_USERNAME + " TEXT PRIMARY KEY, "
+                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COLUMN_USERNAME + " TEXT UNIQUE, "
                 + COLUMN_PASSWORD + " TEXT, "
                 + COLUMN_FULLNAME + " TEXT, "
                 + COLUMN_ADDRESS + " TEXT, "
@@ -39,14 +38,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_USERS_TABLE);
     }
 
-    // update/upgrade tbl
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         onCreate(db);
     }
 
-    // register new users
     public boolean addUser(String username, String password, String fullname, String address, String userType) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -56,12 +53,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_ADDRESS, address);
         values.put(COLUMN_USERTYPE, userType);
 
-        long result = db.insert(TABLE_USERS, null, values);
-        db.close();
-        return result != -1;
+        try {
+            long result = db.insertOrThrow(TABLE_USERS, null, values);
+            return result != -1;
+        } catch (android.database.sqlite.SQLiteConstraintException e) {
+            // Handle UNIQUE constraint (duplicate username)
+            e.printStackTrace();
+            return false;
+        } finally {
+            db.close();
+        }
     }
 
-    // pagcheck ng login infos
+
     public boolean checkUserCredentials(String username, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_USERS, null,
@@ -78,6 +82,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.query(TABLE_USERS, null, COLUMN_USERNAME + "=?",
                 new String[]{username}, null, null, null);
     }
-
-
 }

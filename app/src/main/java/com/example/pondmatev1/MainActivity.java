@@ -1,9 +1,13 @@
 package com.example.pondmatev1;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import androidx.activity.EdgeToEdge;
@@ -21,13 +25,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     NafisBottomNavigation bottomNavigation;
-
+    DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
 
         SessionManager sessionManager = new SessionManager(this);
         if (sessionManager.getUsername() == null) {
@@ -98,7 +103,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        dbHelper = new DatabaseHelper(this);
+
+        //sync only if internet is availavle
+        if (isInternetAvailable()) {
+            SyncManager.syncUsersToServer(this, dbHelper);
+        } else {
+            Toast.makeText(this, "No internet connection. Sync skipped.", Toast.LENGTH_SHORT).show();
+        }
+
+
 
     }
 
+    public boolean isInternetAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            return activeNetwork != null && activeNetwork.isConnected();
+        }
+        return false;
+    }
 }
+
+
+

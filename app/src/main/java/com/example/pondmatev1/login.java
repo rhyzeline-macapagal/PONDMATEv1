@@ -22,6 +22,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+
 public class login extends AppCompatActivity {
 
     EditText userName, passWord;
@@ -100,31 +107,74 @@ public class login extends AppCompatActivity {
         loadPreferences();
 
         loginButton.setOnClickListener(v -> {
-            String username = userName.getText().toString();
-            String password = passWord.getText().toString();
+            String username = userName.getText().toString().trim();
+            String password = passWord.getText().toString().trim();
 
             if (username.isEmpty() || password.isEmpty()) {
                 Toast.makeText(login.this, "Both fields are required", Toast.LENGTH_SHORT).show();
-            } else {
-                boolean isValid = dbHelper.checkUserCredentials(username, password);
-                if (isValid) {
-                    Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(login.this, MainActivity.class);
-                    intent.putExtra("loggedInUsername", username);
-                    startActivity(intent);
-                    SessionManager sessionManager = new SessionManager(login.this);
-                    sessionManager.saveUsername(username);
-                    finish();
-                    if (rememberMeCheckBox.isChecked()) {
-                        savePreferences(username, password);
-                    } else {
-                        clearPreferences();  // Clear saved credentials if "Remember me" is unchecked
-                    }
-                } else {
-                    Toast.makeText(login.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
-                }
+                return;
             }
+
+            new Thread(() -> {
+                try {
+                    URL url = new URL("https://pondmate.alwaysdata.net/login_user.php"); // Replace with your real URL
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setDoOutput(true);
+                    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+                    String postData = "username=" + URLEncoder.encode(username, "UTF-8") +
+                            "&password=" + URLEncoder.encode(password, "UTF-8");
+
+                    OutputStream os = conn.getOutputStream();
+                    os.write(postData.getBytes());
+                    os.flush();
+                    os.close();
+
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    String response = in.readLine();
+                    in.close();
+
+                    runOnUiThread(() -> {
+                        switch (response) {
+                            case "success":
+                                Toast.makeText(login.this, "✅ Login successful", Toast.LENGTH_SHORT).show();
+                                SessionManager sessionManager = new SessionManager(login.this);
+                                sessionManager.saveUsername(username);
+
+                                if (rememberMeCheckBox.isChecked()) {
+                                    savePreferences(username, password);
+                                } else {
+                                    clearPreferences();
+                                }
+
+                                Intent intent = new Intent(login.this, MainActivity.class);
+                                intent.putExtra("loggedInUsername", username);
+                                startActivity(intent);
+                                finish();
+                                break;
+
+                            case "invalid":
+                                Toast.makeText(login.this, "❌ Invalid username or password", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case "missing":
+                                Toast.makeText(login.this, "⚠️ Missing username or password", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            default:
+                                Toast.makeText(login.this, "❌ Server error", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> Toast.makeText(login.this, "⚠️ Network error", Toast.LENGTH_SHORT).show());
+                }
+            }).start();
         });
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -163,7 +213,7 @@ public class login extends AppCompatActivity {
         }
     }
 
-    
+
     private void setPasswordEyeIcon(EditText editText, Drawable startDrawable, Drawable endDrawable) {
         editText.setCompoundDrawablesWithIntrinsicBounds(startDrawable, null, endDrawable, null);
     }
