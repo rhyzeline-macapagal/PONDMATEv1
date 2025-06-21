@@ -112,29 +112,26 @@
             android:orientation="horizontal"
             android:layout_marginBottom="14dp">
 
-            <Button
-                android:id="@+id/dispenseron"
-                android:layout_width="108dp"
-                android:layout_height="53dp"
-                android:layout_marginStart="76dp"
-                android:backgroundTint="#047CA1"
-                android:text="ON"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@android:color/white"
-                app:cornerRadius="0dp"/>
 
             <Button
-                android:id="@+id/dispenseroff"
-                android:layout_width="108dp"
-                android:layout_height="53dp"
-                android:layout_marginStart="6dp"
-                android:backgroundTint="#047CA1"
-                android:text="OFF"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@android:color/white"
-                app:cornerRadius="0dp"/>
+                android:id="@+id/btnToggleFeeder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Connect"
+                android:layout_marginTop="20dp" />
+
+
+
+
+
         </LinearLayout>
-
+    <TextView
+        android:id="@+id/feederStatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: Disconnected"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

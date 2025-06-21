@@ -7,12 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
+
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -54,6 +54,49 @@ public class ControlsFeeder extends Fragment {
         feedleveltv = view.findViewById(R.id.feedlevel); //text view ng feed lvl
         monitorbtn = view.findViewById(R.id.monitorbttn); // to monitor feed lvl
         feedlvlicon = view.findViewById(R.id.feedLevelIcon); //icon ng feed lvl
+
+        Button btnToggleFeeder = view.findViewById(R.id.btnToggleFeeder);
+        TextView feederStatusText = view.findViewById(R.id.feederStatusText);
+
+        final String baseUrl = "http://192.168.254.100"; // replace with your actual ESP IP
+        final boolean[] isConnected = {false}; // using array to mutate inside inner class
+
+        btnToggleFeeder.setOnClickListener(v -> {
+            new Thread(() -> {
+                try {
+                    String endpoint = "/on";
+                    URL url = new URL(baseUrl + endpoint);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    connection.setConnectTimeout(3000);
+                    connection.setReadTimeout(3000);
+                    int responseCode = connection.getResponseCode();
+                    connection.disconnect();
+
+                    requireActivity().runOnUiThread(() -> {
+                        if (responseCode == 200) {
+                            isConnected[0] = true;
+                            btnToggleFeeder.setText("Connected");
+                            btnToggleFeeder.setEnabled(false);
+                            feederStatusText.setText("Status: Connected");
+                        } else {
+                            feederStatusText.setText("Error: HTTP " + responseCode);
+                            btnToggleFeeder.setEnabled(true);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    requireActivity().runOnUiThread(() -> {
+                        feederStatusText.setText("Connection failed: " + e.getMessage());
+                        btnToggleFeeder.setEnabled(true);
+                    });
+                }
+            }).start();
+        });
+
+
+
 
         //monitoring feed level
         monitorbtn.setOnClickListener(v -> {
