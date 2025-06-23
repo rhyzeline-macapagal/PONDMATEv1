@@ -18,6 +18,14 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.nafis.bottomnavigation.NafisBottomNavigation;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
@@ -108,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         //sync only if internet is availavle
         if (isInternetAvailable()) {
             SyncManager.syncUsersToServer(this, dbHelper);
+            syncUsersFromServer();  // ⬅️ This function will download all users and save to SQLite
         } else {
             Toast.makeText(this, "No internet connection. Sync skipped.", Toast.LENGTH_SHORT).show();
         }
@@ -115,6 +124,57 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    private void syncUsersFromServer() {
+        new Thread(() -> {
+            try {
+                URL url = new URL("https://pondmate.alwaysdata.net/get_users.php"); // your API URL
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder jsonBuilder = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    jsonBuilder.append(line);
+                }
+
+                reader.close();
+                conn.disconnect();
+
+                String jsonResponse = jsonBuilder.toString();
+
+                JSONArray usersArray = new JSONArray(jsonResponse);
+
+                for (int i = 0; i < usersArray.length(); i++) {
+                    JSONObject user = usersArray.getJSONObject(i);
+
+                    int id = user.getInt("id");
+                    String username = user.getString("username");
+                    String password = user.getString("password");
+                    String fullname = user.getString("fullname");
+                    String address = user.getString("address");
+                    String usertype = user.getString("usertype");
+
+                    // Insert or update in SQLite
+                    if (!dbHelper.checkUserCredentials(username, password)) {
+                        dbHelper.addUser(username, password, fullname, address, usertype);
+                    }
+                }
+
+                runOnUiThread(() ->
+                        Toast.makeText(MainActivity.this, "✅ Users synced from server", Toast.LENGTH_SHORT).show()
+                );
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() ->
+                        Toast.makeText(MainActivity.this, "⚠️ Failed to sync users", Toast.LENGTH_SHORT).show()
+                );
+            }
+        }).start();
+    }
+
 
     public boolean isInternetAvailable() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

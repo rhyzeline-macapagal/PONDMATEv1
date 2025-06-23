@@ -1,30 +1,25 @@
 package com.example.pondmatev1;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -43,39 +38,33 @@ public class login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         dbHelper = new DatabaseHelper(this);
-        dbHelper.getReadableDatabase();
 
         userName = findViewById(R.id.username_input);
         passWord = findViewById(R.id.password_input);
         loginButton = findViewById(R.id.login_button);
         rememberMeCheckBox = findViewById(R.id.checkBox);
+        signupdirect = findViewById(R.id.signuptext);
 
+        // Password eye toggle
         final Drawable eyeOpen = ContextCompat.getDrawable(this, R.drawable.eye_open);
         final Drawable eyeClosed = ContextCompat.getDrawable(this, R.drawable.hidden);
         final Drawable lockIcon = ContextCompat.getDrawable(this, R.drawable.lock_icon);
         final boolean[] isVisible = {false};
-
-        // Set initial state: hidden password
         setPasswordEyeIcon(passWord, lockIcon, eyeClosed);
 
         passWord.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                Drawable drawableEnd = passWord.getCompoundDrawables()[2]; // right drawable
+                Drawable drawableEnd = passWord.getCompoundDrawables()[2];
                 if (drawableEnd != null) {
                     int drawableWidth = drawableEnd.getBounds().width();
                     int clickAreaStart = passWord.getWidth() - passWord.getPaddingEnd() - drawableWidth;
                     if (event.getX() >= clickAreaStart) {
                         isVisible[0] = !isVisible[0];
                         int cursorPosition = passWord.getSelectionStart();
-
-                        if (isVisible[0]) {
-                            passWord.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                            setPasswordEyeIcon(passWord, lockIcon, eyeOpen);
-                        } else {
-                            passWord.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                            setPasswordEyeIcon(passWord, lockIcon, eyeClosed);
-                        }
-
+                        passWord.setInputType(isVisible[0] ?
+                                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        setPasswordEyeIcon(passWord, lockIcon, isVisible[0] ? eyeOpen : eyeClosed);
                         passWord.setSelection(cursorPosition);
                         return true;
                     }
@@ -85,24 +74,15 @@ public class login extends AppCompatActivity {
         });
 
         passWord.addTextChangedListener(new TextWatcher() {
-            @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Drawable currentIcon = isVisible[0] ? eyeOpen : eyeClosed;
-                setPasswordEyeIcon(passWord, lockIcon, currentIcon);
+                setPasswordEyeIcon(passWord, lockIcon, isVisible[0] ? eyeOpen : eyeClosed);
             }
-
-            @Override
             public void afterTextChanged(Editable s) {}
         });
 
-        signupdirect = findViewById(R.id.signuptext);
-        signupdirect.setOnClickListener(v -> {
-            Intent intent = new Intent(login.this, signup.class);
-            startActivity(intent);
-        });
+        // Sync all users from server to local SQLite (if online)
+        if (isInternetAvailable()) syncUsersFromServer();
 
         loadPreferences();
 
@@ -111,82 +91,125 @@ public class login extends AppCompatActivity {
             String password = passWord.getText().toString().trim();
 
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(login.this, "Both fields are required", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Both fields are required", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            new Thread(() -> {
-                try {
-                    URL url = new URL("https://pondmate.alwaysdata.net/login_user.php"); // Replace with your real URL
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setDoOutput(true);
-                    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-                    String postData = "username=" + URLEncoder.encode(username, "UTF-8") +
-                            "&password=" + URLEncoder.encode(password, "UTF-8");
-
-                    OutputStream os = conn.getOutputStream();
-                    os.write(postData.getBytes());
-                    os.flush();
-                    os.close();
-
-                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    String response = in.readLine();
-                    in.close();
-
-                    runOnUiThread(() -> {
-                        switch (response) {
-                            case "success":
-                                Toast.makeText(login.this, "✅ Login successful", Toast.LENGTH_SHORT).show();
-                                SessionManager sessionManager = new SessionManager(login.this);
-                                sessionManager.saveUsername(username);
-
-                                if (rememberMeCheckBox.isChecked()) {
-                                    savePreferences(username, password);
-                                } else {
-                                    clearPreferences();
-                                }
-
-                                Intent intent = new Intent(login.this, MainActivity.class);
-                                intent.putExtra("loggedInUsername", username);
-                                startActivity(intent);
-                                finish();
-                                break;
-
-                            case "invalid":
-                                Toast.makeText(login.this, "❌ Invalid username or password", Toast.LENGTH_SHORT).show();
-                                break;
-
-                            case "missing":
-                                Toast.makeText(login.this, "⚠️ Missing username or password", Toast.LENGTH_SHORT).show();
-                                break;
-
-                            default:
-                                Toast.makeText(login.this, "❌ Server error", Toast.LENGTH_SHORT).show();
-                                break;
-                        }
-                    });
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    runOnUiThread(() -> Toast.makeText(login.this, "⚠️ Network error", Toast.LENGTH_SHORT).show());
-                }
-            }).start();
+            if (isInternetAvailable()) {
+                loginOnline(username, password);
+            } else {
+                loginOffline(username, password);
+            }
         });
 
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        signupdirect.setOnClickListener(v -> startActivity(new Intent(this, signup.class)));
     }
 
-    // Save username and password to SharedPreferences
+    private void loginOnline(String username, String password) {
+        new Thread(() -> {
+            try {
+                URL url = new URL("https://pondmate.alwaysdata.net/login_user.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+                String postData = "username=" + URLEncoder.encode(username, "UTF-8") +
+                        "&password=" + URLEncoder.encode(password, "UTF-8");
+
+                OutputStream os = conn.getOutputStream();
+                os.write(postData.getBytes());
+                os.flush();
+                os.close();
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String response = in.readLine();
+                in.close();
+
+                runOnUiThread(() -> {
+                    if ("success".equals(response)) {
+                        SessionManager session = new SessionManager(this);
+                        session.saveUsername(username);
+                        if (rememberMeCheckBox.isChecked()) savePreferences(username, password);
+                        else clearPreferences();
+                        startActivity(new Intent(this, MainActivity.class));
+                        finish();
+                    } else if ("invalid".equals(response)) {
+                        Toast.makeText(this, "❌ Invalid credentials", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "⚠️ Login failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(this, "⚠️ Network error", Toast.LENGTH_SHORT).show());
+            }
+        }).start();
+    }
+
+    private void loginOffline(String username, String password) {
+        boolean valid = dbHelper.checkUserCredentials(username, password);
+        if (valid) {
+            SessionManager session = new SessionManager(this);
+            session.saveUsername(username);
+            Toast.makeText(this, "✅ Offline login successful", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        } else {
+            Toast.makeText(this, "❌ Invalid credentials (offline)", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void syncUsersFromServer() {
+        new Thread(() -> {
+            try {
+                URL url = new URL("https://pondmate.alwaysdata.net/get_users.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                StringBuilder jsonBuilder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    jsonBuilder.append(line);
+                }
+                reader.close();
+
+                JSONArray usersArray = new JSONArray(jsonBuilder.toString());
+
+                for (int i = 0; i < usersArray.length(); i++) {
+                    JSONObject user = usersArray.getJSONObject(i);
+                    String uname = user.getString("username");
+                    String pass = user.getString("password");
+                    String fname = user.getString("fullname");
+                    String address = user.getString("address");
+                    String type = user.getString("usertype");
+
+                    if (!dbHelper.checkUserCredentials(uname, pass)) {
+                        dbHelper.addUser(uname, pass, fname, address, type);
+                    }
+                }
+
+                runOnUiThread(() -> Toast.makeText(this, "🔄 Users synced", Toast.LENGTH_SHORT).show());
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(this, "❌ Sync failed", Toast.LENGTH_SHORT).show());
+            }
+        }).start();
+    }
+
+    private boolean isInternetAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            NetworkInfo activeNet = cm.getActiveNetworkInfo();
+            return activeNet != null && activeNet.isConnected();
+        }
+        return false;
+    }
+
     private void savePreferences(String username, String password) {
-        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        SharedPreferences sp = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
         editor.putString("username", username);
         editor.putString("password", password);
         editor.putBoolean("rememberMe", true);
@@ -194,27 +217,20 @@ public class login extends AppCompatActivity {
     }
 
     private void clearPreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove("username");
-        editor.remove("password");
-        editor.remove("rememberMe");
-        editor.apply();
+        SharedPreferences sp = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        sp.edit().clear().apply();
     }
-    // Load username and password from SharedPreferences
+
     private void loadPreferences() {
-        SharedPreferences sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
-        if (sharedPreferences.getBoolean("rememberMe", false)) {
-            String savedUsername = sharedPreferences.getString("username", "");
-            String savedPassword = sharedPreferences.getString("password", "");
-            userName.setText(savedUsername);
-            passWord.setText(savedPassword);
-            rememberMeCheckBox.setChecked(true);  // Set checkbox to checked
+        SharedPreferences sp = getSharedPreferences("LoginPrefs", MODE_PRIVATE);
+        if (sp.getBoolean("rememberMe", false)) {
+            userName.setText(sp.getString("username", ""));
+            passWord.setText(sp.getString("password", ""));
+            rememberMeCheckBox.setChecked(true);
         }
     }
 
-
-    private void setPasswordEyeIcon(EditText editText, Drawable startDrawable, Drawable endDrawable) {
-        editText.setCompoundDrawablesWithIntrinsicBounds(startDrawable, null, endDrawable, null);
+    private void setPasswordEyeIcon(EditText editText, Drawable start, Drawable end) {
+        editText.setCompoundDrawablesWithIntrinsicBounds(start, null, end, null);
     }
 }
