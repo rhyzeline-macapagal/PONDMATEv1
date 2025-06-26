@@ -56,10 +56,10 @@
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/container"
+                android:background="@drawable/rounded_edittext"
                 android:fontFamily="sans-serif-light"
                 android:hint="00:00"
-                android:padding="8dp"
+                android:padding="12dp"
                 android:textAlignment="center"
                 android:textColorHint="#000000"
                 android:textSize="14sp"
@@ -82,18 +82,14 @@
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/container"
+                android:background="@drawable/rounded_edittext"
                 android:fontFamily="sans-serif-light"
                 android:hint="00:00"
-                android:padding="8dp"
+                android:padding="12dp"
                 android:textAlignment="center"
                 android:textColorHint="#000000"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp"/>
-
-
-
-
         </LinearLayout>
 
         <TextView
@@ -109,29 +105,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="14dp">
-
-
+            android:orientation="vertical">
             <Button
                 android:id="@+id/btnToggleFeeder"
+                android:layout_width="120dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:backgroundTint="#047CA1"
+                android:text="CONNECT"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                app:cornerRadius="0dp"/>
+
+            <TextView
+                android:id="@+id/feederStatusText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Connect"
-                android:layout_marginTop="20dp" />
-
-
-
-
-
+                android:text="Status: Disconnected"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp" />
         </LinearLayout>
-    <TextView
-        android:id="@+id/feederStatusText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status: Disconnected"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -173,15 +166,15 @@
                     android:id="@+id/feedsamtpcycle"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="90dp"
-                    android:background="@drawable/container"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/rounded_edittext"
                     android:fontFamily="sans-serif-medium"
                     android:hint="--"
-                    android:padding="8dp"
+                    android:padding="12dp"
                     android:textAlignment="textEnd"
                     android:textColorHint="#000000"
-                    android:textSize="14sp"
-                    android:layout_marginBottom="8dp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -201,7 +194,7 @@
                         android:id="@+id/feedLevelIcon"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginStart="60dp"
+                        android:layout_marginStart="50dp"
                         android:layout_gravity="center"
                         android:src="@drawable/unknown" />
 
@@ -209,15 +202,15 @@
                         android:id="@+id/feedlevel"
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:background="@drawable/container"
-                        android:text="UNKNOWN"
-                        android:padding="8dp"
                         android:layout_marginStart="5dp"
+                        android:background="@drawable/rounded_edittext"
+                        android:fontFamily="sans-serif-light"
+                        android:padding="12dp"
+                        android:text="UNKNOWN"
                         android:textAlignment="center"
-                        android:textStyle="bold"
                         android:textColor="#000000"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 

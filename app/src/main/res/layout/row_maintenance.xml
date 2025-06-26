@@ -31,21 +31,21 @@
         android:id="@+id/maintenanceCost"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/container"
         android:clickable="false"
         android:cursorVisible="false"
-        android:focusable="true"
-        android:descendantFocusability="beforeDescendants"
+        android:focusable="false"
         android:layout_marginStart="5dp"
-        android:focusableInTouchMode="true"
+        android:focusableInTouchMode="false"
         android:fontFamily="sans-serif-light"
         android:hint="₱1,500"
         android:inputType="numberDecimal"
-        android:padding="8dp"
         android:paddingStart="8dp"
         android:textAlignment="textEnd"
         android:textColorHint="#000000"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:background="@drawable/rounded_edittext"
+        android:layout_marginBottom="8dp"
+        android:padding="12dp"/>
 
     <ImageButton
         android:id="@+id/removeMaintenanceButton"

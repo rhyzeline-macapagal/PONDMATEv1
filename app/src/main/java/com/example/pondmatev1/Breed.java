@@ -28,7 +28,6 @@ public class Breed extends Fragment {
     TextView SOA, MortResult, harvestDateView, NoDFish;
     Calendar calendar;
     Button btnSelectDate, btnSelectBreed, btnEditFbreed;
-
     boolean isEditingBreed = false;
 
     @Override

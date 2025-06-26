@@ -37,9 +37,9 @@ import java.util.Locale;
 public class pcostroi extends Fragment {
     ArrayList<String> breedList, maintenanceOptions;
     Button editButton, saveButton, generateReportButton, TypeofFeeders, initialMaintenancetype, maintenanceType;
-    EditText amtFeeders, maintenance, Capital, Labor, fperpiece, maintenanceCost;
+    EditText amtFeeders, maintenance, Labor, fperpiece, maintenanceCost;
     LinearLayout maintenanceList, feedersContainer, maintenanceContainer;
-    TextView totalExpenses, fishbreeddisplay, numfingerlingsdisplay, amtFingerlings;
+    TextView fishbreeddisplay, numfingerlingsdisplay, amtFingerlings, Capital;
     ImageButton addMaintenanceButton, addFeederBtn, removeBtn;
     EditText initialMaintenanceCost;
     private boolean isDataSaved = false;
@@ -80,7 +80,6 @@ public class pcostroi extends Fragment {
         initialMaintenancetype = view.findViewById(R.id.initialMaintenanceType);
         fperpiece = view.findViewById(R.id.amtperpiece);
         initialMaintenanceCost = view.findViewById(R.id.initialMaintenanceCost);
-        totalExpenses = view.findViewById(R.id.totalexpenses);
         editButton = view.findViewById(R.id.editbtn);
         saveButton = view.findViewById(R.id.savebtn);
         maintenanceList = view.findViewById(R.id.maintenanceList);
@@ -98,7 +97,7 @@ public class pcostroi extends Fragment {
 
         addFeederBtn.setOnClickListener(v -> {
             addFeederRow(feedersContainer);
-            updateTotalExpenses();
+            updateCapital();
         });
 
         SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
@@ -140,7 +139,7 @@ public class pcostroi extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable s) {
-                updateTotalExpenses();
+                updateCapital();
             }
         });
 
@@ -155,12 +154,11 @@ public class pcostroi extends Fragment {
             }
             @Override
             public void afterTextChanged(Editable s) {
-                updateTotalExpenses();
+                updateCapital();
             }
         };
         amtFingerlings.addTextChangedListener(expenseWatcher);
         amtFeeders.addTextChangedListener(expenseWatcher);
-        Capital.addTextChangedListener(expenseWatcher);
         Labor.addTextChangedListener(expenseWatcher);
         initialMaintenanceCost.addTextChangedListener(expenseWatcher);
         // restrict to character input
@@ -216,7 +214,7 @@ public class pcostroi extends Fragment {
         maintenanceContainer = view.findViewById(R.id.maintenance_container);
         addMaintenanceButton.setOnClickListener(v -> {
             addMaintenanceRow(maintenanceList);
-            updateTotalExpenses();
+            updateCapital();
         });
 
         initialMaintenancetype.setOnClickListener(v -> showMaintenanceMenu(initialMaintenancetype));
@@ -233,7 +231,7 @@ public class pcostroi extends Fragment {
     private void setEditable(boolean editable) {
         // Static EditText fields
         EditText[] editTextFields = {
-                amtFeeders, initialMaintenanceCost, Capital, Labor, fperpiece
+                amtFeeders, initialMaintenanceCost, Labor, fperpiece
         };
         for (EditText field : editTextFields) {
             field.setFocusable(editable);
@@ -277,11 +275,10 @@ public class pcostroi extends Fragment {
         addFeederBtn.setEnabled(editable);
         addMaintenanceButton.setEnabled(editable);
     }
-    private void updateTotalExpenses() {
+    private void updateCapital() {
         double total = 0;
         // Static fields
         total += parseDoubleFromTextView(amtFingerlings);
-        total += parseDoubleFromEditText(Capital);
         total += parseDoubleFromEditText(Labor);
         total += parseDoubleFromEditText(initialMaintenanceCost);
         // Dynamic feeder rows
@@ -296,7 +293,7 @@ public class pcostroi extends Fragment {
             EditText cost = row.findViewById(R.id.maintenanceCost);
             total += parseDoubleSafely(cost);
         }
-        totalExpenses.setText(String.format("%.2f", total));
+        Capital.setText(String.format("%.2f", total));
     }
     private double parseDoubleSafely(EditText editText) {
         if (editText != null) {
@@ -356,6 +353,7 @@ public class pcostroi extends Fragment {
         });
         removeBtn.setOnClickListener(v -> container.removeView(maintenanceRow));
         container.addView(maintenanceRow);
+        updateCapital();
     }
     private void showAddCustomMaintenanceDialog(Button targetButton, List<String> optionsList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -398,8 +396,6 @@ public class pcostroi extends Fragment {
         if (amtFingerlings.getText().toString().trim().isEmpty()) return false;
         if (amtFeeders.getText().toString().trim().isEmpty()) return false;
         if (TypeofFeeders.getText().toString().trim().isEmpty()) return false;
-        //if (initialMaintenancetype.getText().toString().trim().isEmpty()) return false;
-        //if (initialMaintenanceCost.getText().toString().trim().isEmpty()) return false;
         if (Capital.getText().toString().trim().isEmpty()) return false;
         if (Labor.getText().toString().trim().isEmpty()) return false;
         // Validate all feeder rows
@@ -411,15 +407,6 @@ public class pcostroi extends Fragment {
                 return false;
             }
         }
-        // Validate all maintenance rows
-        //for (int i = 0; i < maintenanceList.getChildCount(); i++) {
-        //    View row = maintenanceList.getChildAt(i);
-        //    Button type = row.findViewById(R.id.maintenanceType);
-        //    EditText cost = row.findViewById(R.id.maintenanceCost);
-        //    if (type.getText().toString().trim().isEmpty() || cost.getText().toString().trim().isEmpty()) {
-        //        return false;
-        //    }
-        //}
         return true;
     }
     private void showAddFeederDialog(Button feederButton, List<String> feederOptions) {
@@ -470,6 +457,7 @@ public class pcostroi extends Fragment {
         });
         removeBtn.setOnClickListener(v -> {
             container.removeView(row);
+            updateCapital();
         });
 
         container.addView(row);
@@ -575,10 +563,7 @@ public class pcostroi extends Fragment {
         y += lineSpacing / 2;
         canvas.drawText("------------------------------------------", xLeft, y, paint);
         y += lineSpacing;
-        // Capital & Labor
-        canvas.drawText("Capital:", xLeft, y, paint);
-        canvas.drawText("₱" + Capital.getText(), xRight, y, paint);
-        y += lineSpacing;
+        // Labor
         canvas.drawText("Labor:", xLeft, y, paint);
         canvas.drawText("₱" + Labor.getText(), xRight, y, paint);
         y += lineSpacing;
@@ -587,8 +572,8 @@ public class pcostroi extends Fragment {
         y += lineSpacing;
         // Total
         paint.setFakeBoldText(true);
-        canvas.drawText("TOTAL EXPENSES:", xLeft, y, paint);
-        canvas.drawText("₱" + totalExpenses.getText(), xRight, y, paint);
+        canvas.drawText("CAPITAL:", xLeft, y, paint);
+        canvas.drawText("₱" + Capital.getText(), xRight, y, paint);
         paint.setFakeBoldText(false);
         document.finishPage(page);
         try {
