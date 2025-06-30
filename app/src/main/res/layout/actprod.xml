@@ -23,45 +23,43 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="14dp" />
 
-        <!-- Responsive horizontal layout -->
         <LinearLayout
             android:id="@+id/calendarNoteLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:weightSum="1">
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal">
 
-            <!-- Calendar using layout_weight instead of fixed width -->
+            <!-- Calendar -->
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
                 android:id="@+id/calendarView"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.7"
                 android:padding="8dp"
                 app:mcv_showOtherDates="all"
                 app:mcv_selectionColor="#047CA1" />
 
-            <!-- Side Note -->
-            <ScrollView
-                android:layout_width="0dp"
+            <!-- Note below calendar -->
+            <TextView
+                android:id="@+id/noteText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:padding="8dp">
+                android:minHeight="120dp"
+                android:background="@drawable/note_background"
+                android:elevation="2dp"
+                android:padding="16dp"
+                android:fontFamily="sans-serif-light"
+                android:textStyle="bold"
+                android:text="Select a date to see activities"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:gravity="start|top"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4dp"
+                />
 
-                <TextView
-                    android:id="@+id/noteText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/note_background"
-                    android:elevation="2dp"
-                    android:padding="16dp"
-                    android:fontFamily="sans-serif-light"
-                    android:text="Select a date to see activities"
-                    android:textColor="#333333"
-                    android:textSize="16sp"
-                    android:gravity="center" />
-            </ScrollView>
         </LinearLayout>
 
         <TextView

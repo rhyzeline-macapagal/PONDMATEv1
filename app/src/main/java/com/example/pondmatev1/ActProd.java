@@ -108,14 +108,20 @@ public class ActProd extends Fragment {
             return;
         }
 
+        // Format date to "Month day, year" (e.g., June 11, 2025)
+        SimpleDateFormat displayFormat = new SimpleDateFormat("MMMM d, yyyy", Locale.getDefault());
+        String formattedDate = displayFormat.format(date.getDate());
+
         StringBuilder noteContent = new StringBuilder();
-        noteContent.append("📅 ").append(dateOnlyFormat.format(date.getDate())).append("\n\n");
+        noteContent.append("Activities for ").append(formattedDate).append(":\n\n");
+
         for (String activity : activities) {
-            noteContent.append("• ").append(activity).append("\n");
+            noteContent.append(activity).append("\n");
         }
 
         noteText.setText(noteContent.toString().trim());
     }
+
 
     private void highlightActivityDates() {
         calendarView.removeDecorators();
