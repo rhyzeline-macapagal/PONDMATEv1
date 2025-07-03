@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,13 +14,40 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Production Activities"
+            android:text="POND MANAGEMENT"
             android:fontFamily="sans-serif-light"
             android:textColor="#0E1012"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="14dp" />
+            android:layout_marginBottom="5dp" />
+
+        <HorizontalScrollView
+            android:id="@+id/pondScroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:overScrollMode="never"
+            android:layout_marginBottom="5dp">
+
+            <LinearLayout
+                android:id="@+id/pondContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp" />
+
+        </HorizontalScrollView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PRODUCTION ACTIVITIES"
+            android:fontFamily="sans-serif-light"
+            android:textColor="#0E1012"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp" />
 
         <!-- Horizontal layout: Calendar and Note side-by-side -->
         <LinearLayout
@@ -63,4 +91,4 @@
         <!-- Remove Activity Logs Table if not needed here -->
 
     </LinearLayout>
-</ScrollView>
+</LinearLayout>

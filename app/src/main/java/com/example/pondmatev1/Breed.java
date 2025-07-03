@@ -176,7 +176,7 @@ public class Breed extends Fragment {
                     viewModel.setSOADate(calendar.getTime());
 
                     Calendar harvestCalendar = (Calendar) calendar.clone();
-                    harvestCalendar.add(Calendar.MONTH, 7);
+                    harvestCalendar.add(Calendar.MONTH, 4);
                     harvestDateView.setText(sdf.format(harvestCalendar.getTime()));
                 }, year, month, day);
 

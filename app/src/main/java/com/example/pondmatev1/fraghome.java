@@ -3,15 +3,22 @@ package com.example.pondmatev1;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -32,6 +39,7 @@ public class fraghome extends Fragment {
     private TextView noteText;
     private SharedPreferences sharedPreferences;
     private SharedViewModel sharedViewModel;
+    private View SelectedPond = null;
 
     private final HashMap<CalendarDay, List<String>> scheduledActivityMap = new HashMap<>();
     private static final String PREF_NAME = "ActivityPrefs";
@@ -52,6 +60,79 @@ public class fraghome extends Fragment {
 
         calendarView = view.findViewById(R.id.calendarView);
         noteText = view.findViewById(R.id.noteText);
+
+        //pond card view
+        LinearLayout pondContainer = view.findViewById(R.id.pondContainer);
+        int[] pondImages = {
+                R.drawable.pond, R.drawable.pond, R.drawable.pond, R.drawable.pond, R.drawable.pond
+        };
+        char[] labels = {'A', 'B', 'C', 'D', 'E'};
+
+        View plusCard = LayoutInflater.from(requireContext()).inflate(R.layout.pond_card, null);
+        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        cardParams.setMargins(1, 0, 1, 0);
+        plusCard.setLayoutParams(cardParams);
+
+
+        ImageView plusImage = plusCard.findViewById(R.id.pondImage);
+        TextView plusLabel = plusCard.findViewById(R.id.pondLabel);
+
+        plusImage.setImageResource(R.drawable.pond);
+        plusLabel.setText("+");
+        pondContainer.addView(plusCard);
+
+        plusCard.setOnClickListener(v -> {
+            int currentCount = pondContainer.getChildCount() - 1;
+
+            if (currentCount < pondImages.length) {
+                new AlertDialog.Builder(requireContext())
+                        .setTitle("Create New Pond")
+                        .setMessage("Do you want to create Pond " + labels[currentCount] + "?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            View newCard = LayoutInflater.from(requireContext()).inflate(R.layout.pond_card, null);
+                            LinearLayout.LayoutParams newParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT);
+                            newParams.setMargins(16, 0, 16, 0);
+                            newCard.setLayoutParams(newParams);
+
+                            ImageView pondImage = newCard.findViewById(R.id.pondImage);
+                            TextView pondLabel = newCard.findViewById(R.id.pondLabel);
+
+                            pondImage.setImageResource(pondImages[currentCount]);
+                            pondLabel.setText(String.valueOf(labels[currentCount]));
+
+                            // Add to layout
+                            pondContainer.addView(newCard, currentCount);
+
+                            if (currentCount == 0) {
+                                View selector = newCard.findViewById(R.id.selectorBorder);
+                                selector.setVisibility(View.VISIBLE);
+                                SelectedPond = newCard;
+                            }
+
+                            // Selection logic
+                            newCard.setOnClickListener(clickedView -> {
+                                if (SelectedPond != null) {
+                                    View lastBorder = SelectedPond.findViewById(R.id.selectorBorder);
+                                    if (lastBorder != null) lastBorder.setVisibility(View.GONE);
+                                }
+
+                                View currentBorder = clickedView.findViewById(R.id.selectorBorder);
+                                if (currentBorder != null) currentBorder.setVisibility(View.VISIBLE);
+                                SelectedPond = clickedView;
+                            });
+
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+                }else {
+                Toast.makeText(requireContext(), "Maximum ponds added", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         calendarView.setOnDateChangedListener((widget, date, selected) -> {
             if (scheduledActivityMap.containsKey(date)) {
@@ -149,4 +230,6 @@ public class fraghome extends Fragment {
             view.addSpan(new DotSpan(10, color));
         }
     }
+
+
 }
