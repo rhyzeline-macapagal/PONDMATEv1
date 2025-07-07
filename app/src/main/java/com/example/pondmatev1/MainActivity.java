@@ -6,7 +6,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -34,13 +36,26 @@ public class MainActivity extends AppCompatActivity {
 
     NafisBottomNavigation bottomNavigation;
     DatabaseHelper dbHelper;
+    private boolean navigationEnabled = false;
+    public void enableNavigationItems() {
+        navigationEnabled = true;
+
+        RelativeLayout bottomNavContainer = findViewById(R.id.bottomNavContainer);
+        bottomNavContainer.setVisibility(View.GONE);
+
+        bottomNavigation.add(new NafisBottomNavigation.Model(1, R.drawable.home1));
+        bottomNavigation.add(new NafisBottomNavigation.Model(2, R.drawable.productioncost3));
+        bottomNavigation.add(new NafisBottomNavigation.Model(3, R.drawable.feeder4));
+        bottomNavigation.add(new NafisBottomNavigation.Model(4, R.drawable.activity5));
+
+        bottomNavigation.show(1, true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
 
         SessionManager sessionManager = new SessionManager(this);
         if (sessionManager.getUsername() == null) {
@@ -65,51 +80,42 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         });
 
+        RelativeLayout bottomNavContainer = findViewById(R.id.bottomNavContainer);
+        bottomNavContainer.setVisibility(View.GONE);
+
         bottomNavigation = findViewById(R.id.bottomNavigation);
 
-        bottomNavigation.add(new NafisBottomNavigation.Model(1, R.drawable.home1));
-        bottomNavigation.add(new NafisBottomNavigation.Model(2, R.drawable.select2));
-        bottomNavigation.add(new NafisBottomNavigation.Model(3, R.drawable.productioncost3));
-        bottomNavigation.add(new NafisBottomNavigation.Model(4, R.drawable.feeder4));
-        bottomNavigation.add(new NafisBottomNavigation.Model(5, R.drawable.activity5));
-
+        bottomNavigation.add(new NafisBottomNavigation.Model(1, 0));
+        bottomNavigation.add(new NafisBottomNavigation.Model(2, 0));
+        bottomNavigation.add(new NafisBottomNavigation.Model(3, 0));
+        bottomNavigation.add(new NafisBottomNavigation.Model(4, 0));
 
         bottomNavigation.show(1, true);
         getSupportFragmentManager().beginTransaction().replace(R.id.con, new fraghome()).commit();
 
-        bottomNavigation.setOnClickMenuListener(new Function1<NafisBottomNavigation.Model, Unit>() {
-            @Override
-            public Unit invoke(NafisBottomNavigation.Model model) {
-                switch (model.getId()) {
-                    case 1:
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.con, new fraghome())
-                                .commit();
-                        break;
-                    case 2:
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.con, new Breed())
-                                .commit();
-                        break;
-                    case 3:
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.con, new pcostroi())
-                                .commit();
-                        break;
-                    case 4:
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.con, new feeders())
-                                .commit();
-                        break;
-                    case 5:
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.con, new ActProd())
-                                .commit();
-                        break;
-                }
+        bottomNavigation.setOnClickMenuListener(model -> {
+            if (!navigationEnabled && model.getId() != 1) {
+                Toast.makeText(MainActivity.this, "Please create a pond first.", Toast.LENGTH_SHORT).show();
                 return null;
             }
+
+            switch (model.getId()) {
+                case 1:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.con, new fraghome()).commit();
+                    break;
+                case 2:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.con, new pcostroi()).commit();
+                    break;
+                case 3:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.con, new feeders()).commit();
+                    break;
+                case 4:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.con, new ActProd()).commit();
+                    break;
+            }
+            return null;
         });
+
 
         dbHelper = new DatabaseHelper(this);
 
@@ -120,8 +126,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No internet connection. Sync skipped.", Toast.LENGTH_SHORT).show();
         }
-
-
 
     }
     private void syncUsersFromServer() {

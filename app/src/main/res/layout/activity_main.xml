@@ -65,27 +65,36 @@
 
     <FrameLayout
         android:id="@+id/con"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavContainer"
         android:layout_below="@id/topBar"
         android:background="@drawable/group1">
     </FrameLayout>
 
-    <com.nafis.bottomnavigation.NafisBottomNavigation
-        android:id="@+id/bottomNavigation"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/bottomNavContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="1dp"
-        app:mbn_backgroundBottomColor="#116588"
-        app:mbn_circleColor="#caf0f8"
-        app:mbn_countBackgroundColor="#047BA0"
-        app:mbn_countTextColor="#047BA0"
-        app:mbn_countTypeface="fonts/SourceSansPro-Regular.ttf"
-        app:mbn_defaultIconColor="#caf0f8"
-        app:mbn_hasAnimation="true"
-        app:mbn_rippleColor="#1E5B6B"
-        app:mbn_selectedIconColor="#114B5B" />
+        android:visibility="gone">
+
+        <com.nafis.bottomnavigation.NafisBottomNavigation
+            android:id="@+id/bottomNavigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="1dp"
+            app:mbn_backgroundBottomColor="#116588"
+            app:mbn_circleColor="#caf0f8"
+            app:mbn_countBackgroundColor="#047BA0"
+            app:mbn_countTextColor="#047BA0"
+            app:mbn_countTypeface="fonts/SourceSansPro-Regular.ttf"
+            app:mbn_defaultIconColor="#caf0f8"
+            app:mbn_hasAnimation="true"
+            app:mbn_rippleColor="#1E5B6B"
+            app:mbn_selectedIconColor="#114B5B" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
